@@ -4,6 +4,10 @@ primaryColor = "#174D3A"
 backgroundColor = "#F7F5EE"
 secondaryBackgroundColor = "#E7ECE5"
 textColor = "#252923"
+linkColor = "#174D3A"
+borderColor = "#E2E6DF"
+baseRadius = "10px"
+buttonRadius = "8px"
 font = "sans serif"
 
 [theme.sidebar]
@@ -11,3 +15,6 @@ backgroundColor = "#10382B"
 secondaryBackgroundColor = "#174D3A"
 textColor = "#F7F5EE"
 primaryColor = "#C7ED72"
+
+[client]
+toolbarMode = "minimal"

@@ -60,11 +60,11 @@ Pipeline options:
 
 | | Track capability | What it does | Code |
 |---|---|---|---|
-| **L** Lihat ke depan | Detect and predict | 7-day forecast per store x product family, with a range from measured error; model what-if effects of promotions, holidays, payday | `pipeline.py` (model, `uncertainty_table`), `views/look_ahead.py`, `views/product.py` |
-| **A** Amaran stok habis | Detect, categorize, prioritize, explain | P(running out before delivery), risk categories, tiers (Act today / This order / Watch), RM at risk, bridge top-up, explanation card | `inventory.assess`, `categorize`, `priority`; `laris_core.assess_products`, `explain`, `plan_table`; `planning.alert_table`; `views/alerts.py`, `views/home.py` |
-| **R** Rendahkan pembaziran | Detect, explain | Stock that will expire unsold or ties up cash; skip or discount | `inventory.dead_stock`, `planning.waste_table`, `views/waste.py` |
-| **I** Ikut bajet | Decide | Best order list for the cash: must-haves first up to expected demand, then value per RM; "with RM X more"; estimate vs ordering last week's sales | `inventory.allocate_budget`, `score_allocation`; `planning.strategy_compare`, `laris_core.budget_scenario`; `views/budget.py` |
-| **S** Semak hasil | Prove it | Accuracy vs 3 simple rules with CIs; unseen stores; range coverage; alert backtest (false alarms); budget replay vs usual ordering rules | `pipeline.py`, `budget_sim.py` (metrics.json; SIMULATED replay line on I · Invest Within Budget; range coverage on charts). In the app, S is Send & Sync: `views/send.py` |
+| **L** Lihat ke depan | Detect and predict | 7-day forecast per store x product family, with a range from measured error; model what-if effects of promotions, holidays, payday | `pipeline.py` (model, `uncertainty_table`), `workspace/look_ahead.py`, `views/product.py` |
+| **A** Amaran stok habis | Detect, categorize, prioritize, explain | P(running out before delivery), risk categories, tiers (Act today / This order / Watch), RM at risk, bridge top-up, explanation card | `inventory.assess`, `categorize`, `priority`; `laris_core.assess_products`, `explain`, `plan_table`; `planning.alert_table`; `workspace/alerts.py`, `views/home.py` |
+| **R** Rendahkan pembaziran | Detect, explain | Stock that will expire unsold or ties up cash; skip or discount | `inventory.dead_stock`, `planning.waste_table`, `workspace/waste.py` |
+| **I** Ikut bajet | Decide | Best order list for the cash: must-haves first up to expected demand, then value per RM; "with RM X more"; estimate vs ordering last week's sales | `inventory.allocate_budget`, `score_allocation`; `planning.strategy_compare`, `laris_core.budget_scenario`; `workspace/invest.py` |
+| **S** Semak hasil | Prove it | Accuracy vs 3 simple rules with CIs; unseen stores; range coverage; alert backtest (false alarms); budget replay vs usual ordering rules | `pipeline.py`, `budget_sim.py` (metrics.json; SIMULATED replay line on I · Invest Within Budget; range coverage on charts). In the app, S is Send & Sync: `workspace/send.py` |
 
 Three layers: **(1) the AI model** (offline, `pipeline.py`) → **(2) risk assessment and prioritisation**
 (live, `inventory.py` + `laris_core.py`) → **(3) the budget optimiser** (live, `inventory.allocate_budget`).
@@ -78,8 +78,8 @@ Three layers: **(1) the AI model** (offline, `pipeline.py`) → **(2) risk asses
 | `inventory.py` | Pure decision functions: stockout risk, bridge top-up, dead stock, budget allocation, risk categories, priority |
 | `laris_core.py` | Shared per-week context for the app: risk, explanation, allocation, the pitch-scenario rule |
 | `laris_ui.py`, `.streamlit/config.toml`, `assets/` | Look and feel (green theme, logo) |
-| `app.py`, `views/*.py` | Streamlit app (top navigation): Home (insights + assistant), LARIS (one workspace, letters L/A/R/I/S), Products, Orders, Settings; product detail opens from any product. `app.py` builds the one shared planning context every page reads |
-| `workspace/*.py` | The five LARIS tools (L Look Up, A Analyse, R Recommend, I Inventory, S Sales), drawn inside `views/laris.py` |
+| `app.py`, `views/*.py` | Streamlit app (top navigation): Home (today's priorities + assistant), LARIS (one workspace, letters L/A/R/I/S), Products (catalogue, edit table, stock counts), Insights (sales and profit), Settings; product detail opens from any product. `app.py` builds the one shared planning context every page reads |
+| `workspace/*.py` | The five LARIS tools drawn inside `views/laris.py`: `look_ahead.py` (L), `alerts.py` (A), `waste.py` (R), `invest.py` (I), `send.py` (S); plus `analyse.py` and `sales.py` (Insights page) and `inventory.py` (Products › Stock & counts) |
 | `assistant.py`, `assistant_tools.py` | The Home assistant: allowlisted read-only business tools over the shared context, an OpenAI-compatible client, and a labelled quick-answer fallback |
 | `planning.py` | Page logic derived from the shared context (alerts, look-ahead options, waste, budget breakdown, sales and gross profit, product validation, WhatsApp draft); no Streamlit, tested in `tests/test_laris2.py` |
 | `store.py` | Local JSON store (`state/laris_state.json`, git-ignored) for events, alert/waste decisions, order status records and preferences |
@@ -157,3 +157,22 @@ LARIS's own calculations. To use an AI model, set before starting the app (envir
 The model only chooses tools from `assistant_tools.TOOL_SPECS`; the tools do every calculation. It never sees the
 owner's name or supplier contacts, keeps the last 10 messages for follow-ups, and can only *propose* an order-quantity
 change, which the owner confirms on Home and LARIS then checks against the rebuilt plan. Test it in Settings › Assistant.
+
+## 12. LARIS 2.2 notes (interface)
+
+- **Letters follow the product spec again:** L Look Ahead, A Alert Before Stockout, R Reduce Waste, I Invest Within
+  Budget, S Send & Sync, inside the 2.1 single workspace. The alert and waste cards removed in 2.1 are back (they
+  use the existing `planning.alert_table` / `waste_table`); the budget view is the I tool; Orders became S.
+- **Design system in `laris_ui.py`:** colour tokens as CSS variables, pill filters, cards, meters, a run-out timeline
+  (A), sell-through bars (R), a budget meter (I) and an order stepper (S). Category pills are a display grouping of the
+  sample shop's data families (`laris_ui.FAMILY_CATEGORY`); a `Category` or `Brand` column in the product list is used
+  when present.
+- **Motion:** CSS only (no new dependencies), transform and opacity, once per page per session, and only from real
+  changes (counts and change chips compare actual figures between runs). Everything that moves sits inside
+  `@media (prefers-reduced-motion: no-preference)`; `tests/test_ui.py` checks this.
+- **Feedback:** toasts appear only after a save succeeded; a failed save says so. A delivery that has been recorded
+  can't be submitted again by accident.
+- **Streamlit 1.51 compatibility:** `st.Page(visibility=...)` is used only when available (the product page's nav link
+  is hidden by CSS otherwise). Single choices are pill-styled radios, because AppTest in 1.51 mishandles single-select
+  segmented controls on reruns.
+

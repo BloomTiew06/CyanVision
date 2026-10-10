@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import norm
 
-ACTION_LABEL = {"RESTOCK": "Buy more", "REDUCE": "Buy less", "STOP": "Don't reorder", "MAINTAIN": "As usual"}
+ACTION_LABEL = {"RESTOCK": "Buy more", "REDUCE": "Buy less", "STOP": "Skip this order", "MAINTAIN": "As usual"}
 ACTION_HELP = {
     "RESTOCK": "These products may run low before your next delivery or need a larger order than usual.",
     "REDUCE": "These products may need a smaller order than usual.",
@@ -54,18 +54,18 @@ def insights(ctx):
     must_u, other_u = urgent[urgent["must_have"]], urgent[~urgent["must_have"]]
     if len(must_u):
         out.append(("URGENT", f"{len(must_u)} must-have product(s) may run out before your next delivery: "
-                              f"{', '.join(must_u['name'])}.", "R"))
+                              f"{', '.join(must_u['name'])}.", "A"))
     if len(other_u):
         out.append(("URGENT", f"{len(other_u)} other product(s) may run out before your next delivery.",
-                    "R"))
+                    "A"))
     if ctx["order_rm"] > ctx["budget_rm"] + 0.5:
         out.append(("WARNING", f"Your order exceeds your budget by RM {ctx['order_rm'] - ctx['budget_rm']:,.0f}.",
-                    "R"))
+                    "I"))
     elif ctx["budget_limited"]:
         short = plan[(plan["ideal"] > 0) & (plan["qty"] < plan["ideal"])]
         out.append(("WARNING", f"Your budget leaves RM {ctx['ideal_rm'] - ctx['totals']['spent_rm']:,.0f} of the "
                                f"recommended order unfilled; {len(short)} product(s) get less than they need.",
-                    "R"))
+                    "I"))
     stop = plan[plan["action"] == "STOP"]
     if len(stop):
         rm = float(rows.loc[stop["product"], "expected_expire_rm"].sum())
@@ -172,9 +172,13 @@ def look_ahead_table(ctx, rank_by="Biggest increase"):
                       ([f"it keeps only {r['shelf_life']} day(s)"] if short_life else []) + \
                       (["your budget doesn't cover the full amount"] if p.qty < p.ideal else [])
             if reasons:
-                rec, rec_why = "part", "Demand may increase, but " + " and ".join(reasons) + "."
+                lead_in = ("Demand may increase" if p.trend == "Growing" else
+                           "Your stock and usual order may not cover expected sales")
+                rec, rec_why = "part", f"{lead_in}, but " + " and ".join(reasons) + "."
             else:
-                rec, rec_why = "full", "Demand is expected to rise, the forecast is fairly steady and the stock keeps."
+                rec, rec_why = "full", (("Demand is expected to rise" if p.trend == "Growing" else
+                                         "Your stock and usual order may not cover expected sales")
+                                        + ", the forecast is fairly steady and the stock keeps.")
         out.append({"product": p.product, "name": p.name, "fc7": r["demand_7d"], "last7": r["demand_last7"],
                     "change": p.change, "trend": p.trend, "cover": p.cover_days, "band": band,
                     "uncertain": uncertain, "delivery": as_of + pd.Timedelta(days=lead),
@@ -343,10 +347,10 @@ def profit_insights(ctx, summary):
         name, stock_rm = pl["name"], (r["on_hand"] + r["on_order"]) * r["unit_cost"]
         if p in top_rev and (pl["urgent"] or pl["action"] == "RESTOCK"):
             out.append(("High sales, low stock", f"{name} is one of your top sellers by revenue and may run short "
-                                                 "before the next delivery.", p, "R"))
+                                                 "before the next delivery.", p, "A"))
         elif p in top_margin and pl["cover_days"] < r["lead_time"]:
             out.append(("High margin, running low", f"{name} earns one of your best margins, but its stock may not "
-                                                    "last until the delivery.", p, "R"))
+                                                    "last until the delivery.", p, "A"))
         if pl["cover_days"] > 14 and stock_rm >= 50:
             out.append(("High stock, slow sales", f"About RM {stock_rm:,.0f} is tied up in {name}, which may take "
                                                   f"{pl['cover_days']:.0f} days to sell.", p, "R"))
@@ -564,3 +568,129 @@ def product_trends(ctx, days=7):
     df["change_pct"] = np.where(df["units_prev"] > 0, (df["units"] / df["units_prev"].where(df["units_prev"] > 0) - 1)
                                 * 100, np.nan)
     return df.drop(columns=["has_history", "has_history_prev"]).reset_index(drop=True)
+
+
+# ---------------- Proof: the evaluation the pipeline measured, as a few plain verdicts ----------------
+MODEL_KEY = "Model (gradient boosting)"
+GATE_TEXT = {
+    "G1": "The AI forecast beats the best simple rule on 7-day error (95% confidence interval below zero)",
+    "G2": "85–95% of actual 7-day sales fall inside the 90% forecast range",
+    "G3": "Ordering with LARIS loses less (lost profit + waste) than every usual rule at 50% and 75% cash, in most stores",
+    "G4": "G3 still holds under the sensitivity checks (margins, goodwill, shelf lives, late deliveries)",
+}
+
+
+def proof_summary(metrics):
+    """Plain verdicts from metrics.json (written by pipeline.py on held-out weeks). Nothing is recomputed here;
+    every figure is read from the file. Gates G1-G4 are the ones fixed in LARIS_OVERVIEW.md before any results."""
+    m = metrics or {}
+    out = {"source": m.get("data_source", "unknown"), "mock": "MOCK" in m.get("data_source", ""), "gates": {}}
+    wk = m.get("test_weekly_totals") or {}
+    out["accuracy"] = [{"method": k, "wape": v.get("WMAPE"), "mae": v.get("MAE"), "bias": v.get("bias"),
+                        "model": k == MODEL_KEY} for k, v in wk.items()]
+    ci = {k: v for k, v in (m.get("model_vs_baselines_7day_ci") or {}).items() if k != "label"}
+    base = {k: v["WMAPE"] for k, v in wk.items() if k != MODEL_KEY and "WMAPE" in v}
+    if base and ci:
+        best = min(base, key=base.get)
+        hi = (ci.get(best) or {}).get("ci95", [None, None])[1]
+        out["best_rule"] = {"name": best, "wape": base[best], "diff": (ci.get(best) or {}).get("diff"),
+                            "ci95": (ci.get(best) or {}).get("ci95")}
+        out["gates"]["G1"] = "PASS" if hi is not None and hi < 0 else "FAIL"
+        out["beats_rules"] = sum(1 for v in ci.values() if v.get("ci95", [0, 0])[1] < 0)
+        out["n_rules"] = len(ci)
+    else:
+        out["gates"]["G1"] = "NOT RUN"
+    cov = m.get("lead_time_interval_coverage") or {}
+    c7 = (cov.get("conformal") or {}).get("L7_90")
+    c7 = c7 if c7 is not None else m.get("band_coverage_90")
+    out["coverage"] = {"L7_90": c7, "daily_90": m.get("band_coverage_90"),
+                       "by_horizon": {L: (cov.get("conformal") or {}).get(f"L{L}_90") for L in (1, 3, 7)}}
+    out["gates"]["G2"] = "NOT RUN" if c7 is None else "PASS" if 0.85 <= c7 <= 0.95 else "FAIL"
+    out["unseen"] = m.get("unseen_stores")
+    ab = m.get("alert_backtest") or {}
+    out["alerts"] = {"rows": [{"method": k, **v} for k, v in (ab.get("test") or {}).items()],
+                     "pr_auc": ab.get("test_pr_auc"), "reliability": ab.get("reliability") or [],
+                     "label": ab.get("label", ""), "tau": ab.get("tau_act")}
+    bs = m.get("budget_simulation") or {}
+    tot = bs.get("totals_by_budget") or {}
+    out["replay"] = {"totals": tot, "label": bs.get("label", ""), "stores": bs.get("stores", []),
+                     "assumptions": bs.get("assumptions", [])}
+    laris = "LARIS (AI forecast + optimiser)"
+    if tot:
+        wins = []
+        for pct in ("50%", "75%"):
+            t = tot.get(pct, {})
+            usual = {k: v for k, v in t.items() if k.startswith("Usual")}
+            rate = (bs.get("laris_win_rate_by_store") or {}).get(pct, {})
+            wins.append(bool(usual) and laris in t and all(
+                t[laris]["lost_margin_plus_waste_rm"] < v["lost_margin_plus_waste_rm"] and rate.get(k, 0) > 0.5
+                for k, v in usual.items()))
+        out["gates"]["G3"] = "PASS" if all(wins) else "FAIL"
+        sens = bs.get("sensitivity_75pct") or {}
+        out["sensitivity_failures"] = [k for k, v in sens.items() if not v.get("laris_lowest_vs_usual", True)]
+        out["gates"]["G4"] = ("NOT RUN" if not sens else
+                              "PASS" if bs.get("conclusion_holds_in_all_scenarios") else "FAIL")
+    else:
+        out["gates"]["G3"] = out["gates"]["G4"] = "NOT RUN"
+        out["sensitivity_failures"] = []
+    return out
+
+
+def attention(ctx):
+    """The products that need the owner this week, counted once, so Home and the LARIS tiles always agree:
+    urgent = may run out before an order placed today arrives (A); waste = may expire unsold or is excess stock (R)."""
+    al = alert_table(ctx)
+    wa = waste_table(ctx)
+    urgent = list(al.loc[al["level"] == "URGENT", "product"]) if len(al) else []
+    waste = list(wa.loc[wa["kind"].isin(["Expiry risk", "Excess stock"]), "product"]) if len(wa) else []
+    waste = [p for p in waste if p not in urgent]
+    return {"urgent": urgent, "waste": waste, "total": len(urgent) + len(waste)}
+
+
+def forecast_grid(ctx):
+    """One row per product with the 7 daily forecasts (the same daily_forecast the plan used), the 7-day total, last
+    week's sales and the change. Pure reshaping: no new forecasting."""
+    as_of = ctx["week"]["as_of"]
+    days = pd.date_range(as_of, periods=7)
+    rows = ctx["rows"].set_index("product")
+    out = []
+    for p in ctx["plan"].itertuples():
+        d = daily_forecast(ctx, p.product)
+        out.append({"product": p.product, "name": p.name, **{f"{day:%a %d}": float(v) for day, v in zip(days, d)},
+                    "total": float(np.sum(d)), "last7": float(rows.at[p.product, "demand_last7"]), "change": p.change,
+                    "source": p.forecast_source, "must_have": bool(p.must_have)})
+    return pd.DataFrame(out), [f"{day:%a %d}" for day in days]
+
+
+def purchase_order(plan, ref, as_of, supplier=""):
+    """This week's order as purchase-order lines (only products with a quantity)."""
+    order = plan[plan["order_qty"] > 0]
+    return pd.DataFrame({"PO number": ref, "Order date": f"{pd.Timestamp(as_of):%Y-%m-%d}", "Supplier": supplier or "",
+                         "Product": order["name"].map(lambda n: str(n).split(" ", 1)[1]
+                                                      if not str(n)[:1].isalnum() and " " in str(n) else str(n)),
+                         "Quantity": order["order_qty"].astype(int), "Unit cost (RM)": order["unit_cost"].round(2),
+                         "Line total (RM)": order["order_rm"].round(2)})
+
+
+def activity(state, names=None, limit=50):
+    """Every decision LARIS has recorded (alerts, waste, orders, stock counts), newest first. `state` is the local
+    store's dict (store.load())."""
+    names = names or {}
+    rows = []
+    for key, v in (state.get("alerts") or {}).items():
+        ref, _, p = key.partition("|")
+        rows.append({"When": v.get("at", ""), "Area": "A · Alert", "Product": names.get(p, p), "What": v.get("status", ""),
+                     "Detail": v.get("choice", "")})
+    for key, v in (state.get("waste") or {}).items():
+        ref, _, p = key.partition("|")
+        rows.append({"When": v.get("at", ""), "Area": "R · Waste", "Product": names.get(p, p), "What": v.get("status", ""),
+                     "Detail": v.get("choice", "")})
+    for ref, v in (state.get("orders") or {}).items():
+        for h in v.get("history", []):
+            rows.append({"When": h.get("at", ""), "Area": "S · Order", "Product": ref, "What": h.get("status", ""),
+                         "Detail": h.get("note", "")})
+    for v in state.get("stock_log") or []:
+        rows.append({"When": v.get("at", ""), "Area": "Stock count", "Product": v.get("name", ""),
+                     "What": f"{v.get('before', 0):,.0f} → {v.get('after', 0):,.0f}", "Detail": v.get("reason", "")})
+    df = pd.DataFrame(rows, columns=["When", "Area", "Product", "What", "Detail"])
+    return df.sort_values("When", ascending=False).head(limit).reset_index(drop=True)

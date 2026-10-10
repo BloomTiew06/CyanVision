@@ -15,18 +15,18 @@ from inventory import (TAU_ACT, TIER_RANK, _normal_loss, allocate_budget, assess
 # Sample kedai runcit (ILLUSTRATIVE): item names, RM prices and weekly sales are made up for the demo. Each item
 # replays the daily sales pattern of one Favorita product family, scaled to these weekly sales.
 SAMPLE_SHOP = {  # family: (item, cost RM, selling price RM, units sold last 7 days)
-    "GROCERY I": ("Maggi Curry 5-pack", 4.20, 5.20, 60),
-    "BEVERAGES": ("Milo 1kg", 15.50, 18.90, 20),
-    "DAIRY": ("Fresh milk 1L", 6.20, 7.50, 35),
-    "BREAD/BAKERY": ("White bread loaf", 3.40, 4.10, 70),
-    "EGGS": ("Eggs, grade B (tray of 30)", 11.00, 13.50, 25),
-    "POULTRY": ("Fresh chicken 1kg", 9.00, 11.00, 30),
-    "PRODUCE": ("Sawi (vegetables) 500g", 2.00, 3.00, 40),
-    "MEATS": ("Beef 500g", 18.00, 22.00, 10),
-    "FROZEN FOODS": ("Frozen burger patties 12pc", 9.50, 12.00, 15),
-    "CLEANING": ("Dishwashing liquid 900ml", 4.50, 6.00, 12),
-    "PERSONAL CARE": ("Shampoo 400ml", 12.00, 15.90, 8),
-    "DELI": ("Fishballs 500g", 6.00, 7.90, 20),
+    "GROCERY I": ("Maggi Kari 5-pack 79g", 4.20, 5.20, 60),
+    "BEVERAGES": ("Milo Activ-Go 1kg", 15.50, 18.90, 20),
+    "DAIRY": ("Dutch Lady Full Cream 1L", 6.20, 7.50, 35),
+    "BREAD/BAKERY": ("Gardenia Original Classic 400g", 3.40, 4.10, 70),
+    "EGGS": ("Eggs Grade B (tray of 30)", 11.00, 13.50, 25),
+    "POULTRY": ("Fresh whole chicken 1kg", 9.00, 11.00, 30),
+    "PRODUCE": ("Sawi 500g", 2.00, 3.00, 40),
+    "MEATS": ("Local beef 500g", 18.00, 22.00, 10),
+    "FROZEN FOODS": ("Ramly beef burger 12pc", 9.50, 12.00, 15),
+    "CLEANING": ("Sunlight Lime 900ml", 4.50, 6.00, 12),
+    "PERSONAL CARE": ("Sunsilk Smooth & Manageable 320ml", 12.00, 15.90, 8),
+    "DELI": ("Figo fishballs 500g", 6.00, 7.90, 20),
 }
 
 QGRID = np.round(np.linspace(0.01, 0.99, 99), 2)   # same grid as pipeline.uncertainty_table
@@ -312,7 +312,7 @@ def explain(row):
     for w in row["low_why"]:
         out.append(("Caution", f"Lower confidence: {w}."))
     out.append(("Your setting", f"Lead time {row['lead_time']} d, shelf life {row['shelf_life']} d, margin RM "
-                                f"{row['margin']:.2f}{', must-have' if row['must_have'] else ''} (placeholders unless you changed them)."))
+                                f"{row['margin']:.2f}{', must-have' if row['must_have'] else ''} (your settings; change them in Products)."))
     return out
 
 
@@ -422,7 +422,10 @@ def plan_table(rows, alloc, items):
             risk = f"Stock lasts {_days(cover)}."
 
         if action == "STOP":
-            rec = "Don't reorder" + ("; put it on sale before it expires" if r["perishable"] else "; consider a promotion")
+            lasts = min(cover, float(r["shelf_life"])) if r["perishable"] else cover
+            again = max(0, int(lasts - lead)) if np.isfinite(lasts) else None
+            rec = "Skip this order" + (f"; reorder in about {again} day(s)" if again is not None else "") + \
+                  ("; put older stock on sale before it expires" if r["perishable"] else "; consider a promotion")
         elif action == "RESTOCK":
             rec = (f"Order {qty:,.0f} units (you'd usually order {usual:,.0f})" if qty > usual else
                    f"Order {qty:,.0f} units today")

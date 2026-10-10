@@ -1,4 +1,5 @@
-"""S · Sales: revenue, gross profit and margin, best sellers, and products that deserve attention."""
+"""Insights · Revenue and profit: gross profit and margin by product, best sellers, and products that deserve
+attention (drawn on the Insights page)."""
 from html import escape
 
 import altair as alt
@@ -7,17 +8,16 @@ import streamlit as st
 import laris_ui as ui
 import planning
 
-HERE = "views/laris.py"
+HERE = "views/insights.py"
 
 
 def render(ctx):
 
-    period = st.segmented_control("Period", list(planning.PERIODS), **ui.sticky("sales_period", "Last 28 days")) \
-        or "Last 28 days"
+    period = ui.choice("Period", list(planning.PERIODS), "sales_period", "Last 28 days", keep=True)
     df, tot = planning.sales_summary(ctx, planning.PERIODS[period])
-    st.markdown(ui.label("SAMPLE DATA", "placeholder") + f'<span class="lr-muted">{tot["start"]:%d %b %Y} – '
-                f'{tot["end"]:%d %b %Y} ({tot["days"]} days). Recorded sales are replayed sample data scaled to this shop, '
-                "priced with your selling prices and costs: illustrative, not real business results.</span>",
+    st.markdown(f'<span class="lr-muted">{tot["start"]:%d %b %Y} – '
+                f'{tot["end"]:%d %b %Y} ({tot["days"]} days). Recorded sales '
+                "priced with your selling prices and costs.</span>",
                 unsafe_allow_html=True)
 
     # ---------------- A. summary ----------------
@@ -35,7 +35,7 @@ def render(ctx):
     st.caption(" ".join(notes))
 
     # ---------------- B/C. revenue and gross profit rankings ----------------
-    n = st.segmented_control("Show", ["Top 5", "Top 10", "Top 20", "All"], **ui.sticky("sales_top", "Top 10")) or "Top 10"
+    n = ui.choice("Show", ["Top 5", "Top 10", "Top 20", "All"], "sales_top", "Top 10", keep=True)
     limit = None if n == "All" else int(n.split()[1])
 
 
@@ -51,7 +51,7 @@ def render(ctx):
             x=alt.X(f"{col}:Q", title=title), tooltip=["name", alt.Tooltip(f"{col}:Q", format=",.2f", title=title)])
         text = base.mark_text(align="left", dx=4, color=ui.CHARCOAL, fontSize=11).encode(
             x=f"{col}:Q", text=alt.Text(f"{col}:Q", format=",.0f"))
-        st.altair_chart((bars + text).properties(height=max(160, 28 * len(d))), use_container_width=True)
+        st.altair_chart((bars + text).properties(height=max(160, 28 * len(d))), width="stretch")
 
 
     a, b = st.columns(2)
@@ -66,7 +66,7 @@ def render(ctx):
     ui.section("Gross margin %", "The share of each ringgit of sales you keep. A high percentage on a slow seller can still "
                                  "mean little profit in RM.")
     m = df.dropna(subset=["margin_pct"]).sort_values("margin_pct", ascending=False)
-    st.dataframe(m[["name", "units", "revenue", "gross_profit", "margin_pct"]], hide_index=True, use_container_width=True,
+    st.dataframe(m[["name", "units", "revenue", "gross_profit", "margin_pct"]], hide_index=True, width="stretch",
                  column_config={"name": "Product", "units": st.column_config.NumberColumn("Units sold", format="%.0f"),
                                 "revenue": st.column_config.NumberColumn("Revenue (RM)", format="%.0f"),
                                 "gross_profit": st.column_config.NumberColumn("Gross profit (RM)", format="%.0f"),

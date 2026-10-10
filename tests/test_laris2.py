@@ -1,5 +1,6 @@
 """LARIS 2.0: shared-context logic behind every page, plus cross-page behaviour in the running app."""
 import json
+import re
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -258,43 +259,52 @@ def test_budget_and_week_are_shared_across_pages(monkeypatch):
     at = _app(monkeypatch)
     week = at.session_state["as_of"]
     at.session_state["budget_rm"] = 300.0
-    at.session_state["tool"] = "R"
+    at.session_state["tool"] = "I"
     at.switch_page("views/laris.py").run()
     assert not at.exception and at.session_state["ctx"]["budget_rm"] == 300.0
-    at.switch_page("views/orders.py").run()
+    at.session_state["tool"] = "S"
+    at.switch_page("views/laris.py").run()
     assert at.session_state["ctx"]["budget_rm"] == 300.0 and at.session_state["as_of"] == week
     assert at.session_state["ctx"]["totals"]["spent_rm"] <= 300.0 + 1e-6
 
 
-def test_labels_and_no_claims_of_sending(monkeypatch):
-    for page, tool in (("home.py", None), ("orders.py", None), ("laris.py", "S"), ("laris.py", "R"),
-                       ("settings.py", None)):
+def test_professional_wording_and_no_claims_of_sending(monkeypatch):
+    """No demo / mock / hackathon wording anywhere, and still no claims that LARIS sent or placed anything."""
+    for page, tool in (("home.py", None), ("laris.py", "L"), ("laris.py", "A"), ("laris.py", "R"), ("laris.py", "I"),
+                       ("laris.py", "S"), ("products.py", None), ("insights.py", None), ("proof.py", None),
+                       ("settings.py", None), ("product.py", None)):
         at = _app(monkeypatch, page, tool)
-        assert any("MOCK DATA" in e.value for e in at.error)
-        text = " ".join(m.value for m in at.markdown) + " " + " ".join(c.value for c in at.caption)
+        text = " ".join(m.value for m in at.markdown if "<style" not in m.value) + " " + \
+            " ".join(c.value for c in at.caption) + " " + " ".join(b.label for b in at.button)
+        text = re.sub(r'class="[^"]*"', "", text)            # CSS class names aren't visible text
+        low = text.lower()
+        for word in ("mock", "demo", "hackathon", "pitch", "sample shop", "sample data", "illustrative", "placeholder",
+                     "replay", "pilot", "not connected"):
+            assert word not in low, (page, tool, word)
         for phrase in ("message sent", "sent automatically", "order was placed", "order has been placed", "synced with"):
-            assert phrase not in text.lower()
-        if page == "orders.py":
-            assert "NOT CONNECTED" in text and "can't see whether it was sent" in text
+            assert phrase not in low
+        assert "estimates" in low or "estimated" in low                 # estimates are still labelled
         if tool == "S":
+            assert "can't see whether it was sent" in text
+        if page == "insights.py":
             assert "not net profit" in text
-        if tool == "R":
-            assert "SIMULATED" in text or "budget replay hasn't been run" in text
+        if tool == "I":
+            assert "BACKTEST" in text or "Backtest not available" in text
 
 
 def test_reset_is_explicit_and_edits_survive_a_week_change(monkeypatch):
     at = _app(monkeypatch, "settings.py")
-    assert next(b for b in at.button if b.label == "Reset to sample shop").disabled
+    assert next(b for b in at.button if b.label == "Restore default stock levels").disabled
     inp = at.session_state["inputs"].copy()
     inp.loc[0, "On hand"] = 12345
     at.session_state["inputs"], at.session_state["inputs_dirty"] = inp, True
-    week = at.selectbox(key="set_week")
-    target = week.options[0] if week.value != week.options[0] else week.options[1]
+    days, now = at.session_state["_days"], at.session_state["as_of"]
+    target = days[0] if days[0] != now else days[1]
     at.selectbox(key="set_week").set_value(target).run()
-    assert str(at.session_state["as_of"].date()) in target or at.session_state["inputs_key"][1] != str(week.value)
+    assert at.session_state["as_of"] == target and at.session_state["inputs_key"][1] == str(target)
     assert not at.exception and at.session_state["inputs"].loc[0, "On hand"] == 12345
 
 
 def test_app_never_imports_the_training_pipeline():
-    src = (ROOT / "app.py").read_text() + "".join(p.read_text() for p in (ROOT / "views").glob("*.py"))
+    src = (ROOT / "app.py").read_text(encoding="utf-8") + "".join(p.read_text(encoding="utf-8") for p in (ROOT / "views").glob("*.py"))
     assert "import pipeline" not in src and "from pipeline" not in src

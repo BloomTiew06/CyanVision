@@ -58,7 +58,7 @@ def test_categorize_and_priority():
     assert priority(row)[0] != "Act today"
 
 
-PAGES = ["home.py", "laris.py", "products.py", "orders.py", "settings.py", "product.py"]
+PAGES = ["home.py", "laris.py", "products.py", "insights.py", "settings.py", "product.py"]
 
 
 def test_editing_products_changes_the_plan(monkeypatch):

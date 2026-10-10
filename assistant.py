@@ -27,7 +27,7 @@ Rules:
 - If a tool says data is missing or unavailable, say so plainly. Never make up product names or figures.
 - Say which figures are recorded sales, which are LARIS calculations, and which are forecasts or estimates.
 - You cannot send or place orders, buy anything, or change stock, and neither can a button. LARIS never places
-  orders: the owner sends the order themselves from the Orders page (it opens a WhatsApp draft they send).
+  orders: the owner sends the order themselves from LARIS › S · Send & Sync (it opens a WhatsApp draft they send).
 - Only after you call propose_order_change may you mention a Confirm button, and then only to change that one
   product's quantity in this week's order. Never tell the owner to press Confirm for anything else, and never say
   a change was made.
@@ -79,7 +79,7 @@ def http_transport(cfg, payload, retries=1):
 
 def _ai_answer(question, history, ctx, cfg, transport):
     week = ctx["week"]
-    today = (f"\nLARIS is replaying past data: treat {week['as_of']:%A %d %B %Y} as today and the planning week as "
+    today = (f"\nThe planning date is {week['as_of']:%A %d %B %Y}: treat it as today and the planning week as "
              f"{week['as_of']:%d %b} to {week['end']:%d %b %Y}. Use dates exactly as the tools give them; never "
              "compare them with the real calendar.")
     messages = [{"role": "system", "content": SYSTEM + today}]
@@ -158,7 +158,7 @@ def _restock(ctx, memory):
     return (f"**Order {len(items)} products this week, about {_rm(d['order_total'])} in total** "
             f"(budget {_rm(d['available_budget'])}).\n\n" + _table(["Product", "Order", "Cost", "Runs out first?"], rows)
             + f"\n\n{len(urgent)} of them may run out before the next delivery. Quantities come from LARIS's optimiser "
-              "within your budget.\n\n**Next:** check the list in LARIS › R · Recommend, then send it from Orders.")
+              "within your budget.\n\n**Next:** check the list in LARIS › I · Invest, then send it from LARIS › S · Send & Sync.")
 
 
 def _budget(ctx, memory):
@@ -176,7 +176,7 @@ def _budget(ctx, memory):
             text += (f"\nAn extra {_rm(add['extra_rm'])} would add " + ", ".join(f"{a['units']:,.0f} × {a['name']}"
                      for a in add["would_add"]) + f" (estimated {_rm(add['estimated_loss_avoided_rm'])} of lost "
                      "profit and waste avoided).\n")
-    return text + "\n**Next:** change the budget in the top bar, or see the trade-offs in LARIS › R · Recommend."
+    return text + "\n**Next:** change the budget or see the trade-offs in LARIS › I · Invest."
 
 
 def _best(ctx, memory):
@@ -188,7 +188,7 @@ def _best(ctx, memory):
     rows = [(t["name"], _rm(t["revenue_rm"]), f"{t['units']:,.0f}") for t in top]
     return (f"**Your best seller last week was {top[0]['name']}** ({d['period'][0]} to {d['period'][1]}).\n\n"
             + _table(["Product", "Revenue", "Units"], rows) + "\n\nThese are recorded sales priced at your selling "
-            "prices.\n\n**Next:** make sure the top sellers are in stock (LARIS › I · Inventory).")
+            "prices.\n\n**Next:** make sure the top sellers are in stock (Products › Stock & counts).")
 
 
 def _profit(ctx, memory):
@@ -203,7 +203,7 @@ def _profit(ctx, memory):
             f"margin.\n\nTop contributors: " + ", ".join(f"{t['name']} ({_rm(t['gross_profit_rm'])})"
                                                           for t in d["top_gross_profit"][:3])
             + f".\n\nThis is gross profit (sales minus what the goods cost), not net profit: rent, wages and other "
-              f"running costs aren't included.{note}\n\n**Next:** see LARIS › S · Sales for margins by product.")
+              f"running costs aren't included.{note}\n\n**Next:** see Insights for margins by product.")
 
 
 def _runout(ctx, memory):
@@ -220,7 +220,7 @@ def _runout(ctx, memory):
             + _table(["Product", "Urgency", "Stock lasts", "Delivery if ordered today"], rows)
             + "\n\nRanked by whether stock runs out before an order placed today can arrive, then must-haves and "
               "margin at risk. Days are estimates from the forecast." + extra
-            + "\n\n**Next:** see LARIS › R · Recommend for what to order or top up.")
+            + "\n\n**Next:** see LARIS › A · Alert for top-ups and LARIS › I · Invest for the order.")
 
 
 def _excess(ctx, memory):
@@ -233,7 +233,7 @@ def _excess(ctx, memory):
     return ("**These products have more stock than they're likely to sell in time.**\n\n"
             + _table(["Product", "Type", "Est. unsold", "Cost tied up"], rows)
             + "\n\nEstimates assume the stock on hand is fresh (expiry dates aren't recorded).\n\n"
-              "**Next:** skip or cut their next order in LARIS › R · Recommend.")
+              "**Next:** skip or cut their next order in LARIS › R · Reduce Waste.")
 
 
 def _inventory(ctx, memory):
@@ -245,7 +245,7 @@ def _inventory(ctx, memory):
     return (head + ("\n\n" + _table(["Product", "Status", "Stock", "Lasts"], rows) if rows else "")
             + f"\n\nStock value at cost: {_rm(d['stock_value_at_cost_rm'])}"
             + (f" ({d['products_without_cost_price']} product(s) have no cost price)." if d["products_without_cost_price"]
-               else ".") + "\n\n**Next:** see LARIS › I · Inventory.")
+               else ".") + "\n\n**Next:** see Products › Stock & counts.")
 
 
 def _summary(ctx, memory):
@@ -257,7 +257,7 @@ def _summary(ctx, memory):
             f"- May run out first: {', '.join(s['restock']['running_out']) or 'none'}\n"
             f"- Sales last 7 days: {_rm(sa['last_7_days_rm'])}{change}\n"
             f"- Gross profit last 7 days: {_rm(pr['gross_profit_7d_rm'])}\n"
-            f"- Overstocked: {', '.join(s['inventory']['excess']) or 'none'}\n\n**Next:** review LARIS › R · Recommend.")
+            f"- Overstocked: {', '.join(s['inventory']['excess']) or 'none'}\n\n**Next:** review LARIS › A · Alert and I · Invest.")
 
 
 def _product(ctx, memory, p):
@@ -268,7 +268,7 @@ def _product(ctx, memory, p):
             f"- Forecast next 7 days: {d['forecast_next_7_days']} ({d['forecast_source']})\n"
             f"- Sold last 7 days: {d['sold_last_7_days']:,.0f}\n\nWhy: {d['why']} {d['risk']}"
             + (f" {d['estimated_impact']} (estimate)." if d["estimated_impact"] else "")
-            + "\n\n**Next:** open it in LARIS › L · Look Up for the full forecast.")
+            + "\n\n**Next:** open it in LARIS › L · Look Ahead for the full forecast.")
 
 
 def _most_urgent(ctx, memory):

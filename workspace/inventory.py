@@ -1,4 +1,5 @@
-"""I · Inventory: current stock, what's low or out, what's excess, stock value, and explicit stock counts."""
+"""Products · Stock: current stock, what's low or out, what's excess, stock value, and explicit stock counts
+(drawn on the Products page)."""
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -25,14 +26,13 @@ def render(ctx):
                          f"{missing} product(s) without a cost price" if missing else "at your cost prices"),
                   unsafe_allow_html=True)
 
-    show_status = st.segmented_control("Show", ["All", "Out of stock", "Low", "Excess", "OK"],
-                                       label_visibility="collapsed", **ui.sticky("in_filter", "All")) or "All"
+    show_status = ui.choice("Show", ["All", "Out of stock", "Low", "Excess", "OK"], "in_filter", "All", keep=True)
     t = inv if show_status == "All" else inv[inv["status"] == show_status]
     if t.empty:
         st.info(f"No products are '{show_status}'.")
     else:
         st.dataframe(t.assign(lasts=t["cover_days"].map(lambda c: f"{c:.1f} days" if np.isfinite(c) else "–")),
-                     hide_index=True, use_container_width=True,
+                     hide_index=True, width="stretch",
                      column_order=["name", "status", "stock", "daily", "lasts", "reorder_point", "max_level", "value_rm"],
                      column_config={"name": st.column_config.TextColumn("Product", width="medium"), "status": "Status",
                                     "stock": st.column_config.NumberColumn("Stock", format="%d"),
@@ -93,4 +93,4 @@ def _adjust(ctx):
     if log:
         with st.expander(f"Recent stock changes ({len(log)})"):
             st.dataframe(pd.DataFrame(log[::-1][:20])[["at", "name", "before", "after", "reason", "note"]],
-                         hide_index=True, use_container_width=True)
+                         hide_index=True, width="stretch")

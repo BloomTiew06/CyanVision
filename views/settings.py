@@ -7,27 +7,12 @@ import streamlit as st
 
 import assistant
 import laris_ui as ui
+import planning
 import store
 
 ss = st.session_state
 ctx = ss["ctx"]
 TITLES = ["Encik", "Puan", "Cik", "Tuan", "Mr.", "Mrs.", "Ms.", "Dr.", "(none)"]
-
-
-def _seed(widget_key, value):
-    if widget_key not in ss:
-        ss[widget_key] = value
-
-
-def _save_prefs(fields):
-    """fields: {pref name: widget key}. Saves to state/laris_state.json; the app reads it on every run."""
-    prefs = store.get("prefs", {})
-    prefs.update({f: ss[k] for f, k in fields.items()})
-    store.put("prefs", prefs)
-    ss["set_msg"] = "Saved."
-
-
-prefs = store.get("prefs", {})
 
 # ---------------- shop & owner ----------------
 with st.expander("Shop and owner", expanded=True, icon=":material/storefront:"):
@@ -60,35 +45,31 @@ with st.expander("Supplier", icon=":material/local_shipping:"):
                 st.error("That number looks too short. Include the country code, e.g. 60123456789.")
             else:
                 store.put("prefs", {**store.get("prefs", {}), "supplier_name": name.strip(), "supplier_phone": digits})
-                st.success("Saved. Orders will open WhatsApp drafts addressed to this number.")
+                st.success("Saved. LARIS › S · Send & Sync will open WhatsApp drafts addressed to this number.")
 
 # ---------------- budget ----------------
 with st.expander("Budget", icon=":material/payments:"):
-    st.number_input("Budget for this week's order (RM)", min_value=0.0, step=10.0, format="%.0f",
+    st.number_input("Budget for this week's order (RM, cash or credit)", min_value=0.0, step=10.0, format="%.0f",
                     **ui.bind("set_budget", "budget_rm"))
-    st.caption(f"The full recommended order costs {ui.money(ctx['ideal_rm'])}. The same budget box is in the top bar.")
+    st.caption(f"Cash or supplier credit. The full recommended order costs {ui.money(ctx['ideal_rm'])}. You can "
+               "also change it in LARIS › I · Invest. Alerts and reminders are in LARIS › S · Send & Sync.")
     st.radio("When cash is short", ["essentials", "value"], horizontal=True, **ui.bind("set_strategy", "strategy"),
              format_func={"essentials": "Protect essentials first (recommended)",
                           "value": "Best value per ringgit"}.get)
 
-# ---------------- alerts & reminders ----------------
-with st.expander("Alerts and reminders", icon=":material/notifications:"):
-    names = dict(zip(ctx["plan"]["product"], ctx["plan"]["name"])) if not ctx["empty"] else {}
-    _seed("pf_urgent", prefs.get("urgent", True))
-    _seed("pf_evening", prefs.get("evening", False))
-    _seed("pf_muted", [p for p in prefs.get("muted", []) if p in names])
-    _seed("pf_snooze", pd.Timestamp(prefs["snooze_until"]).date() if prefs.get("snooze_until") else None)
-    fields = {"urgent": "pf_urgent", "evening": "pf_evening", "muted": "pf_muted"}
-    st.toggle("Urgent stock alerts", key="pf_urgent", on_change=_save_prefs, args=(fields,))
-    st.toggle("Evening summary", key="pf_evening", on_change=_save_prefs, args=(fields,))
-    st.multiselect("Mute alerts for these products", list(names), format_func=names.get, key="pf_muted",
-                   on_change=_save_prefs, args=(fields,), help="Muted products are left out of 'Act today' in Recommend.")
-    st.date_input("Snooze order reminders until", key="pf_snooze",
-                  on_change=lambda: store.put("prefs", {**store.get("prefs", {}), "snooze_until":
-                                                        str(ss["pf_snooze"]) if ss["pf_snooze"] else None}))
-    st.markdown(ui.label("NOT CONNECTED", "planned") + '<span class="lr-muted">These preferences are saved, but LARIS '
-                "has no notification service yet, so no alerts or reminders are actually sent. Muting works inside "
-                "the app.</span>", unsafe_allow_html=True)
+# ---------------- display ----------------
+with st.expander("Display", icon=":material/animation:"):
+    MOTION = {"system": "Follow my computer's setting (recommended)", "always": "Always on (for presentations)"}
+    ss["set_motion"] = ss.get("motion", "system")
+
+    def _save_motion():
+        store.put("prefs", {**store.get("prefs", {}), "motion": ss["set_motion"]})
+        ss["motion"] = ss["set_motion"]
+        st.toast("Saved.")
+
+    st.radio("Animations", list(MOTION), format_func=MOTION.get, key="set_motion", on_change=_save_motion)
+    st.caption("By default LARIS follows your computer: if Windows animation effects are off (Settings › Accessibility › "
+               "Visual effects), nothing moves. 'Always on' shows them anyway, for example when presenting.")
 
 # ---------------- local events ----------------
 with st.expander("Local events", icon=":material/event:"):
@@ -156,25 +137,49 @@ Keys are read on the server only and never shown in the browser. The assistant o
 from LARIS's tools, never your name or supplier contacts. It can't change anything without your confirmation.
 """)
 
-# ---------------- sample data ----------------
-with st.expander("Sample data (demo only)", icon=":material/dataset:"):
-    st.markdown(ui.label("SAMPLE", "placeholder") + '<span class="lr-muted">These controls choose which past week '
-                "and store pattern the demo replays. They are not real shop settings.</span>", unsafe_allow_html=True)
+# ---------------- activity ----------------
+with st.expander("Activity log", icon=":material/history:"):
+    names = dict(zip(ctx["plan"]["product"], ctx["plan"]["name"])) if not ctx["empty"] else {}
+    log = planning.activity(store.load(), names)
+    if log.empty:
+        st.caption("Nothing recorded yet. Decisions you save in A, R and S, and stock counts, appear here.")
+    else:
+        st.dataframe(log, hide_index=True, width="stretch")
+
+# ---------------- data & planning ----------------
+with st.expander("Data & planning", icon=":material/dataset:"):
     days, stores = ss["_days"], ss["_stores"]
+    default_store, default_day = ctx.get("default_week") or (None, None)
+
+    def _tight_week():
+        for k in ("inputs_key", "inputs", "budget_rm"):
+            ss.pop(k, None)
+        ss.update(store=default_store, as_of=default_day, preset="Tight budget", strategy="essentials", order_adj={},
+                  inputs_dirty=False, inputs_ver=ss.get("inputs_ver", 0) + 1,
+                  flash=["Tight-budget week loaded: budget at 60% of the full recommended order."])
+
     a, b = st.columns(2)
-    a.selectbox("Week to replay", days, format_func=lambda d: f"{d:%d %b} – {d + pd.Timedelta(days=6):%d %b %Y}",
+    a.selectbox("Planning week", days, format_func=lambda d: f"{d:%d %b} – {d + pd.Timedelta(days=6):%d %b %Y}",
                 **ui.bind("set_week", "as_of"))
-    b.selectbox("Sales pattern from store", stores, **ui.bind("set_store", "store"))
-    st.caption(f"Data source: {ctx['metrics'].get('data_source', 'unknown')}.")
+    b.selectbox("Sales history from store", stores, **ui.bind("set_store", "store"),
+                help="Which store's sales history the forecasts follow.")
+    with st.container(border=True, key="card_set_pitch"):
+        x, y = st.columns([3, 1.3], vertical_alignment="center")
+        x.markdown("**Tight-budget week**<br><span class='lr-muted'>The week with the largest predicted rise in must-have "
+                   "demand, with the budget at 60% of the full recommended order. Opens by default.</span>",
+                   unsafe_allow_html=True)
+        y.button("Load tight-budget week", type="primary", on_click=_tight_week, width="stretch",
+                 disabled=default_day is None,
+                 help=None if default_day is not None else "No suitable week in the sales history.")
 
     def _reset():
         for k in ("inputs_key", "inputs", "budget_rm"):
             ss.pop(k, None)
         ss.update(order_adj={}, inputs_dirty=False, reset_ok=False, inputs_ver=ss.get("inputs_ver", 0) + 1,
-                  flash=["The sample shop was reloaded for this week."])
+                  flash=["Default stock levels restored for this week."])
 
-    st.checkbox("I understand this replaces my products and order changes", key="reset_ok")
-    st.button("Reset to sample shop", on_click=_reset, disabled=not ss.get("reset_ok"))
-
-if ss.pop("set_msg", None):
-    st.toast("Saved.")
+    st.checkbox("I understand this replaces my product list and order changes", key="reset_ok")
+    st.button("Restore default stock levels", on_click=_reset, disabled=not ss.get("reset_ok"))
+    source = ctx["metrics"].get("data_source", "unknown")
+    source = "development sales dataset" if ctx.get("is_mock") else source.split(":")[0]
+    st.caption(f"Sales history: {source}. Forecast model details are on the Proof page.")
