@@ -2,7 +2,26 @@
 import numpy as np
 import pandas as pd
 
-from pipeline import bootstrap_wape_diff, lead_time_ratios, suspect_zero_runs
+from pipeline import bootstrap_wape_diff, evaluate_alerts, lead_time_ratios, suspect_zero_runs
+
+
+def test_evaluate_alerts_picks_threshold_on_validation_and_scores_test():
+    rng = np.random.default_rng(0)
+    n = 4000
+    p = rng.uniform(0, 1, n)
+    out = rng.uniform(0, 1, n) < p                     # perfectly calibrated probabilities
+    cases = pd.DataFrame({
+        "split": np.where(np.arange(n) < n // 2, "val", "test"), "stockout": out,
+        "p_normal": p, "p_conformal": np.clip(p + 0.3, 0, 1),   # conformal deliberately miscalibrated
+        "exp_short_normal": p, "exp_short_conformal": p, "unit_loss": 1.0, "real_loss_rm": out * 1.0,
+        "score_minstock": rng.uniform(0, 2, n), "score_lastweek": rng.uniform(0, 2, n),
+        "ma": 1.0, "lw": 1.0, "L": 1, "stock": 1.0})
+    res = evaluate_alerts(cases)
+    assert res["uncertainty_model"] == "normal"        # lower validation Brier score wins
+    assert 0 < res["tau_act"] < 1
+    laris = next(v for k, v in res["test"].items() if "best F1" in k)
+    rule = next(v for k, v in res["test"].items() if k.startswith("Min-stock"))
+    assert laris["precision"] > rule["precision"]      # informative score beats a random rule
 
 
 def test_suspect_zero_runs_flags_long_runs_in_busy_series_only():

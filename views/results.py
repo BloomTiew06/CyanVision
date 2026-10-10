@@ -69,12 +69,44 @@ with t1:
         x=alt.X("importance:Q", title="increase in error when shuffled"), y=alt.Y("feature:N", sort="-x", title=None)),
         use_container_width=True)
 with t2:
-    st.markdown(ui.label("MEASURED on real sales, simulated stock", "measured"), unsafe_allow_html=True)
-    if "alert_backtest" in metrics:
-        st.json(metrics["alert_backtest"])
+    st.markdown(ui.label("MEASURED on real sales, SIMULATED stock levels", "measured"), unsafe_allow_html=True)
+    ab = metrics.get("alert_backtest")
+    if ab:
+        res = pd.DataFrame(ab["test"]).T
+        match = next((k for k in res.index if "same recall" in k), None)
+        rule = next((k for k in res.index if k.startswith("Min-stock")), None)
+        if match and rule:
+            m, r = res.loc[match], res.loc[rule]
+            st.markdown(
+                f"**False alarms.** With its alert level set on earlier weeks to catch as many stockouts as a "
+                f"typical min-stock rule, LARIS caught **{m['recall']:.0%}** of the stockouts (rule: {r['recall']:.0%}) "
+                f"and raised a false alarm in **{m['false_alarm_rate']:.0%}** of the cases with no stockout "
+                f"(rule: {r['false_alarm_rate']:.0%}). Precision {m['precision']:.0%} vs {r['precision']:.0%}.")
+        st.dataframe(res[["precision", "recall", "false_alarm_rate", "alerts", "false_alarms", "missed"]].style.format(
+            {"precision": "{:.0%}", "recall": "{:.0%}", "false_alarm_rate": "{:.1%}", "alerts": "{:,.0f}",
+             "false_alarms": "{:,.0f}", "missed": "{:,.0f}"}), use_container_width=True)
+        a2, b2 = st.columns(2)
+        with a2:
+            st.markdown("**Ranking quality (Prioritize).** Share of the real lost margin found in the top 20% of "
+                        "cases, ranked by each method.")
+            st.dataframe(pd.Series(ab["test_rm_loss_captured_top20pct"], name="RM loss captured").to_frame()
+                         .style.format("{:.0%}"), use_container_width=True)
+            st.caption(f"PR-AUC (higher is better): " + ", ".join(f"{k} {v:.2f}" for k, v in ab["test_pr_auc"].items()))
+        with b2:
+            st.markdown(f"**Are the probabilities honest?** Predicted vs actual stockout rate on the test period "
+                        f"({ab['uncertainty_model']} uncertainty, chosen on validation; Brier {ab['test_brier']:.3f}).")
+            rel = pd.DataFrame(ab["reliability"])
+            st.altair_chart(
+                alt.Chart(rel).mark_line(point=True, color=ui.GREEN).encode(
+                    x=alt.X("predicted:Q", title="predicted chance of stockout", scale=alt.Scale(domain=[0, 1])),
+                    y=alt.Y("observed:Q", title="actual share that ran out", scale=alt.Scale(domain=[0, 1])),
+                    tooltip=["predicted", "observed", "cases"])
+                + alt.Chart(pd.DataFrame({"x": [0, 1], "y": [0, 1]})).mark_line(strokeDash=[4, 4], color="#9AA59F")
+                .encode(x="x:Q", y="y:Q"), use_container_width=True)
+        st.caption(ab["label"] + ". " + " ".join(ab["notes"]))
     else:
-        st.info("Not run yet. The alert backtest (precision, recall and false-alarm rate vs a min-stock rule) "
-                "is the next pipeline step.")
+        st.info("Not run yet. Rerun pipeline.py to backtest the alerts (precision, recall and false-alarm rate "
+                "vs a min-stock rule).")
 with t3:
     st.markdown(ui.label("MEASURED", "measured"), unsafe_allow_html=True)
     us = metrics.get("unseen_stores")

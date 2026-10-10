@@ -60,6 +60,8 @@ def parse_args():
     p.add_argument("--review", type=int, default=7, help="days between orders in the simulation")
     p.add_argument("--max-iter", type=int, default=300, help="boosting iterations")
     p.add_argument("--history-days", type=int, default=56, help="history exported for charts")
+    p.add_argument("--settings", default=str(Path(__file__).parent / "product_settings.csv"),
+                   help="per-product settings (lead time, shelf life, costs); defaults are placeholders")
     p.add_argument("--holdout-stores", type=int, default=10,
                    help="stores left out of a second training run and scored on the test period, as a test on "
                         "unseen shops (default 10; capped at a third of the stores; 0 = skip)")
@@ -253,6 +255,150 @@ def interval_coverage(te, sig, unc, horizons=(1, 3, 7), levels=(0.5, 0.8, 0.9, 0
     return out
 
 
+STOCK_GRID = (0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0)
+
+
+def _conformal_cdf(x, qvals):
+    """P(ratio <= x) from a product's validation quantile grid (QGRID), clipped to the grid's range."""
+    return np.interp(x, qvals, QGRID, left=0.005, right=0.995)
+
+
+def _alert_scores(y, alert):
+    y, alert = np.asarray(y, bool), np.asarray(alert, bool)
+    tp, fp = int((alert & y).sum()), int((alert & ~y).sum())
+    fn, tn = int((~alert & y).sum()), int((~alert & ~y).sum())
+    prec = tp / (tp + fp) if tp + fp else float("nan")
+    rec = tp / (tp + fn) if tp + fn else float("nan")
+    return {"precision": prec, "recall": rec, "false_alarm_rate": fp / (fp + tn) if fp + tn else float("nan"),
+            "f1": 2 * prec * rec / (prec + rec) if tp else 0.0, "alerts": tp + fp, "false_alarms": fp,
+            "missed": fn, "cases": len(y)}
+
+
+def alert_cases(long, sig, unc, settings, val_start, test_start, end, grid=STOCK_GRID):
+    """Backtest cases for stockout alerts: real future sales, simulated stock levels.
+
+    For every series, start day t and stock level c x (training mean daily sales) x L (L = the
+    product's lead time from settings): did actual sales over the next L days exceed the stock?
+    Scores known at t: the model's P(stockout) (normal and conformal), a min-stock rule on the
+    28-day average up to t-1, and a 'same days last week' rule. Suspect-zero windows are dropped."""
+    from scipy.stats import norm
+    from inventory import GOODWILL_RM, product_settings
+    Y = long.pivot(index="date", columns="sid", values="y")
+    full = pd.date_range(Y.index.min(), Y.index.max())
+    Y = Y.reindex(full)
+    P = long.pivot(index="date", columns="sid", values="pred_model").reindex(full)
+    SUS = long.pivot(index="date", columns="sid", values="suspect_zero").reindex(full).fillna(True).astype(float)
+    ma28 = Y.shift(1).rolling(28, min_periods=14).mean()
+    tmean = long[(long["split"] == "train") & ~long["suspect_zero"]].groupby("sid")["y"].mean()
+    prod_of = long.groupby("sid")["product"].first()
+    st = {p: product_settings(settings, p) for p in prod_of.unique()}
+    lead = prod_of.map(lambda p: int(st[p]["lead_time_days"]))
+    out = []
+    for L, sids in lead.groupby(lead).groups.items():
+        sids = [s for s in sids if s in Y.columns]
+        fwd = lambda M: M[sids].rolling(L, min_periods=L).sum().shift(-(L - 1))
+        frame = pd.DataFrame({
+            "yL": fwd(Y).stack(future_stack=True), "pL": fwd(P).stack(future_stack=True),
+            "sus": fwd(SUS).stack(future_stack=True), "lw": fwd(Y.shift(7)).stack(future_stack=True),
+            "ma": ma28[sids].stack(future_stack=True)}).reset_index()
+        frame.columns = ["date", "sid", "yL", "pL", "sus", "lw", "ma"]
+        frame = frame[(frame["sus"] == 0)].dropna(subset=["yL", "pL"])
+        last = frame["date"] + pd.Timedelta(days=L - 1)
+        frame["split"] = np.where((frame["date"] >= test_start) & (last <= end), "test",
+                                  np.where((frame["date"] >= val_start) & (last < test_start), "val", ""))
+        frame = frame[frame["split"] != ""]
+        frame["L"] = L
+        out.append(frame)
+    base = pd.concat(out, ignore_index=True)
+    base["product"] = base["sid"].map(prod_of)
+    base["tmean"] = base["sid"].map(tmean)
+    base = base[base["tmean"] > 0]
+    cases = pd.concat([base.assign(c=c, stock=c * base["tmean"] * base["L"]) for c in grid], ignore_index=True)
+    cases["stockout"] = cases["yL"] > cases["stock"]
+    must = cases["product"].map(lambda p: bool(st[p]["must_have"]))
+    cases["unit_loss"] = cases["product"].map(lambda p: float(st[p]["margin_rm"])) + GOODWILL_RM * must
+    cases["real_loss_rm"] = np.maximum(0, cases["yL"] - cases["stock"]) * cases["unit_loss"]
+    # Model probabilities: normal sigma*sqrt(L), and validation-error quantiles (conformal).
+    sd = cases["sid"].map(sig["sigma_d"]).to_numpy() * np.sqrt(cases["L"].to_numpy())
+    k = (cases["stock"] - cases["pL"]).to_numpy() / sd
+    cases["p_normal"] = 1 - norm.cdf(k)
+    cases["exp_short_normal"] = sd * (norm.pdf(k) - k * (1 - norm.cdf(k)))
+    qcols = [f"q{int(round(x * 100)):02d}" for x in QGRID]
+    cases["p_conformal"] = np.nan
+    cases["exp_short_conformal"] = np.nan
+    for (prod, L), g in cases.groupby(["product", "L"]):
+        u = unc[(unc["L"] == L) & (unc["product"] == prod)]
+        if u.empty:
+            u = unc[(unc["L"] == L) & (unc["product"] == "ALL")]
+        if u.empty:
+            continue
+        q = u[qcols].iloc[0].to_numpy(float)
+        x = (g["stock"] / g["pL"] - 1).to_numpy()
+        cases.loc[g.index, "p_conformal"] = 1 - _conformal_cdf(x, q)
+        dem = g["pL"].to_numpy()[:, None] * (1 + q[None, :])
+        cases.loc[g.index, "exp_short_conformal"] = np.maximum(0, dem - g["stock"].to_numpy()[:, None]).mean(1)
+    cases["p_conformal"] = cases["p_conformal"].fillna(cases["p_normal"])
+    cases["exp_short_conformal"] = cases["exp_short_conformal"].fillna(cases["exp_short_normal"])
+    # Rule scores (higher = more alarming) and their usual alert thresholds.
+    cases["score_minstock"] = cases["ma"] * cases["L"] / cases["stock"]
+    cases["score_lastweek"] = cases["lw"] / cases["stock"]
+    return cases
+
+
+def evaluate_alerts(cases, min_stock_factor=1.2):
+    """Choose the uncertainty model and the alert threshold on VALIDATION; report everything on TEST."""
+    from sklearn.metrics import average_precision_score
+    va, te = cases[cases["split"] == "val"], cases[cases["split"] == "test"]
+    brier = {m: float(((va[f"p_{m}"] - va["stockout"]) ** 2).mean()) for m in ("normal", "conformal")}
+    chosen = min(brier, key=brier.get)
+    pcol = f"p_{chosen}"
+    rule_alert = lambda d: (d["score_minstock"] > 1 / min_stock_factor).fillna(False)
+    rule_rec_val = _alert_scores(va["stockout"], rule_alert(va))["recall"]
+    taus = np.round(np.arange(0.05, 0.96, 0.01), 2)
+    val_stats = {t: _alert_scores(va["stockout"], va[pcol] >= t) for t in taus}
+    tau_match = max([t for t in taus if val_stats[t]["recall"] >= rule_rec_val] or [taus[0]])
+    tau_f1 = max(taus, key=lambda t: val_stats[t]["f1"])
+    rows = {
+        f"LARIS, threshold {tau_match:.2f} (same recall as min-stock rule on validation)":
+            _alert_scores(te["stockout"], te[pcol] >= tau_match),
+        f"LARIS, threshold {tau_f1:.2f} (best F1 on validation)": _alert_scores(te["stockout"], te[pcol] >= tau_f1),
+        f"Min-stock rule (stock < {min_stock_factor} x 28-day average x lead time)":
+            _alert_scores(te["stockout"], rule_alert(te)),
+        "Last-week rule (stock < same days last week)":
+            _alert_scores(te["stockout"], (te["score_lastweek"] > 1).fillna(False)),
+    }
+    pr_auc = {"LARIS": float(average_precision_score(te["stockout"], te[pcol])),
+              "Min-stock rule": float(average_precision_score(te["stockout"], te["score_minstock"].fillna(0))),
+              "Last-week rule": float(average_precision_score(te["stockout"], te["score_lastweek"].fillna(0)))}
+    bins = np.linspace(0, 1, 11)
+    rel = te.assign(bin=pd.cut(te[pcol], bins, include_lowest=True)).groupby("bin", observed=True).agg(
+        predicted=(pcol, "mean"), observed=("stockout", "mean"), cases=("stockout", "size")).reset_index(drop=True)
+    # Prioritisation: share of the realised RM loss found in the top 20% of cases by each ranking.
+    def capture(score):
+        top = te.assign(s=score).sort_values("s", ascending=False).head(max(1, len(te) // 5))
+        return float(top["real_loss_rm"].sum() / max(te["real_loss_rm"].sum(), 1e-9))
+    rank_capture = {
+        "LARIS (expected RM loss)": capture(te[f"exp_short_{chosen}"] * te["unit_loss"]),
+        "Min-stock rule (shortfall vs 28-day average)":
+            capture((te["ma"] * te["L"] - te["stock"]).clip(lower=0).fillna(0) * te["unit_loss"]),
+        "Last-week rule (shortfall vs last week)":
+            capture((te["lw"] - te["stock"]).clip(lower=0).fillna(0) * te["unit_loss"]),
+    }
+    return {
+        "label": "MEASURED on real future sales with SIMULATED stock levels (the data has no stock records): "
+                 "stock = c x training mean daily sales x lead time, c in " + ", ".join(f"{c:g}" for c in STOCK_GRID),
+        "uncertainty_model": chosen, "validation_brier": brier,
+        "test_brier": float(((te[pcol] - te["stockout"]) ** 2).mean()),
+        "tau_act": float(tau_match), "tau_best_f1": float(tau_f1),
+        "test": rows, "test_pr_auc": pr_auc, "test_rm_loss_captured_top20pct": rank_capture,
+        "test_cases": int(len(te)), "test_stockout_rate": float(te["stockout"].mean()),
+        "reliability": rel.to_dict(orient="records"),
+        "notes": ["Thresholds and the uncertainty model were chosen on the validation period only.",
+                  "A false alarm = alert where actual sales over the lead time did not exceed the stock.",
+                  "Sales stand in for demand; past stockouts in the data may hide some true demand."],
+    }
+
+
 def pick_holdout_stores(tr, k):
     """k stores spread evenly across the range of training sales volume (small to large)."""
     vol = tr.groupby("store")["y"].sum().sort_values()
@@ -385,6 +531,12 @@ def main():
     unc.to_csv(out / "uncertainty.csv", index=False)
     coverage = interval_coverage(te_all, sig, unc)
 
+    print("Backtesting stockout alerts (real sales, simulated stock levels)...")
+    from inventory import load_settings
+    cases = alert_cases(long, sig, unc, load_settings(a.settings), val_start, test_start, end)
+    alert_bt = evaluate_alerts(cases)
+    pd.DataFrame(alert_bt["test"]).T.rename_axis("method").to_csv(out / "alert_eval.csv")
+
     # Simulation on the TEST window: same order-up-to rule, only the forecast differs.
     print("Simulating replenishment policies...")
     hist_all = long.set_index(["sid", "date"])["y"]
@@ -457,6 +609,7 @@ def main():
             **boot},
         "test_by_volume_tier": by_tier,
         **({"unseen_stores": unseen} if unseen else {}),
+        "alert_backtest": alert_bt,
         "band_coverage_90": band_coverage_90,
         "lead_time_interval_coverage": {
             "label": "MEASURED on the test period: share of actual L-day sales inside the forecast interval "
@@ -480,7 +633,9 @@ def main():
             ],
         },
     }
-    (out / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    (out / "metrics.json").write_text(
+        json.dumps(metrics, indent=2, default=lambda o: o.item() if hasattr(o, "item") else str(o)),
+        encoding="utf-8")
 
     print("\nHeld-out test accuracy (daily):")
     for mth, s in daily.items():
@@ -502,6 +657,11 @@ def main():
         if k in coverage["conformal"]:
             print(f"  {L}-day totals inside the 90% interval: conformal {coverage['conformal'][k]:.1%}, "
                   f"normal {coverage['normal'][k]:.1%}")
+    print(f"Stockout alert backtest on test ({alert_bt['test_cases']:,} cases, real sales, simulated stock; "
+          f"uncertainty model chosen on validation: {alert_bt['uncertainty_model']}):")
+    for mth, s in alert_bt["test"].items():
+        print(f"  {mth[:62]:<62} precision {s['precision']:.2f}  recall {s['recall']:.2f}  "
+              f"false-alarm rate {s['false_alarm_rate']:.3f}")
     if headline:
         chg = headline["stock_change_pct"]
         print(f"\nSIMULATED: to reach the same {headline['matched_fill_rate']:.1%} fill rate, the model policy holds "

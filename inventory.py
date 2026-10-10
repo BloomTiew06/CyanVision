@@ -418,8 +418,9 @@ def allocate_budget(items, budget=None, goodwill_rm=GOODWILL_RM):
     return out, totals
 
 
-# Risk categories (Categorize) and priority tiers (Prioritize). Thresholds are business rules;
-# TAU_ACT is a placeholder until it is chosen on the validation period (alert backtest).
+# Risk categories (Categorize) and priority tiers (Prioritize). Thresholds are business rules.
+# TAU_ACT is the fallback alert threshold; the app uses the one chosen on the validation period by
+# the alert backtest in pipeline.py (passed per row as tau_act).
 TAU_ACT = 0.5
 SURGE_RATIO = 1.3
 CATEGORIES = {
@@ -443,12 +444,11 @@ def risk_flags(row):
     """Every risk category that applies to one assessed product. `row` holds the assess() and
     dead_stock() outputs plus lead_time, demand_last7, and optional anomaly / low_confidence flags."""
     flags = []
-    rod, lead = row.get("run_out_day"), int(row.get("lead_time", 1))
-    if (_is_day(rod) and rod <= lead) or row.get("p_stockout", 0) >= TAU_ACT:
+    if row.get("p_stockout", 0) >= row.get("tau_act", TAU_ACT):
         flags.append("STOCKOUT_IMMINENT")
     if row.get("dead_flag") and row.get("perishable"):
         flags.append("EXPIRY_RISK")
-    if row.get("status") == "ORDER" and "STOCKOUT_IMMINENT" not in flags:
+    if row.get("status") in ("ORDER", "CRITICAL") and "STOCKOUT_IMMINENT" not in flags:
         flags.append("REORDER_NEEDED")
     last7 = float(row.get("demand_last7", 0) or 0)
     if last7 > 0 and row.get("demand_7d", 0) >= SURGE_RATIO * last7:

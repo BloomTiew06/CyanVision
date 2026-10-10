@@ -4,13 +4,26 @@ Layer 1 (AI model) outputs are read from outputs/ (forecasts.parquet, sigma.csv)
 assessment, categories, priority) and layer 3 (budget allocation) run live here via inventory.py.
 No Streamlit imports, so this can be tested on its own.
 """
-from math import sqrt
+from math import ceil, sqrt
 
 import numpy as np
 import pandas as pd
 
-from inventory import (TIER_RANK, _normal_loss, allocate_budget, assess, categorize, dead_stock,
+from inventory import (TAU_ACT, TIER_RANK, _normal_loss, allocate_budget, assess, categorize, dead_stock,
                        horizon_demand, make_item, priority, product_settings)
+
+QGRID = np.round(np.linspace(0.01, 0.99, 99), 2)   # same grid as pipeline.uncertainty_table
+QCOLS = [f"q{int(round(x * 100)):02d}" for x in QGRID]
+
+
+def conformal_quantiles(unc, product, L):
+    """Validation error quantiles of L-day totals for a product (fallback: all products), or None."""
+    if unc is None or L > 7:
+        return None
+    u = unc[(unc["L"] == L) & (unc["product"] == product)]
+    if u.empty:
+        u = unc[(unc["L"] == L) & (unc["product"] == "ALL")]
+    return None if u.empty else u[QCOLS].iloc[0].to_numpy(float)
 
 COVER_PATTERN = [1.5, 6, 2.5, 12, 4, 9, 1, 7, 3, 10, 5, 8]   # default stock = N days of forecast (a mix)
 PRESETS = {
@@ -110,8 +123,15 @@ def _anomaly(past, product, as_of, sigma_raw):
     return False, ""
 
 
-def assess_products(week, sig, store, inputs, service=0.95, scale=1.0):
-    """Layer 2: risk, category, priority and a plain-language explanation for every product."""
+def assess_products(week, sig, store, inputs, service=0.95, scale=1.0, unc=None, alert_cfg=None):
+    """Layer 2: risk, category, priority and a plain-language explanation for every product.
+
+    When the pipeline's alert backtest chose the validation-error (conformal) uncertainty model,
+    P(stockout before delivery) and expected units short use those error quantiles; the alert
+    threshold is the one chosen on the validation period."""
+    alert_cfg = alert_cfg or {}
+    use_conformal = alert_cfg.get("uncertainty_model") == "conformal"
+    tau = float(alert_cfg.get("tau_act", TAU_ACT))
     rows, items = [], []
     for _, r in inputs.iterrows():
         prod = r["product"]
@@ -125,6 +145,12 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0):
         w = a["window"]
         mu_w, sd_w = horizon_demand(daily, w), sigma * sqrt(w)
         avail = on_hand + on_order
+        q = conformal_quantiles(unc, prod, lead) if use_conformal else None
+        p_lead = horizon_demand(daily, lead)
+        if q is not None and p_lead > 0:
+            a["p_stockout"] = float(1 - np.interp(avail / p_lead - 1, q, QGRID, left=0.005, right=0.995))
+            a["expected_short"] = float(np.maximum(0, p_lead * (1 + q) - avail).mean())
+            a["margin_at_risk"] = a["expected_short"] * margin
         window_short = sd_w * _normal_loss((avail - mu_w) / sd_w)
         fc7 = a["demand_7d"]
         band_pct = Z90 * sigma * sqrt(7) / fc7 if fc7 > 0 else float("inf")
@@ -157,9 +183,15 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0):
                "dead_action": d["action"], "low_confidence": bool(low_why), "low_why": low_why,
                "anomaly": anomaly, "anomaly_why": anomaly_why, "model_err28": m_err, "naive_err28": n_err,
                "promo_days": int(week["promo_days"].get(prod, 0)), "holiday": week["holiday"],
-               "effects": effects}
+               "effects": effects, "tau_act": tau,
+               "uncertainty": "past errors of the model" if q is not None else "measured daily error"}
         row["category"], row["label"] = categorize(row)
         row["tier"], row["rm_at_risk"], row["act_by"] = priority(row)
+        if row["category"] == "STOCKOUT_IMMINENT":
+            row["bridge_qty"] = float(max(1, ceil(row["expected_short"] / pack)) * pack)
+        else:
+            row["bridge_qty"] = 0.0
+        row["bridge_value"] = row["bridge_qty"] * cost
         row["action"] = action_text(row)
         row["why"] = explain(row)
         rows.append(row)
@@ -225,7 +257,9 @@ def explain(row):
     rod = row["run_out_day"]
     lasts = "beyond 7 days" if rod is None or pd.isna(rod) else f"about {int(rod)} day(s)"
     out.append(("Calculation", f"Stock of {avail:,.0f} lasts {lasts}; delivery takes {row['lead_time']} day(s)."))
-    out.append(("Calculation", f"{row['p_stockout']:.0%} chance of running out before the delivery arrives."))
+    out.append(("Calculation", f"{row['p_stockout']:.0%} chance of running out before the delivery arrives "
+                               f"(from the {row['uncertainty']}; LARIS alerts at {row['tau_act']:.0%} or more, a level "
+                               "chosen on past weeks)."))
     if row["dead_flag"]:
         out.append(("Calculation", f"{row['days_of_cover']:,.0f} days of stock vs a {row['shelf_life']}-day shelf life"
                                    + (f"; about {row['expected_expire_units']:,.0f} units (RM {row['expected_expire_rm']:,.0f}) "
@@ -244,10 +278,11 @@ def explain(row):
     return out
 
 
-def build_context(fc, sig, settings, store, as_of, inputs, budget_pct, scale=1.0, service=0.95):
+def build_context(fc, sig, settings, store, as_of, inputs, budget_pct, scale=1.0, service=0.95,
+                  unc=None, alert_cfg=None):
     """Everything the pages need, computed once per run."""
     week = week_view(fc, store, as_of, scale)
-    rows, items = assess_products(week, sig, store, inputs, service, scale)
+    rows, items = assess_products(week, sig, store, inputs, service, scale, unc, alert_cfg)
     ideal_alloc, ideal_tot = allocate_budget(items, None)
     budget_rm = round(ideal_tot["ideal_rm"] * budget_pct / 100.0, 2)
     alloc, tot = allocate_budget(items, budget_rm)

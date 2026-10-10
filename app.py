@@ -34,7 +34,8 @@ def load_outputs(out_dir, stamp=None):
     frontier = pd.read_csv(out / "sim_frontier.csv")
     imp = pd.read_csv(out / "importance.csv")
     per = pd.read_csv(out / "per_product_metrics.csv")
-    return metrics, fc, sig, frontier, imp, per
+    unc = pd.read_csv(out / "uncertainty.csv") if (out / "uncertainty.csv").exists() else None
+    return metrics, fc, sig, frontier, imp, per, unc
 
 
 @st.cache_data
@@ -45,7 +46,7 @@ def load_product_settings(path):
 if not (OUT / "metrics.json").exists():
     st.error(f"No pipeline outputs in {OUT}. Run:  python pipeline.py --data <folder with train.csv> --out outputs")
     st.stop()
-metrics, fc, sig, frontier, imp, per = load_outputs(str(OUT), (OUT / "metrics.json").stat().st_mtime)
+metrics, fc, sig, frontier, imp, per, unc = load_outputs(str(OUT), (OUT / "metrics.json").stat().st_mtime)
 settings = load_product_settings(str(ROOT / "product_settings.csv"))
 is_mock = "MOCK" in metrics["data_source"]
 
@@ -110,7 +111,7 @@ if ss.get("inputs_key") != key:
     ss["inputs_key"] = key
 
 ss["ctx"] = {**core.build_context(fc, sig, settings, store, as_of, ss["inputs"], ss["budget_pct"],
-                                  ss["scale"], ss["service"]),
+                                  ss["scale"], ss["service"], unc, metrics.get("alert_backtest")),
              "metrics": metrics, "fc": fc, "sig": sig, "frontier": frontier, "imp": imp, "per": per,
              "settings": settings, "is_mock": is_mock, "inputs": ss["inputs"], "widest": ss.get("widest")}
 pg.run()
