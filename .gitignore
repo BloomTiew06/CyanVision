@@ -1,0 +1,7 @@
+data/
+data_mock/
+outputs/
+outputs_mock/
+__pycache__/
+.pytest_cache/
+*.zip
