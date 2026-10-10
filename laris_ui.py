@@ -85,7 +85,7 @@ header[data-testid="stHeader"] {background: var(--header); backdrop-filter: blur
 [data-testid="stTopNavLink"]:hover, [data-testid="stTopNavSection"]:hover {background: var(--hover);}
 [data-testid="stTopNavLink"][aria-current="page"] {background: var(--nav-active);}
 [data-testid="stTopNavLink"][aria-current="page"] * {color: var(--text) !important; font-weight: 700;}
-[data-testid="stAppDeployButton"] {display: none;}
+[data-testid="stAppDeployButton"], [data-testid="stStatusWidget"] {display: none;}   /* LARIS shows its own */
 [data-testid="stToolbarActions"] *, [data-testid="stMainMenu"] *, [data-testid="stBaseButton-header"]
   {color: var(--text) !important;}
 [data-testid="stSidebarNavLink"], [data-baseweb="input"], [data-baseweb="select"] > div {min-height: 44px;}
@@ -238,6 +238,11 @@ hr {border-color: var(--line) !important;}
 .st-key-chatlog {height: auto !important; max-height: none !important; overflow-y: auto;}
 .st-key-chatlog [data-testid="stChatMessage"] {padding: 6px 0; gap: 10px;}
 .st-key-chatlog [data-testid="stChatMessage"] p {font-size: 14px;}
+.st-key-chatlog [data-testid="stSpinner"] {font-size: 12px; color: var(--muted); gap: 6px; padding: 2px 0 4px 44px;}
+.st-key-chatlog [data-testid="stSpinner"] p {font-size: 12px; margin: 0;}
+.st-key-chatlog [data-testid="stSpinnerIcon"] {transform: scale(.45); transform-origin: center;}
+.st-key-chat_clear button {min-height: 30px; padding: 0 10px; font-size: 12px;}
+.st-key-chat_clear button p {font-size: 12px;}
 .st-key-glass_ask [data-testid="stChatInput"], .st-key-glass_ask [data-testid="stChatInput"] > div
   {background: var(--tile); border: 1px solid var(--line); border-radius: 18px; box-shadow: none;}
 .st-key-glass_ask [data-testid="stChatInput"] textarea {font-size: 15px; min-height: 52px; color: var(--text);}

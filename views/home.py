@@ -140,37 +140,39 @@ with ask_col, st.container(key="glass_ask"):
     if chat:
         c.button("Clear", key="chat_clear", icon=":material/delete_sweep:",
                  on_click=lambda: ss.update(chat=[], chat_mem={}), use_container_width=True)
-    with st.container(height=300, key="chatlog", border=False, autoscroll=True):
-        if not chat:
-            with st.chat_message("assistant", avatar=":material/storefront:"):
-                st.markdown("Ask me about your stock, sales, profit or this week's order.")
-        for i, m in enumerate(chat):
-            with st.chat_message(m["role"], avatar=":material/storefront:" if m["role"] == "assistant"
-                                 else ":material/person:"):
-                st.markdown(m["content"])
-                if m["role"] == "assistant":
-                    st.caption(SOURCE.get(m.get("source"), ""))
-                    if m.get("proposal") and m.get("pending"):
-                        x, y = st.columns(2)
-                        x.button("Confirm", key=f"chat_ok_{i}", type="primary", on_click=_confirm, args=(i,),
-                                 use_container_width=True)
-                        y.button("Cancel", key=f"chat_no_{i}", on_click=_cancel, args=(i,),
-                                 use_container_width=True)
+    log = st.container(height=300, key="chatlog", border=False, autoscroll=True)   # filled below
     typed = st.chat_input("What would you like to know about your shop today?", key="chat_in")
     with st.container(key="chips", horizontal=True, gap="small"):
         for i, q in enumerate(SUGGESTIONS):
             st.button(q, key=f"chip_{i}", icon=":material/auto_awesome:", on_click=ss.update, kwargs={"chat_q": q})
 
+question = typed or ss.pop("chat_q", None)
+with log:
+    if not chat and not question:
+        with st.chat_message("assistant", avatar=":material/storefront:"):
+            st.markdown("Ask me about your stock, sales, profit or this week's order.")
+    for i, m in enumerate(chat):
+        with st.chat_message(m["role"], avatar=":material/storefront:" if m["role"] == "assistant"
+                             else ":material/person:"):
+            st.markdown(m["content"])
+            if m["role"] == "assistant":
+                st.caption(SOURCE.get(m.get("source"), ""))
+                if m.get("proposal") and m.get("pending"):
+                    x, y = st.columns(2)
+                    x.button("Confirm", key=f"chat_ok_{i}", type="primary", on_click=_confirm, args=(i,),
+                             use_container_width=True)
+                    y.button("Cancel", key=f"chat_no_{i}", on_click=_cancel, args=(i,), use_container_width=True)
+    if question:   # show the question at once, with a small "thinking" line, inside the box
+        with st.chat_message("user", avatar=":material/person:"):
+            st.markdown(question)
+        with st.spinner("Thinking…"):
+            r = assistant.ask(question, chat, ctx, cfg, memory)
+        chat.append({"role": "user", "content": question})
+        chat.append({"role": "assistant", "content": r["text"], "source": r["source"], "tools": r["tools"],
+                     "proposal": r["proposal"], "pending": bool(r["proposal"])})
+        st.rerun()
+
 st.markdown('<p class="lr-disclaimer">'
             + ("AI assistant on. " if cfg["enabled"] else "Quick answers (AI assistant not set up). ")
             + "Answers use your shop's numbers. LARIS never sends orders or changes stock by itself.</p>",
             unsafe_allow_html=True)
-
-question = typed or ss.pop("chat_q", None)
-if question:
-    chat.append({"role": "user", "content": question})
-    with st.spinner("Checking your shop's numbers…"):
-        r = assistant.ask(question, chat[:-1], ctx, cfg, memory)
-    chat.append({"role": "assistant", "content": r["text"], "source": r["source"], "tools": r["tools"],
-                 "proposal": r["proposal"], "pending": bool(r["proposal"])})
-    st.rerun()
