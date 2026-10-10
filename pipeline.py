@@ -291,7 +291,7 @@ def alert_cases(long, sig, unc, settings, val_start, test_start, end, grid=STOCK
     full = pd.date_range(Y.index.min(), Y.index.max())
     Y = Y.reindex(full)
     P = long.pivot(index="date", columns="sid", values="pred_model").reindex(full)
-    SUS = long.pivot(index="date", columns="sid", values="suspect_zero").reindex(full).fillna(True).astype(float)
+    SUS = long.pivot(index="date", columns="sid", values="suspect_zero").reindex(full).astype(float).fillna(1.0)
     ma28 = Y.shift(1).rolling(28, min_periods=14).mean()
     tmean = long[(long["split"] == "train") & ~long["suspect_zero"]].groupby("sid")["y"].mean()
     prod_of = long.groupby("sid")["product"].first()
