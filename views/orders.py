@@ -59,9 +59,10 @@ st.dataframe(
         "exp_short_units": st.column_config.NumberColumn("Expected short", format="%.1f"),
         "cut_reason": st.column_config.TextColumn("Why cut"),
     })
-st.caption("How LARIS chooses: each extra pack is worth (margin, plus a goodwill cost for must-haves) × the chance "
-           "it sells, minus its cost × the chance it's left over or expires. LARIS buys packs in order of value per "
-           "ringgit until the budget runs out.")
+st.caption("How LARIS chooses: must-have items are filled first, up to their expected demand. After that, each "
+           "extra pack is worth (margin, plus a goodwill cost for must-haves) × the chance it sells, minus its cost × "
+           "the chance it's left over or expires, and LARIS buys packs in order of value per ringgit until the budget "
+           "runs out.")
 order = alloc[alloc["qty"] > 0][["name", "qty", "spend_rm"]].rename(columns={"name": "product", "spend_rm": "total_rm"})
 st.download_button("Download order list (CSV)", order.to_csv(index=False).encode("utf-8"), "laris_order.csv",
                    "text/csv", help="Nothing is sent anywhere; share the file with your supplier yourself.")

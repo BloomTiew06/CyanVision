@@ -311,11 +311,13 @@ def _pack_values(mu, sd, position, pack, cs, co):
     return pv[pv > 0]
 
 
-def allocate_budget(items, budget=None, goodwill_rm=GOODWILL_RM):
+def allocate_budget(items, budget=None, goodwill_rm=GOODWILL_RM, protect_must_have=True):
     """Best order list for the cash available (LARIS 'I').
 
     Greedy by expected value per ringgit, one pack at a time: shortage cost = margin (+ goodwill for
-    must-haves), overstock cost per item. Packs that don't fit the remaining budget are skipped
+    must-haves), overstock cost per item. With protect_must_have, must-have packs are bought first
+    until the item covers its expected demand (each such pack more likely than not to sell); after
+    that every pack competes on value per RM. Packs that don't fit the remaining budget are skipped
     and cheaper packs of other products are still considered. budget=None gives the unconstrained
     ideal order (the newsvendor critical fractile, in packs).
     Returns (per-product DataFrame, totals dict).
@@ -328,24 +330,28 @@ def allocate_budget(items, budget=None, goodwill_rm=GOODWILL_RM):
     pack_cost = pack * df["unit_cost"].to_numpy(float)
     dead = df["dead"].to_numpy(bool) if "dead" in df else np.zeros(n, bool)
 
-    vals, prods, ks = [], [], []
+    must = df["must_have"].to_numpy(bool)
+    vals, prods, ks, prot = [], [], [], []
     n_ideal = np.zeros(n, int)
     for i in range(n):
-        pv = _pack_values(float(df.at[i, "mu_window"]), float(df.at[i, "sd_window"]),
-                          float(df.at[i, "position"]), int(pack[i]), float(cs[i]), float(co[i]))
+        mu_i, sd_i, pos_i = float(df.at[i, "mu_window"]), float(df.at[i, "sd_window"]), float(df.at[i, "position"])
+        pv = _pack_values(mu_i, sd_i, pos_i, int(pack[i]), float(cs[i]), float(co[i]))
         n_ideal[i] = len(pv)
         if dead[i] or len(pv) == 0:
             continue
+        first_unit = pos_i + np.arange(len(pv)) * pack[i] + 0.5
+        p_sell = 1 - norm.cdf((first_unit - mu_i) / sd_i)
         vals.append(pv)
         prods.append(np.full(len(pv), i))
         ks.append(np.arange(len(pv)))
+        prot.append(protect_must_have & must[i] & (p_sell >= 0.5))
     taken_packs = np.zeros(n, int)
     if vals:
         v = np.concatenate(vals)
         p = np.concatenate(prods)
         k = np.concatenate(ks)
         ratio = v / pack_cost[p]
-        order = np.lexsort((k, p, ~df["must_have"].to_numpy(bool)[p], -ratio))
+        order = np.lexsort((k, p, ~must[p], -ratio, ~np.concatenate(prot)))
         p = p[order]
         cost = pack_cost[p]
         if budget is None:
