@@ -14,33 +14,33 @@ def render(ctx):
     inv = planning.inventory_table(ctx)
     counts = inv["status"].value_counts()
     out_n, low_n, ex_n = counts.get("Out of stock", 0), counts.get("Low", 0), counts.get("Excess", 0)
-    k = st.columns(4)
-    k[0].markdown(ui.kpi("Out of stock", f"{out_n}", "products", "bad" if out_n else None), unsafe_allow_html=True)
-    k[1].markdown(ui.kpi("Low", f"{low_n}", "may run out before a delivery", "bad" if low_n else None),
-                  unsafe_allow_html=True)
-    k[2].markdown(ui.kpi("Excess", f"{ex_n}", "more than sells in time", "warn" if ex_n else None),
-                  unsafe_allow_html=True)
     missing = int(inv["value_rm"].isna().sum())
-    k[3].markdown(ui.kpi("Stock value at cost", ui.money(inv["value_rm"].sum(skipna=True)),
-                         f"{missing} product(s) without a cost price" if missing else "at your cost prices"),
-                  unsafe_allow_html=True)
+    ui.kpi_row(ui.kpi("Out of stock", f"{out_n}", "products", "bad" if out_n else None),
+               ui.kpi("Low", f"{low_n}", "may run out before a delivery", "bad" if low_n else None),
+               ui.kpi("Excess", f"{ex_n}", "more than sells in time", "warn" if ex_n else None),
+               ui.kpi("Stock value at cost", ui.money(inv["value_rm"].sum(skipna=True)),
+                      f"{missing} product(s) without a cost price" if missing else "at your cost prices"))
 
     show_status = st.segmented_control("Show", ["All", "Out of stock", "Low", "Excess", "OK"],
                                        label_visibility="collapsed", **ui.sticky("in_filter", "All")) or "All"
-    t = inv if show_status == "All" else inv[inv["status"] == show_status]
+    cat = ui.category_filter(ctx, "in_cat")
+    t = ui.in_category(inv if show_status == "All" else inv[inv["status"] == show_status], cat)
     if t.empty:
-        st.info(f"No products are '{show_status}'.")
+        st.info("No products match these filters.")
     else:
-        st.dataframe(t.assign(lasts=t["cover_days"].map(lambda c: f"{c:.1f} days" if np.isfinite(c) else "–")),
-                     hide_index=True, use_container_width=True,
-                     column_order=["name", "status", "stock", "daily", "lasts", "reorder_point", "max_level", "value_rm"],
-                     column_config={"name": st.column_config.TextColumn("Product", width="medium"), "status": "Status",
-                                    "stock": st.column_config.NumberColumn("Stock", format="%d"),
-                                    "daily": st.column_config.NumberColumn("Sells a day", format="%.1f"),
-                                    "lasts": "Lasts",
-                                    "reorder_point": st.column_config.NumberColumn("Reorder at", format="%d"),
-                                    "max_level": st.column_config.NumberColumn("Order up to", format="%d"),
-                                    "value_rm": st.column_config.NumberColumn("Value at cost (RM)", format="%.0f")})
+        st.caption("Click a product for its details.")
+        ui.product_table(t.assign(lasts=t["cover_days"].map(lambda c: f"{c:.1f} days" if np.isfinite(c) else "–")),
+                         "in_table", "views/laris.py",
+                         column_order=["name", "group", "status", "stock", "daily", "lasts", "reorder_point", "max_level",
+                                       "value_rm"],
+                         column_config={"name": st.column_config.TextColumn("Product", width="medium"),
+                                        "group": "Category", "status": "Status",
+                                        "stock": st.column_config.NumberColumn("Stock", format="%d"),
+                                        "daily": st.column_config.NumberColumn("Sells a day", format="%.1f"),
+                                        "lasts": "Lasts",
+                                        "reorder_point": st.column_config.NumberColumn("Reorder at", format="%d"),
+                                        "max_level": st.column_config.NumberColumn("Order up to", format="%d"),
+                                        "value_rm": st.column_config.NumberColumn("Value at cost (RM)", format="%.0f")})
     st.caption(f"Reorder at = expected sales during the delivery time + safety stock for a {ctx['service']:.0%} chance "
                "of not running out. Order up to = expected sales until the following delivery (capped by shelf life) "
                "+ the same safety stock. Value is blank where there's no cost price.")

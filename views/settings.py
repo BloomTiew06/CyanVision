@@ -29,6 +29,14 @@ def _save_prefs(fields):
 
 prefs = store.get("prefs", {})
 
+# ---------------- appearance ----------------
+with st.expander("Appearance", icon=":material/contrast:"):
+    dark = ui.mode() == "dark"
+    st.markdown(f"LARIS is in **{'dark' if dark else 'light'} mode**. The page reloads to switch; your budget, order "
+                "changes and chat are kept.")
+    st.button("Switch to light mode" if dark else "Switch to dark mode", key="set_theme", on_click=ui.toggle_theme,
+              icon=":material/light_mode:" if dark else ":material/dark_mode:")
+
 # ---------------- shop & owner ----------------
 with st.expander("Shop and owner", expanded=True, icon=":material/storefront:"):
     with st.form("f_shop"):

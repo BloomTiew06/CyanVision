@@ -15,7 +15,7 @@ def _row(ctx, r, deadline):
     with st.container(key=f"row_{r.Index}"):
         a, b, c, d = st.columns([3, 2, 3.3, 1.3], vertical_alignment="center")
         a.markdown(f'<span class="lr-name">{escape(r.name)}</span><br>{ui.action_chip(r.action)}'
-                   f'{ui.must_chip(r.must_have)}', unsafe_allow_html=True)
+                   f'{ui.must_chip(r.must_have)}{ui.cat_chip(r.group)}', unsafe_allow_html=True)
         mine = f'<br><span class="lr-muted">your change · LARIS suggests {r.qty:,.0f}</span>' if r.adjusted else ""
         b.markdown(f'<div class="lr-qty">{r.order_qty:,.0f} <span>· usually {r.usual:,.0f} · {ui.money(r.order_rm)}'
                    f'</span></div>{mine}', unsafe_allow_html=True)
@@ -51,6 +51,7 @@ def render(ctx):
     status = f"RM {left:,.0f} left" if left >= -0.5 else f"over by RM {-left:,.0f}"
     st.markdown(f'<div class="lr-big">Order {ui.money(ctx["order_rm"])} <small>of your {ui.money(ctx["budget_rm"])} '
                 f"budget · {status}</small></div>", unsafe_allow_html=True)
+    ui.budget_slider(ctx, "rc_budget")
     notes = []
     if ctx["budget_limited"]:
         notes.append(f"Your budget doesn't cover the full recommended order ({ui.money(ctx['ideal_rm'])}); this is the "
@@ -83,10 +84,12 @@ def render(ctx):
     # the order list, grouped by action
     pick = st.segmented_control("Show", ["All"] + [planning.ACTION_LABEL[a] for a in ui.ACTIONS],
                                 label_visibility="collapsed", **ui.sticky("rc_filter", "All")) or "All"
+    cat = ui.category_filter(ctx, "rc_cat")
+    shown = ui.in_category(plan, cat)
     deadlines = planning.look_ahead_table(ctx).set_index("product")["deadline"].to_dict()
     for action in ui.ACTIONS:
         label = planning.ACTION_LABEL[action]
-        group = plan[plan["action"] == action]
+        group = shown[shown["action"] == action]
         if pick not in ("All", label) or group.empty:
             continue
         if action == "MAINTAIN" and pick == "All":
@@ -97,8 +100,8 @@ def render(ctx):
         ui.section(f"{label} ({len(group)})", planning.ACTION_HELP[action])
         for r in group.itertuples():
             _row(ctx, r, deadlines.get(r.product))
-    if pick != "All" and plan[plan["action"].map(planning.ACTION_LABEL) == pick].empty:
-        st.info(f"No products in '{pick}' this week.")
+    if shown.empty or (pick != "All" and shown[shown["action"].map(planning.ACTION_LABEL) == pick].empty):
+        st.info("No products match these filters this week.")
 
     with st.expander("Budget trade-offs: what was cut, strategy, and what more cash would add"):
         _budget(ctx)

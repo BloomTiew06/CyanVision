@@ -1,13 +1,16 @@
 [theme]
-base = "light"
+font = "Manrope:https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+headingFont = "Manrope:https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+
+# LARIS switches between these with the light/dark button (laris_ui.theme_script); the page styles follow.
+[theme.dark]
+primaryColor = "#C8E66E"
+backgroundColor = "#0F2E24"
+secondaryBackgroundColor = "#173D31"
+textColor = "#F3F1EA"
+
+[theme.light]
 primaryColor = "#174D3A"
 backgroundColor = "#F7F5EE"
-secondaryBackgroundColor = "#E7ECE5"
+secondaryBackgroundColor = "#E9EEE6"
 textColor = "#252923"
-font = "sans serif"
-
-[theme.sidebar]
-backgroundColor = "#10382B"
-secondaryBackgroundColor = "#174D3A"
-textColor = "#F7F5EE"
-primaryColor = "#C7ED72"

@@ -9,7 +9,6 @@ in views/ and never recompute forecasts or allocations themselves.
 """
 import json
 import os
-from html import escape
 from math import ceil
 from pathlib import Path
 
@@ -25,7 +24,10 @@ from inventory import load_settings
 st.set_page_config(page_title="LARIS", page_icon="🛒", layout="wide", initial_sidebar_state="collapsed")
 ROOT = Path(__file__).parent
 OUT = Path(os.environ.get("SHELFSIGNAL_OUT", ROOT / "outputs"))
-st.markdown(ui.CSS, unsafe_allow_html=True)
+ss = st.session_state
+ss["theme"] = store.get("prefs", {}).get("theme", "dark")   # light/dark, switched from the top bar
+st.markdown(ui.css(), unsafe_allow_html=True)
+st.html(ui.theme_script(ss["theme"]), unsafe_allow_javascript=True)
 
 
 @st.cache_data
@@ -75,12 +77,12 @@ pages = [st.Page(path, title=title, icon=icon, default=(path.endswith("/" + want
                  visibility="hidden" if path.endswith("/product.py") else "visible")
          for i, (path, title, icon, *_rest) in enumerate(PAGES)]
 meta = {p[1]: p for p in PAGES}
-st.logo(str(ROOT / "assets" / "laris_logo.svg"), size="large")
+st.logo(str(ROOT / "assets" / ("laris_logo_light.svg" if ss["theme"] == "light" else "laris_logo.svg")), size="large")
 pg = st.navigation(pages, position="top")
 
-ss = st.session_state
 if ss.get("goto"):
     st.switch_page(ss.pop("goto"))
+ui.restore_snapshot(core.INPUT_COLUMNS)   # work in progress saved just before a light/dark switch
 
 # ---------------- shared state ----------------
 # Shop and owner details live in the saved preferences (Settings edits them), so they survive restarts.
@@ -112,7 +114,8 @@ if ss.get("inputs_key") != key:
     else:
         week0 = core.week_view(fc, store_id, as_of, ss["scale"])
         ss["inputs"], ss["widest"] = core.default_inputs(week0, settings, sig, store_id, ss["preset"])
-    ss["order_adj"] = {}
+    if ss.get("inputs_key") is not None:   # a different week/store: old order changes no longer apply
+        ss["order_adj"] = {}
     ss["inputs_key"] = key
 
 build = lambda budget: core.build_context(
@@ -120,33 +123,22 @@ build = lambda budget: core.build_context(
     metrics.get("alert_backtest"), protect_must_have=ss["strategy"] == "essentials", adjust=ss["order_adj"])
 if ss["budget_rm"] is None:   # first visit: a round budget that covers the full recommended order
     ss["budget_rm"] = float(ceil(build(None)["ideal_rm"] / 50) * 50)
-
-
-def _set_budget():
-    ss["budget_rm"] = max(0.0, float(ss["budget_w"] or 0))
-
-
-# ---------------- top bar: shop + planning week | budget ----------------
-shop_col, budget_col = st.columns([4, 1.3], vertical_alignment="bottom")
-ss["budget_w"] = ss["budget_rm"]
-budget_col.number_input("Budget (RM)", min_value=0.0, step=10.0, format="%.0f", key="budget_w", on_change=_set_budget,
-                        help="Cash available for this week's order. Every page uses this amount.")
 ctx = build(ss["budget_rm"])
 ss["ctx"] = {**ctx, "metrics": metrics, "fc": fc, "sig": sig, "settings": settings, "is_mock": is_mock,
              "inputs": ss["inputs"], "ref": planning.order_ref(store_id, as_of), "shop": ss["shop_name"]}
-shop_col.markdown(
-    f'<div class="lr-shopline"><b>{escape(ss["shop_name"])} · {escape(ss["shop_place"])}</b> '
-    f'{ui.label("SAMPLE SHOP", "placeholder")}<br><span>Planning week {as_of:%d %b} – '
-    f'{as_of + pd.Timedelta(days=6):%d %b %Y} (replay) · change it in Settings</span></div>', unsafe_allow_html=True)
-
-if is_mock:
-    st.error("MOCK DATA: generated for development only. Do not present these numbers.")
+ui.topbar(ss["shop_name"], ss["shop_place"])
+if is_mock and pg.title != "Home":   # Home shows the same notice inside its hero
+    st.markdown(ui.mock_pill(), unsafe_allow_html=True)
 for msg in ss.pop("flash", []):
     st.toast(msg)
 _, _, _, eyebrow, headline, subtitle = meta[pg.title]
-if headline:
-    st.markdown(ui.page_header(eyebrow, headline, subtitle), unsafe_allow_html=True)
-pg.run()
+if pg.title == "Home":
+    pg.run()
+else:   # every other page sits on one glass card so its content stands off the background
+    with st.container(key="glass_page"):
+        if headline:
+            st.markdown(ui.page_header(eyebrow, headline, subtitle), unsafe_allow_html=True)
+        pg.run()
 
 st.divider()
 st.caption("**About these numbers.** Product names, prices, stock and weekly sales are an illustrative sample shop. "

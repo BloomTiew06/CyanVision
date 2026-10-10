@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 from scipy.stats import norm
 
+import laris_core as core
+
 ACTION_LABEL = {"RESTOCK": "Buy more", "REDUCE": "Buy less", "STOP": "Don't reorder", "MAINTAIN": "As usual"}
 ACTION_HELP = {
     "RESTOCK": "These products may run low before your next delivery or need a larger order than usual.",
@@ -313,7 +315,8 @@ def sales_summary(ctx, days=28, offset=0):
         cost_known = r.unit_cost > 0
         cogs = units * r.unit_cost if cost_known else np.nan
         gp = revenue - cogs if cost_known else np.nan
-        out.append({"product": r.product, "name": r.name, "units": units, "revenue": revenue, "cogs": cogs,
+        out.append({"product": r.product, "name": r.name, "group": r.group, "units": units, "revenue": revenue,
+                    "cogs": cogs,
                     "gross_profit": gp,
                     "margin_pct": gp / revenue * 100 if cost_known and has_hist and revenue > 0 else np.nan,
                     "has_history": has_hist, "cost_known": cost_known})
@@ -366,7 +369,8 @@ NUMERIC = ["Stock", "Sold last 7 days", "Cost price (RM)", "Selling price (RM)",
 
 def to_view(inputs):
     return pd.DataFrame({
-        "product": inputs["product"], "Product": inputs["Name"], "Stock": inputs["On hand"],
+        "product": inputs["product"], "Product": inputs["Name"],
+        "Category": inputs["product"].map(core.category_map(inputs)), "Stock": inputs["On hand"],
         "Sold last 7 days": inputs["Sales last 7 days"], "Cost price (RM)": inputs["Unit cost (RM)"],
         "Selling price (RM)": inputs["Unit cost (RM)"] + inputs["Margin (RM)"],
         "Delivery days": inputs["Lead time (days)"], "Shelf life (days)": inputs["Shelf life (days)"],
@@ -411,6 +415,7 @@ def validate_products(edited, old, columns):
         o = old.loc[key] if key in old.index else None
         rows.append({
             "product": key, "Name": name,
+            "Category": e.get("Category") if isinstance(e.get("Category"), str) and e.get("Category") else "Other",
             "Must-have": bool(e.get("Must-have")) if pd.notna(e.get("Must-have")) else False,
             "On hand": v["Stock"], "On order": float(o["On order"]) if o is not None else 0.0,
             "Sales last 7 days": v["Sold last 7 days"], "Unit cost (RM)": v["Cost price (RM)"],
@@ -451,7 +456,7 @@ def lookup_table(ctx, query=""):
                     "forecast": forecast_text(p.forecast_7d, p.forecast_source),
                     "source": SOURCE_LABEL[p.forecast_source], "cover_days": p.cover_days,
                     "reorder_point": lv.at[p.product, "reorder_point"], "order_qty": p.order_qty,
-                    "action": ACTION_LABEL[p.action], "must_have": p.must_have})
+                    "action": ACTION_LABEL[p.action], "must_have": p.must_have, "group": p.group})
     df = pd.DataFrame(out)
     if query and len(df):
         df = df[df["name"].str.contains(query.strip(), case=False, regex=False)]
@@ -483,7 +488,7 @@ def inventory_table(ctx):
                     "cover_days": pl["cover_days"], "status": status, "lead_time": r.lead_time,
                     "value_rm": stock * r.unit_cost if r.unit_cost > 0 else np.nan,
                     "reorder_point": lv.at[r.product, "reorder_point"], "max_level": lv.at[r.product, "max_level"],
-                    "forecast_source": r.forecast_source})
+                    "forecast_source": r.forecast_source, "group": r.group})
     df = pd.DataFrame(out)
     if len(df):
         df = df.assign(_r=df["status"].map(STOCK_RANK)).sort_values(["_r", "cover_days"]).drop(columns="_r")
@@ -558,7 +563,7 @@ def product_trends(ctx, days=7):
     """Units and revenue per product for the last `days` vs the `days` before (products with history in both)."""
     cur, _ = sales_summary(ctx, days)
     prev, _ = sales_summary(ctx, days, offset=days)
-    df = cur[["product", "name", "units", "revenue", "has_history"]].merge(
+    df = cur[["product", "name", "group", "units", "revenue", "has_history"]].merge(
         prev[["product", "units", "revenue", "has_history"]], on="product", suffixes=("", "_prev"))
     df = df[df["has_history"] & df["has_history_prev"]].copy()
     df["change_pct"] = np.where(df["units_prev"] > 0, (df["units"] / df["units_prev"].where(df["units_prev"] > 0) - 1)
