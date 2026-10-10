@@ -254,6 +254,16 @@ def _app(monkeypatch, page="home.py", tool=None):
     return at
 
 
+def test_home_budget_slider_sets_the_shared_budget(monkeypatch):
+    at = _app(monkeypatch, "home.py")
+    at.slider(key="home_budget").set_value(300.0).run()
+    assert not at.exception and at.session_state["budget_rm"] == 300.0
+    assert at.session_state["ctx"]["totals"]["spent_rm"] <= 300.0 + 1e-6
+    at.session_state["tool"] = "R"
+    at.switch_page("views/laris.py").run()
+    assert at.slider(key="rc_budget").value == 300.0
+
+
 def test_budget_and_week_are_shared_across_pages(monkeypatch):
     at = _app(monkeypatch)
     week = at.session_state["as_of"]
@@ -270,7 +280,7 @@ def test_labels_and_no_claims_of_sending(monkeypatch):
     for page, tool in (("home.py", None), ("orders.py", None), ("laris.py", "S"), ("laris.py", "R"),
                        ("settings.py", None)):
         at = _app(monkeypatch, page, tool)
-        assert any("MOCK DATA" in e.value for e in at.error)
+        assert any("Mock data for development only" in m.value for m in at.markdown)
         text = " ".join(m.value for m in at.markdown) + " " + " ".join(c.value for c in at.caption)
         for phrase in ("message sent", "sent automatically", "order was placed", "order has been placed", "synced with"):
             assert phrase not in text.lower()
@@ -298,3 +308,44 @@ def test_reset_is_explicit_and_edits_survive_a_week_change(monkeypatch):
 def test_app_never_imports_the_training_pipeline():
     src = (ROOT / "app.py").read_text() + "".join(p.read_text() for p in (ROOT / "views").glob("*.py"))
     assert "import pipeline" not in src and "from pipeline" not in src
+
+
+def test_categories_reach_every_product_list_and_filters_work(monkeypatch):
+    at = _app(monkeypatch, "products.py")
+    ctx = at.session_state["ctx"]
+    assert ctx["plan"]["group"].notna().all() and "Vegetables" in set(ctx["plan"]["group"])
+    assert "group" in planning.lookup_table(ctx) and "group" in planning.inventory_table(ctx)
+    at.session_state["pr_view"] = "Cards"
+    at.session_state["pr_cat"] = "Drinks"
+    at.run()
+    assert not at.exception
+    for tool in ("L", "A", "R", "I", "S"):
+        at.session_state["tool"] = tool
+        at.switch_page("views/laris.py").run()
+        assert not at.exception, tool
+
+
+def test_products_hidden_by_the_filter_are_kept_when_saving(monkeypatch):
+    at = _app(monkeypatch, "products.py")
+    n = len(at.session_state["inputs"])
+    at.session_state["pr_cat"] = "Drinks"
+    at.run()
+    next(b for b in at.button if b.label == "Generate stock plan").click().run()
+    assert not at.exception and len(at.session_state["inputs"]) == n
+
+
+def test_theme_switch_saves_the_mode_and_keeps_work_in_progress(monkeypatch):
+    from streamlit.testing.v1 import AppTest
+    at = _app(monkeypatch, "home.py")
+    at.session_state["budget_rm"] = 300.0
+    pid = at.session_state["ctx"]["plan"]["product"].iloc[0]
+    at.session_state["order_adj"] = {pid: 7.0}
+    at.run()
+    at.button(key="theme_btn").click().run()
+    assert store.get("prefs")["theme"] == "light" and store.get("snapshot")
+    fresh = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120)   # the browser reload = a new session
+    fresh.run()
+    assert not fresh.exception
+    assert fresh.session_state["theme"] == "light" and fresh.session_state["budget_rm"] == 300.0
+    assert fresh.session_state["order_adj"] == {pid: 7.0}
+    assert store.get("snapshot") is None

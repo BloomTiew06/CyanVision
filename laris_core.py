@@ -29,6 +29,14 @@ SAMPLE_SHOP = {  # family: (item, cost RM, selling price RM, units sold last 7 d
     "DELI": ("Fishballs 500g", 6.00, 7.90, 20),
 }
 
+# Shop categories the owner can filter and sort by (editable per product in Products).
+CATEGORIES = ["Vegetables", "Fruits", "Drinks", "Dairy & eggs", "Bakery", "Meat & poultry", "Seafood", "Frozen",
+              "Chilled & deli", "Dry goods", "Snacks", "Household", "Personal care", "Other"]
+FAMILY_CATEGORY = {"GROCERY I": "Dry goods", "BEVERAGES": "Drinks", "DAIRY": "Dairy & eggs", "BREAD/BAKERY": "Bakery",
+                   "EGGS": "Dairy & eggs", "POULTRY": "Meat & poultry", "PRODUCE": "Vegetables", "MEATS": "Meat & poultry",
+                   "FROZEN FOODS": "Frozen", "CLEANING": "Household", "PERSONAL CARE": "Personal care",
+                   "DELI": "Chilled & deli", "SEAFOOD": "Seafood", "SNACKS": "Snacks"}
+
 QGRID = np.round(np.linspace(0.01, 0.99, 99), 2)   # same grid as pipeline.uncertainty_table
 QCOLS = [f"q{int(round(x * 100)):02d}" for x in QGRID]
 
@@ -50,8 +58,8 @@ PRESETS = {
                      "default": None},
     "Sparse history": {"budget_pct": 75, "cover": {}, "default": 6.0, "widest_band": 0.8},
 }
-INPUT_COLUMNS = ["product", "Name", "Must-have", "On hand", "On order", "Sales last 7 days", "Unit cost (RM)",
-                 "Margin (RM)", "Shelf life (days)", "Lead time (days)", "Review (days)", "Pack size"]
+INPUT_COLUMNS = ["product", "Name", "Category", "Must-have", "On hand", "On order", "Sales last 7 days",
+                 "Unit cost (RM)", "Margin (RM)", "Shelf life (days)", "Lead time (days)", "Review (days)", "Pack size"]
 Z90 = 1.645
 
 
@@ -106,7 +114,8 @@ def default_inputs(week, settings, sig, store, preset="Mixed week"):
         if widest == prod:
             cover = p["widest_band"] * int(s["lead_time_days"])
         rows.append({
-            "product": prod, "Name": f"{s['icon']} {name}".strip(), "Must-have": bool(s["must_have"]),
+            "product": prod, "Name": f"{s['icon']} {name}".strip(), "Category": FAMILY_CATEGORY.get(prod, "Other"),
+            "Must-have": bool(s["must_have"]),
             "On hand": float(round(sales7 / 7 * cover)), "On order": 0.0, "Sales last 7 days": float(sales7),
             "Unit cost (RM)": float(cost), "Margin (RM)": round(float(price) - float(cost), 2),
             "Shelf life (days)": int(s["shelf_life_days"]), "Lead time (days)": int(s["lead_time_days"]),
@@ -316,6 +325,13 @@ def explain(row):
     return out
 
 
+def category_map(inputs):
+    """{product: category}; lists saved before categories existed fall back to the dataset family's category."""
+    cats = inputs["Category"] if "Category" in inputs else inputs["product"].map(FAMILY_CATEGORY)
+    return {p: c if isinstance(c, str) and c.strip() else FAMILY_CATEGORY.get(p, "Other")
+            for p, c in zip(inputs["product"], cats)}
+
+
 def build_context(fc, sig, settings, store, as_of, inputs, budget_rm=None, scale=1.0, service=0.95,
                   unc=None, alert_cfg=None, protect_must_have=True, adjust=None, extra_rm=50.0):
     """The one shared planning context every page reads, computed once per run.
@@ -326,6 +342,7 @@ def build_context(fc, sig, settings, store, as_of, inputs, budget_rm=None, scale
     (qty), so both stay visible."""
     week = week_view(fc, store, as_of, scale)
     rows, items = assess_products(week, sig, store, inputs, service, scale, unc, alert_cfg)
+    rows["group"] = rows["product"].map(category_map(inputs)).fillna("Other") if len(rows) else []
     ctx = {"week": week, "rows": rows, "items": items, "store": store, "scale": scale, "service": service,
            "protect_must_have": protect_must_have, "empty": not items}
     if not items:
@@ -341,6 +358,7 @@ def build_context(fc, sig, settings, store, as_of, inputs, budget_rm=None, scale
     plan["order_qty"] = [float(adjust.get(p, q)) for p, q in zip(plan["product"], plan["qty"])]
     plan["adjusted"] = plan["order_qty"] != plan["qty"]
     plan["order_rm"] = plan["order_qty"] * plan["unit_cost"]
+    plan["group"] = plan["product"].map(dict(zip(rows["product"], rows["group"])))
     return {**ctx, "plan": plan, "alloc": alloc, "totals": tot, "ideal_rm": ideal_tot["ideal_rm"],
             "budget_rm": budget, "order_rm": float(plan["order_rm"].sum()),
             "budget_limited": tot["spent_rm"] < ideal_tot["ideal_rm"] - 0.5,

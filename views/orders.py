@@ -27,23 +27,25 @@ def _status(new, note=""):
 # ---------------- A. order ready ----------------
 arrive = as_of + pd.Timedelta(days=int(rows.loc[order["product"], "lead_time"].min())) if len(order) else None
 left = ctx["budget_rm"] - ctx["order_rm"]
-k = st.columns(4)
-k[0].markdown(ui.kpi("ORDER STATUS", rec["status"], f"order {ref}"), unsafe_allow_html=True)
-k[1].markdown(ui.kpi("ESTIMATED TOTAL", ui.money(ctx["order_rm"], 2), f"{len(order)} products"), unsafe_allow_html=True)
-k[2].markdown(ui.kpi("BUDGET LEFT" if left >= 0 else "OVER BUDGET", ui.money(abs(left)), f"of {ui.money(ctx['budget_rm'])}",
-                     None if left >= 0 else "bad"), unsafe_allow_html=True)
-k[3].markdown(ui.kpi("FIRST DELIVERY", f"{arrive:%a %d %b}" if arrive is not None else "–",
-                     "if ordered today (your delivery days)"), unsafe_allow_html=True)
+ui.kpi_row(ui.kpi("Order status", rec["status"], f"order {ref}"),
+           ui.kpi("Estimated total", ui.money(ctx["order_rm"], 2), f"{len(order)} products"),
+           ui.kpi("Budget left" if left >= 0 else "Over budget", ui.money(abs(left)), f"of {ui.money(ctx['budget_rm'])}",
+                  None if left >= 0 else "bad"),
+           ui.kpi("First delivery", f"{arrive:%a %d %b}" if arrive is not None else "–", "if ordered today"))
 st.caption(f"Supplier: {ss.get('supplier_name') or 'not set'}"
            f"{' · WhatsApp ' + ss['supplier_phone'] if ss.get('supplier_phone') else ''}. Change it in Settings › Supplier.")
 
 # ---------------- B. review / edit, then share ----------------
 ui.section("1. Check the order", "Change any quantity, then save. Your changes show on every page; LARIS's own "
                                  "suggestion stays visible next to them.")
-edit = pd.DataFrame({"product": plan["product"], "Product": plan["name"], "LARIS suggests": plan["qty"],
-                     "Order": plan["order_qty"], "Unit cost (RM)": plan["unit_cost"], "Total (RM)": plan["order_rm"]})
-edited = st.data_editor(edit, key=f"order_editor_{ref}_{ss.get('order_ver', 0)}", hide_index=True,
-                        use_container_width=True, disabled=["Product", "LARIS suggests", "Unit cost (RM)", "Total (RM)"],
+cat = ui.category_filter(ctx, "or_cat")
+shown = ui.in_category(plan, cat)
+edit = pd.DataFrame({"product": shown["product"], "Product": shown["name"], "Category": shown["group"],
+                     "LARIS suggests": shown["qty"],
+                     "Order": shown["order_qty"], "Unit cost (RM)": shown["unit_cost"], "Total (RM)": shown["order_rm"]})
+edited = st.data_editor(edit, key=f"order_editor_{ref}_{cat}_{ss.get('order_ver', 0)}", hide_index=True,
+                        use_container_width=True,
+                        disabled=["Product", "Category", "LARIS suggests", "Unit cost (RM)", "Total (RM)"],
                         column_config={"product": None,
                                        "LARIS suggests": st.column_config.NumberColumn(format="%d"),
                                        "Order": st.column_config.NumberColumn(min_value=0, step=1, format="%d"),

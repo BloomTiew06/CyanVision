@@ -11,19 +11,16 @@ def render(ctx):
     cmp7 = planning.sales_compare(ctx, 7)
     _, t28 = planning.sales_summary(ctx, 28)
     inv = planning.inventory_table(ctx)
-    k = st.columns(4)
     chg = cmp7["change_pct"]
-    k[0].markdown(ui.kpi("Sales, last 7 days", ui.money(cmp7["revenue_rm"]),
-                         f"{chg:+.1f}% vs the week before" if np.isfinite(chg) else "no earlier week to compare"),
-                  unsafe_allow_html=True)
-    k[1].markdown(ui.kpi("Sales, last 28 days", ui.money(t28["revenue"]), f"{t28['start']:%d %b} – {t28['end']:%d %b}"),
-                  unsafe_allow_html=True)
-    k[2].markdown(ui.kpi("Gross profit, 28 days", ui.money(t28["gross_profit"]),
-                         f"{t28['margin_pct']:.1f}% margin" if np.isfinite(t28["margin_pct"]) else "no cost data"),
-                  unsafe_allow_html=True)
-    k[3].markdown(ui.kpi("Stock value at cost", ui.money(inv["value_rm"].sum(skipna=True)),
-                         f"{int(inv['value_rm'].isna().sum())} product(s) without a cost price"
-                         if inv["value_rm"].isna().any() else "all products priced"), unsafe_allow_html=True)
+    ui.kpi_row(
+        ui.kpi("Sales, last 7 days", ui.money(cmp7["revenue_rm"]),
+               f"{chg:+.1f}% vs the week before" if np.isfinite(chg) else "no earlier week to compare"),
+        ui.kpi("Sales, last 28 days", ui.money(t28["revenue"]), f"{t28['start']:%d %b} – {t28['end']:%d %b}"),
+        ui.kpi("Gross profit, 28 days", ui.money(t28["gross_profit"]),
+               f"{t28['margin_pct']:.1f}% margin" if np.isfinite(t28["margin_pct"]) else "no cost data"),
+        ui.kpi("Stock value at cost", ui.money(inv["value_rm"].sum(skipna=True)),
+               f"{int(inv['value_rm'].isna().sum())} product(s) without a cost price"
+               if inv["value_rm"].isna().any() else "all products priced"))
 
     ui.section("Weekly sales and gross profit", "Recorded sales (replayed sample data, scaled to this shop), priced "
                                                  "at your selling prices.")
@@ -36,19 +33,21 @@ def render(ctx):
         st.altair_chart(alt.Chart(long).mark_bar(cornerRadiusTopLeft=2, cornerRadiusTopRight=2).encode(
             x=alt.X("week_start:T", title="Week starting", axis=alt.Axis(format="%d %b", grid=False)),
             xOffset="measure:N", y=alt.Y("rm:Q", title="RM"),
-            color=alt.Color("measure:N", scale=alt.Scale(domain=["Sales", "Gross profit"], range=[ui.GREEN, ui.LIME]),
+            color=alt.Color("measure:N", scale=alt.Scale(domain=["Sales", "Gross profit"], range=[ui.chart_colors()["bar"], ui.chart_colors()["bar2"]]),
                             legend=alt.Legend(orient="top", title=None)),
             tooltip=[alt.Tooltip("week_start:T", format="%d %b"), "measure", alt.Tooltip("rm:Q", format=",.0f")])
             .properties(height=240).configure_view(strokeWidth=0), use_container_width=True)
 
     ui.section("What changed last week", "Units sold in the last 7 days vs the 7 days before.")
-    tr = planning.product_trends(ctx, 7)
+    cat = ui.category_filter(ctx, "an_cat")
+    tr = ui.in_category(planning.product_trends(ctx, 7), cat)
     if tr.empty:
-        st.caption("No product has two weeks of history yet.")
+        st.caption("No product here has two weeks of history yet.")
     else:
         tr = tr.sort_values("change_pct", ascending=False)
-        st.dataframe(tr[["name", "units_prev", "units", "change_pct", "revenue"]], hide_index=True,
-                     use_container_width=True, column_config={
+        st.caption("Click a product for its details.")
+        ui.product_table(tr[["product", "name", "units_prev", "units", "change_pct", "revenue"]], "an_trends",
+                         "views/laris.py", column_config={
                          "name": "Product", "units_prev": st.column_config.NumberColumn("Week before", format="%d"),
                          "units": st.column_config.NumberColumn("Last week", format="%d"),
                          "change_pct": st.column_config.NumberColumn("Change", format="%+.0f%%"),
