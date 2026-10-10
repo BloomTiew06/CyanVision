@@ -77,10 +77,24 @@ with t2:
                 "is the next pipeline step.")
 with t3:
     st.markdown(ui.label("MEASURED", "measured"), unsafe_allow_html=True)
-    if "unseen_stores" in metrics:
-        st.json(metrics["unseen_stores"])
+    us = metrics.get("unseen_stores")
+    if us:
+        st.markdown(f"**Shops the AI has never seen.** A second model was trained without stores "
+                    f"{', '.join(us['stores'])} ({us['n_series']} product series) and scored on their test period. "
+                    "This is the closest test we have of how LARIS would do in a new shop.")
+        st.dataframe(pd.DataFrame({"Daily WAPE": us["daily_wape"], "7-day total WAPE": us["weekly_wape"]})
+                     .style.format("{:.1%}"), use_container_width=True)
+        ci = us.get("unseen_model_vs_baselines_7day_ci", {})
+        if ci:
+            st.dataframe(pd.DataFrame([{"Unseen-store model vs": k, "WAPE difference": v["diff"],
+                                        "95% CI": f"{v['ci95'][0]:+.1%} to {v['ci95'][1]:+.1%}",
+                                        "Verdict": "model better" if v["ci95"][1] < 0 else
+                                        ("rule better" if v["ci95"][0] > 0 else "no clear difference")}
+                                       for k, v in ci.items()]).style.format({"WAPE difference": "{:+.1%}"}),
+                         hide_index=True, use_container_width=True)
     else:
-        st.info("Not run yet. Unseen-store and noisy-data tests come in the next pipeline steps.")
+        st.info("Unseen-store test not run yet (pipeline.py --holdout-stores).")
+    st.info("Noisy-data test not run yet.")
     dq = metrics.get("data_quality")
     if dq:
         st.markdown(f"**Data quality:** {dq['suspect_zero_days']:,} suspect zero-sales days in "

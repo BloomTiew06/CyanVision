@@ -60,6 +60,9 @@ def parse_args():
     p.add_argument("--review", type=int, default=7, help="days between orders in the simulation")
     p.add_argument("--max-iter", type=int, default=300, help="boosting iterations")
     p.add_argument("--history-days", type=int, default=56, help="history exported for charts")
+    p.add_argument("--holdout-stores", type=int, default=10,
+                   help="stores left out of a second training run and scored on the test period, as a test on "
+                        "unseen shops (default 10; capped at a third of the stores; 0 = skip)")
     return p.parse_args()
 
 
@@ -250,6 +253,39 @@ def interval_coverage(te, sig, unc, horizons=(1, 3, 7), levels=(0.5, 0.8, 0.9, 0
     return out
 
 
+def pick_holdout_stores(tr, k):
+    """k stores spread evenly across the range of training sales volume (small to large)."""
+    vol = tr.groupby("store")["y"].sum().sort_values()
+    k = min(k, len(vol) // 3)
+    if k <= 0:
+        return []
+    pos = np.linspace(0, len(vol) - 1, k + 2)[1:-1].round().astype(int)
+    return list(vol.index[np.unique(pos)])
+
+
+def unseen_store_test(model_params, tr, te, methods, holdout, test_start):
+    """Retrain without the holdout stores, then score those stores' test period: the closest proxy we
+    have for a shop the model has never seen."""
+    from sklearn.ensemble import HistGradientBoostingRegressor
+    m2 = HistGradientBoostingRegressor(**model_params)
+    fit_rows = tr[~tr["store"].isin(holdout) & ~tr["suspect_zero"]]
+    m2.fit(fit_rows[FEATURES], fit_rows["y"])
+    t = te[te["store"].isin(holdout)].copy()
+    t["pred_unseen"] = np.clip(m2.predict(t[FEATURES]), 0, None)
+    cols = {"Model, these stores never seen in training": "pred_unseen", **methods}
+    daily = {m: wmape(t["y"], t[c].fillna(0)) for m, c in cols.items()}
+    t["week"] = (t["date"] - test_start).dt.days // 7
+    fw = t.groupby("week")["date"].nunique()
+    wk = t[t["week"].isin(fw[fw == 7].index)].groupby(["sid", "week"])[["y"] + list(cols.values())].sum()
+    weekly = {m: wmape(wk["y"], wk[c]) for m, c in cols.items()}
+    ci = {m: bootstrap_wape_diff(wk, "pred_unseen", c) for m, c in methods.items() if c != "pred_model"}
+    return {
+        "label": "MEASURED: a second model trained without these stores, scored on their test period",
+        "stores": [str(s) for s in holdout], "n_series": int(t["sid"].nunique()),
+        "daily_wape": daily, "weekly_wape": weekly, "unseen_model_vs_baselines_7day_ci": ci,
+    }
+
+
 def main():
     a = parse_args()
     out = Path(a.out)
@@ -274,10 +310,11 @@ def main():
     n_stores = long["store_code"].nunique()
     cat_idx = [i for i, f in enumerate(FEATURES)
                if (f == "store_code" and n_stores < 250) or (f == "product_code" and n_products < 250)]
-    model = HistGradientBoostingRegressor(
+    model_params = dict(
         loss="poisson", max_iter=a.max_iter, learning_rate=0.06, max_leaf_nodes=63,
         min_samples_leaf=40, l2_regularization=1.0, categorical_features=cat_idx or None,
         early_stopping=False, random_state=0)
+    model = HistGradientBoostingRegressor(**model_params)
     n_suspect = int(long["suspect_zero"].sum())
     print(f"Suspect zero-sales days (excluded from training targets and evaluation): {n_suspect:,} "
           f"in {long.loc[long['suspect_zero'], 'sid'].nunique()} series")
@@ -311,6 +348,12 @@ def main():
     te["tier"] = te["sid"].map(tier)
     by_tier = {str(t): {m: wmape(g["y"], g[c].fillna(0)) for m, c in methods.items()}
                for t, g in te.groupby("tier", observed=True)}
+
+    unseen = None
+    holdout = pick_holdout_stores(tr, a.holdout_stores)
+    if holdout:
+        print(f"Unseen-store test: retraining without stores {holdout}...")
+        unseen = unseen_store_test(model_params, tr, te, methods, holdout, test_start)
 
     fam_rows = []
     for prod, g in te.groupby("product"):
@@ -413,6 +456,7 @@ def main():
                      "negative = model more accurate",
             **boot},
         "test_by_volume_tier": by_tier,
+        **({"unseen_stores": unseen} if unseen else {}),
         "band_coverage_90": band_coverage_90,
         "lead_time_interval_coverage": {
             "label": "MEASURED on the test period: share of actual L-day sales inside the forecast interval "
@@ -447,6 +491,10 @@ def main():
     print("Model minus baseline, 7-day WMAPE (95% CI; negative = model better):")
     for mth, bt in boot.items():
         print(f"  vs {mth:<35} {bt['diff']:+.3f}  [{bt['ci95'][0]:+.3f}, {bt['ci95'][1]:+.3f}]")
+    if unseen:
+        print(f"Unseen stores {unseen['stores']} (model retrained without them), 7-day WMAPE:")
+        for mth, v in unseen["weekly_wape"].items():
+            print(f"  {mth:<45} {v:.3f}")
     print(f"Uncertainty band check: {band_coverage_90:.1%} of test days fell inside the 90% band "
           "(near 90% = honest band; much lower = band too narrow, raise safety stock)")
     for L in (1, 3, 7):
