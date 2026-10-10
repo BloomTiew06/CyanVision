@@ -424,6 +424,24 @@ def allocate_budget(items, budget=None, goodwill_rm=GOODWILL_RM, protect_must_ha
     return out, totals
 
 
+def score_allocation(items, qty):
+    """Expected outcome of ANY order quantities under the forecast distribution: lost margin, expiry
+    waste and must-have units short. Used to compare LARIS's order with simpler rules (an ESTIMATE)."""
+    df = pd.DataFrame(items).reset_index(drop=True)
+    qty = np.asarray(qty, dtype=float)
+    mu, sd = df["mu_window"].to_numpy(float), df["sd_window"].to_numpy(float)
+    kz = (df["position"].to_numpy(float) + qty - mu) / sd
+    short = sd * (norm.pdf(kz) - kz * (1 - norm.cdf(kz)))
+    left = np.maximum(0.0, kz * sd + short)
+    cost = df["unit_cost"].to_numpy(float)
+    expires = df["overstock_cost"].to_numpy(float) >= cost - 1e-9
+    must = df["must_have"].to_numpy(bool)
+    return {"spent_rm": float((qty * cost).sum()),
+            "exp_lost_margin_rm": float((short * df["margin"].to_numpy(float)).sum()),
+            "exp_waste_rm": float((np.where(expires, left, 0) * cost).sum()),
+            "must_have_short_units": float(short[must].sum())}
+
+
 # Risk categories (Categorize) and priority tiers (Prioritize). Thresholds are business rules.
 # TAU_ACT is the fallback alert threshold; the app uses the one chosen on the validation period by
 # the alert backtest in pipeline.py (passed per row as tau_act).

@@ -79,8 +79,7 @@ ss.setdefault("shop_name", "Kedai Maju")
 ss.setdefault("shop_place", "Shah Alam")
 ss.setdefault("owner", "Encik Hafiz")
 
-with st.sidebar:
-    st.markdown(ui.brand(), unsafe_allow_html=True)
+st.logo(str(ROOT / "assets" / "laris_logo.svg"), size="large")
 pg = st.navigation(pages)
 
 stores = sorted(fc["store"].unique(), key=lambda s: (len(s), s))

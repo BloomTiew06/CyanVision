@@ -10,6 +10,16 @@ def _sync(dst, src):
     ss[dst] = ss[src]
 
 
+def _load_pitch_scenario():
+    ctx = ss["ctx"]
+    store, day, rise = core.demo_week(ctx["fc"], ctx["settings"])
+    if day is not None:
+        ss["store"], ss["as_of"], ss["preset"] = store, day, "Tight budget"
+        ss["pitch_note"] = (f"Store {store} (median sales volume), week of {day:%d %b %Y}: the AI predicted the largest "
+                            f"rise in must-have demand of any Wednesday in the test period ({rise:+.0%} vs the week "
+                            "before). Stock levels and budget come from the 'Tight budget' demo scenario.")
+
+
 def _apply_edits():
     edits = ss["inputs_editor"].get("edited_rows", {})
     df = ss["inputs"].copy()
@@ -31,6 +41,11 @@ with a:
 with b:
     with st.container(border=True):
         st.markdown("**Demo and model settings**", unsafe_allow_html=True)
+        st.button("Load the pitch scenario (tight-budget Wednesday)", on_click=_load_pitch_scenario,
+                  help="Picks the store and week by a fixed rule, not by hand: the median-volume store and the "
+                       "Wednesday with the largest predicted rise in must-have demand.")
+        if ss.get("pitch_note"):
+            st.caption(ss["pitch_note"])
         st.selectbox("Demo scenario (sets stock levels and budget)", list(core.PRESETS),
                      index=list(core.PRESETS).index(ss["preset"]), key="preset_w", on_change=_sync,
                      args=("preset", "preset_w"))

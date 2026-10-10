@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 
 import laris_ui as ui
@@ -42,7 +43,16 @@ with right:
                 + ", ".join(f"{q:,.0f} × {n}" for n, q in ctx["more"]))
     else:
         st.success("Your budget covers the full ideal order.")
-    st.caption("Expected values are ESTIMATES from the AI forecast and your placeholder costs, not results.")
+    cmp = pd.DataFrame(ctx["compare"]).T
+    st.markdown(ui.label("ESTIMATE", "placeholder") + " **Same budget, simpler rule:** what ordering last week's "
+                "sales (cut pro-rata to fit the cash) would be expected to cost, scored with the same forecast.",
+                unsafe_allow_html=True)
+    st.dataframe(cmp[["spent_rm", "exp_lost_margin_rm", "exp_waste_rm", "must_have_short_units"]].rename(columns={
+        "spent_rm": "Spent (RM)", "exp_lost_margin_rm": "Expected lost margin (RM)",
+        "exp_waste_rm": "Expected waste (RM)", "must_have_short_units": "Must-have units short"})
+        .style.format("{:,.0f}"), use_container_width=True)
+    st.caption("Expected values are ESTIMATES from the AI forecast and your placeholder costs, not results. "
+               "For the replay of real weeks, see Results > Decision quality.")
 
 show = alloc.copy()
 show["unit_price"] = ctx["inputs"].set_index("product").loc[alloc["product"], "Unit cost (RM)"].to_numpy()

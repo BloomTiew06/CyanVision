@@ -61,6 +61,24 @@ def test_categorize_and_priority():
 PAGES = ["dashboard.py", "forecast.py", "alerts.py", "waste.py", "orders.py", "results.py", "settings.py"]
 
 
+def test_pitch_scenario_and_budget_slider(monkeypatch):
+    out = ROOT / "outputs_mock"
+    if not (out / "metrics.json").exists():
+        pytest.skip("run make_mock_data.py and pipeline.py --out outputs_mock first")
+    from streamlit.testing.v1 import AppTest
+    monkeypatch.setenv("SHELFSIGNAL_OUT", str(out))
+    monkeypatch.setenv("LARIS_PAGE", "settings.py")
+    at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120)
+    at.run()
+    at.button[0].click().run()
+    assert not at.exception, [e.value for e in at.exception]
+    assert at.session_state["preset"] == "Tight budget"
+    spent_tight = at.session_state["ctx"]["totals"]["spent_rm"]
+    at.session_state["budget_pct"] = 100
+    at.run()
+    assert at.session_state["ctx"]["totals"]["spent_rm"] > spent_tight
+
+
 @pytest.mark.parametrize("page", PAGES)
 def test_page_renders(page, monkeypatch):
     out = ROOT / "outputs_mock"

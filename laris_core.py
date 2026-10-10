@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from inventory import (TAU_ACT, TIER_RANK, _normal_loss, allocate_budget, assess, categorize, dead_stock,
-                       horizon_demand, make_item, priority, product_settings)
+                       horizon_demand, make_item, priority, product_settings, score_allocation)
 
 QGRID = np.round(np.linspace(0.01, 0.99, 99), 2)   # same grid as pipeline.uncertainty_table
 QCOLS = [f"q{int(round(x * 100)):02d}" for x in QGRID]
@@ -293,9 +293,54 @@ def build_context(fc, sig, settings, store, as_of, inputs, budget_pct, scale=1.0
     more_alloc, _ = allocate_budget(items, budget_rm + extra)
     more = (more_alloc.set_index("product")["qty"] - alloc.set_index("product")["qty"])
     more = [(names.get(p, p), q) for p, q in more.items() if q > 0]
+    compare = compare_lastweek(week, inputs, items, alloc, budget_rm, scale)
     return {"week": week, "rows": rows, "items": items, "alloc": alloc, "totals": tot,
             "ideal_totals": ideal_tot, "budget_rm": budget_rm, "budget_pct": budget_pct,
-            "more_rm": extra, "more": more, "store": store, "scale": scale, "service": service}
+            "more_rm": extra, "more": more, "store": store, "scale": scale, "service": service,
+            "compare": compare}
+
+
+def compare_lastweek(week, inputs, items, alloc, budget_rm, scale=1.0):
+    """ESTIMATE: LARIS's order vs 'order what sold in the last review period, cut pro-rata to the
+    budget', both scored with the same forecast distribution."""
+    inp = inputs.set_index("product")
+    past = week["past"]
+    need = []
+    for it in items:
+        rev = int(inp.loc[it["product"], "Review (days)"])
+        sold = past[(past["product"] == it["product"]) & (past["date"] >= week["as_of"] - pd.Timedelta(days=rev))]
+        need.append(float(sold["y"].sum()) * scale)
+    need = np.array(need)
+    cost = np.array([it["unit_cost"] for it in items])
+    pack = np.array([it["pack_size"] for it in items])
+    if (need * cost).sum() > budget_rm > 0:
+        need = need * budget_rm / (need * cost).sum()
+    need = np.floor(need / pack) * pack
+    return {"LARIS order": score_allocation(items, alloc["qty"].to_numpy()),
+            "Order last week's sales (pro-rata cut)": score_allocation(items, need)}
+
+
+def demo_week(fc, settings):
+    """The pitch scenario, chosen by a stated rule rather than by hand: in the median-volume store,
+    the replay week (starting Wednesday) where the AI predicts the largest rise in must-have demand
+    over the previous 7 days' actual sales."""
+    test = fc[fc["split"] == "test"]
+    vol = test.groupby("store")["y"].sum().sort_values()
+    store = vol.index[len(vol) // 2]
+    must = [p for p in fc["product"].unique() if bool(product_settings(settings, p)["must_have"])]
+    sub = fc[(fc["store"] == store) & fc["product"].isin(must)].set_index("date")
+    end = test["date"].max()
+    best, best_d = -np.inf, None
+    for d in sorted(test["date"].unique()):
+        d = pd.Timestamp(d)
+        if d.dayofweek != 2 or d + pd.Timedelta(days=6) > end:
+            continue
+        nxt = sub.loc[d:d + pd.Timedelta(days=6), "pred_model"].sum()
+        prev = sub.loc[d - pd.Timedelta(days=7):d - pd.Timedelta(days=1), "y"].sum()
+        rise = nxt / prev - 1 if prev > 0 else -np.inf
+        if rise > best:
+            best, best_d = rise, d
+    return store, best_d, best
 
 
 def sales_value_series(week, inputs, sig, store, scale=1.0, history_days=14):
