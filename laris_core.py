@@ -158,12 +158,15 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0, unc=None,
         # The model's daily pattern is scaled to the shop's own recent sales; a product with no sales history in
         # the data (e.g. added by the user) gets a flat forecast at its recent sales rate.
         sales7, data7 = float(r["Sales last 7 days"]), float(week["last7"].get(prod, 0.0))
+        # forecast_source says where the 7-day forecast comes from, so every screen can tell a real forecast of 0
+        # ('model' with zero recent sales) from a missing one ('unavailable'): model = the AI model's pattern scaled
+        # to the shop; baseline = no model forecast, so last week's sales repeated; unavailable = neither exists.
         if prod in week["fc_wide"] and data7 > 0:
-            ratio = sales7 / data7
+            ratio, source = sales7 / data7, "model"
             daily = week["fc_wide"][prod].to_numpy() * ratio
             sigma, fallback = sigma_for(sig, store, prod, daily, scale * ratio)
         else:
-            ratio = 0.0
+            ratio, source = 0.0, "baseline" if sales7 > 0 else "unavailable"
             daily = np.full(7, sales7 / 7)
             sigma, fallback = max(0.5, 0.3 * sales7 / 7), True
         sigma = max(sigma, 1e-9)   # zero recent sales scales the error to 0; avoid dividing by it below
@@ -195,7 +198,9 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0, unc=None,
         m_err, n_err, _ = _track_record(week["past"], prod, week["as_of"])
         anomaly, anomaly_why = _anomaly(week["past"], prod, week["as_of"], sigma / (scale * ratio) if ratio else sigma)
         low_why = []
-        if hist_n == 0:
+        if source == "unavailable":
+            low_why.append("no sales history and no sales last week, so there is no forecast")
+        elif hist_n == 0:
             low_why.append("no sales history, so the forecast simply repeats your recent sales")
         elif hist_n < 28:
             low_why.append(f"only {hist_n} days of sales history")
@@ -210,6 +215,7 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0, unc=None,
                "review": rev, "shelf_life": shelf, "unit_cost": cost, "margin": margin, "pack_size": pack,
                "on_hand": on_hand, "on_order": on_order, "sigma": sigma, "band_pct": band_pct,
                "demand_last7": sales7, "window_short": window_short, "ratio": ratio,
+               "forecast_source": source,
                "dead_flag": d["flag"], "perishable": d["perishable"], "days_of_cover": d["days_of_cover"],
                "expected_expire_units": d["expected_expire_units"], "expected_expire_rm": d["expected_expire_rm"],
                "demand_shelf_life": d["demand_shelf_life"],
@@ -451,7 +457,14 @@ def plan_table(rows, alloc, items):
                     + (", longer than its shelf life." if r["perishable"] else "."),
             "MAINTAIN": f"{sold}; your usual order fits.",
         }[action]
+        if r["forecast_source"] == "unavailable":
+            risk = "No forecast: no sales history and nothing recorded as sold last week."
+            rec = "Check stock manually before ordering"
+            why = "LARIS can't forecast this product yet. Enter last week's sales in Products to get a forecast."
+            impact_txt = ""
         out.append({"product": p, "name": r["name"], "action": action, "must_have": r["must_have"],
+                    "forecast_7d": fc7 if r["forecast_source"] != "unavailable" else np.nan,
+                    "forecast_source": r["forecast_source"],
                     "risk": risk, "rec": rec, "impact_rm": impact, "impact_txt": impact_txt, "why": why,
                     "qty": qty, "ideal": ideal, "usual": usual, "spend_rm": qty * x["unit_cost"],
                     "unit_cost": x["unit_cost"], "margin": x["margin"], "pack_size": pack,

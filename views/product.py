@@ -11,7 +11,7 @@ ui.require_plan(ctx)
 plan = ctx["plan"]
 rows = ctx["rows"].set_index("product")
 names = dict(zip(plan["product"], plan["name"]))
-back = ss.get("back_to", "views/home.py")
+back = ss.get("back_to", "views/laris.py")
 
 a, b = st.columns([1, 3], vertical_alignment="center")
 a.button("Back", icon=":material/arrow_back:", on_click=ui.goto, args=(back,), use_container_width=True)
@@ -50,7 +50,7 @@ st.caption(note)
 could = [w[0].upper() + w[1:] + "." for w in r["low_why"]]
 could.append("If your stock count or last week's sales are wrong, the recommendation will be too. Update them in "
              "My Products.")
-if r["ratio"] > 0:
+if r["forecast_source"] == "model":
     could.append("A promotion, local event or supplier delay the model doesn't know about could change demand.")
 impact = f' {escape(pl["impact_txt"])} (estimate, compared with reordering last week\'s sales).' if pl["impact_txt"] else ""
 st.markdown(

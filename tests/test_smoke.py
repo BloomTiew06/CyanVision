@@ -58,8 +58,7 @@ def test_categorize_and_priority():
     assert priority(row)[0] != "Act today"
 
 
-PAGES = ["home.py", "look_ahead.py", "alerts.py", "waste.py", "budget.py", "send.py", "products.py", "sales.py",
-         "product.py"]
+PAGES = ["home.py", "laris.py", "products.py", "orders.py", "settings.py", "product.py"]
 
 
 def test_editing_products_changes_the_plan(monkeypatch):
@@ -100,3 +99,18 @@ def test_page_renders(page, monkeypatch):
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120)
     at.run()
     assert not at.exception, [e.value for e in at.exception]
+
+
+@pytest.mark.parametrize("tool", list("LARIS"))
+def test_every_laris_tool_renders(tool, monkeypatch):
+    out = ROOT / "outputs_mock"
+    if not (out / "metrics.json").exists():
+        pytest.skip("run make_mock_data.py and pipeline.py --out outputs_mock first")
+    from streamlit.testing.v1 import AppTest
+    monkeypatch.setenv("SHELFSIGNAL_OUT", str(out))
+    monkeypatch.setenv("LARIS_PAGE", "laris.py")
+    at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120)
+    at.session_state["tool"] = tool
+    at.run()
+    assert not at.exception, [e.value for e in at.exception]
+    assert at.session_state["tool"] == tool

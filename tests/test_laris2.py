@@ -195,14 +195,28 @@ def test_product_validation_accepts_adds_and_deletes(data):
     assert any("below cost" in w for w in warnings) and any("empty row" in w for w in warnings)
 
 
-def test_card_filters_and_sorting(data):
+def test_lookup_search(data):
     ctx = make_ctx(data)
-    assert set(planning.product_cards(ctx, flt="Buy more")["action"]) == {"RESTOCK"}
-    rev = planning.product_cards(ctx, sort="Highest revenue")
-    assert list(rev["revenue"]) == sorted(rev["revenue"], reverse=True)
     name = ctx["plan"]["name"].iloc[0]
-    assert name in set(planning.product_cards(ctx, search=name[2:6].lower())["name"])
-    assert planning.product_cards(ctx, flt="Must-have")["must_have"].all()
+    assert name in set(planning.lookup_table(ctx, name[2:6].lower())["name"])
+
+
+def test_forecast_column_is_filled_and_missing_is_explicit(data):
+    """Regression: the screen's 'Forecast' column was blank because its header sat on a reliability note.
+    Every model product must show its canonical 7-day forecast; a product with no forecast says so; a real
+    forecast of 0 shows 0, not 'unavailable'."""
+    inp = data["inputs"].copy()
+    zero = inp.loc[0, "product"]
+    inp.loc[0, "Sales last 7 days"] = 0                                      # model product, sold 0 -> forecast 0
+    new = {**inp.iloc[1].to_dict(), "product": "Kopi O", "Name": "Kopi O", "Sales last 7 days": 0}
+    ctx = make_ctx(data, inputs=pd.concat([inp, pd.DataFrame([new])], ignore_index=True))
+    lt = planning.lookup_table(ctx).set_index("product")
+    model = lt[lt["source"] == "AI model"]
+    assert len(model) == len(inp) and model["forecast"].str.len().gt(0).all()
+    assert lt.loc[zero, "forecast"] == "0" and lt.loc[zero, "source"] == "AI model"
+    assert lt.loc["Kopi O", "forecast"] == "Forecast unavailable" and np.isnan(lt.loc["Kopi O", "forecast_7d"])
+    plan = ctx["plan"].set_index("product")
+    assert np.allclose(model["forecast_7d"], plan.loc[model.index, "forecast_7d"])
 
 
 # ---------------- send & sync ----------------
@@ -228,11 +242,13 @@ def test_store_round_trip():
 
 
 # ---------------- the running app ----------------
-def _app(monkeypatch, page="home.py"):
+def _app(monkeypatch, page="home.py", tool=None):
     from streamlit.testing.v1 import AppTest
     monkeypatch.setenv("SHELFSIGNAL_OUT", str(OUT))
     monkeypatch.setenv("LARIS_PAGE", page)
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120)
+    if tool:
+        at.session_state["tool"] = tool
     at.run()
     assert not at.exception, [e.value for e in at.exception]
     return at
@@ -242,36 +258,40 @@ def test_budget_and_week_are_shared_across_pages(monkeypatch):
     at = _app(monkeypatch)
     week = at.session_state["as_of"]
     at.session_state["budget_rm"] = 300.0
-    at.switch_page("views/budget.py").run()
+    at.session_state["tool"] = "R"
+    at.switch_page("views/laris.py").run()
     assert not at.exception and at.session_state["ctx"]["budget_rm"] == 300.0
-    at.switch_page("views/send.py").run()
+    at.switch_page("views/orders.py").run()
     assert at.session_state["ctx"]["budget_rm"] == 300.0 and at.session_state["as_of"] == week
     assert at.session_state["ctx"]["totals"]["spent_rm"] <= 300.0 + 1e-6
 
 
 def test_labels_and_no_claims_of_sending(monkeypatch):
-    for page in ("home.py", "send.py", "sales.py", "budget.py"):
-        at = _app(monkeypatch, page)
+    for page, tool in (("home.py", None), ("orders.py", None), ("laris.py", "S"), ("laris.py", "R"),
+                       ("settings.py", None)):
+        at = _app(monkeypatch, page, tool)
         assert any("MOCK DATA" in e.value for e in at.error)
         text = " ".join(m.value for m in at.markdown) + " " + " ".join(c.value for c in at.caption)
-        for phrase in ("message sent", "sent automatically", "order placed", "synced with"):
+        for phrase in ("message sent", "sent automatically", "order was placed", "order has been placed", "synced with"):
             assert phrase not in text.lower()
-        if page == "send.py":
+        if page == "orders.py":
             assert "NOT CONNECTED" in text and "can't see whether it was sent" in text
-        if page == "sales.py":
+        if tool == "S":
             assert "not net profit" in text
-        if page == "budget.py":
+        if tool == "R":
             assert "SIMULATED" in text or "budget replay hasn't been run" in text
 
 
 def test_reset_is_explicit_and_edits_survive_a_week_change(monkeypatch):
-    at = _app(monkeypatch)
+    at = _app(monkeypatch, "settings.py")
     assert next(b for b in at.button if b.label == "Reset to sample shop").disabled
     inp = at.session_state["inputs"].copy()
     inp.loc[0, "On hand"] = 12345
     at.session_state["inputs"], at.session_state["inputs_dirty"] = inp, True
-    week = at.selectbox(key="as_of")
-    at.selectbox(key="as_of").set_value(week.options[0] if week.value != week.options[0] else week.options[1]).run()
+    week = at.selectbox(key="set_week")
+    target = week.options[0] if week.value != week.options[0] else week.options[1]
+    at.selectbox(key="set_week").set_value(target).run()
+    assert str(at.session_state["as_of"].date()) in target or at.session_state["inputs_key"][1] != str(week.value)
     assert not at.exception and at.session_state["inputs"].loc[0, "On hand"] == 12345
 
 

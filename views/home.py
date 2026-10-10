@@ -1,113 +1,158 @@
+"""Home: a greeting, one insights panel built from the shared business summary, and the LARIS assistant."""
+import os
 from datetime import datetime
 from html import escape
+from zoneinfo import ZoneInfo
 
+import numpy as np
 import streamlit as st
 
+import assistant
+import assistant_tools as T
 import laris_ui as ui
 import planning
 
 ss = st.session_state
 ctx = ss["ctx"]
 ui.require_plan(ctx)
-plan, as_of = ctx["plan"], ctx["week"]["as_of"]
-HERE = "views/home.py"
+as_of = ctx["week"]["as_of"]
 
-hour = datetime.now().hour
-greet = "Good morning" if hour < 12 else "Good afternoon" if hour < 18 else "Good evening"
-st.markdown(ui.page_header(f"WEEK OF {as_of:%d %b %Y}".upper(), f"{greet}, {ss['owner']}.",
-                           "Here's what needs your attention this week."), unsafe_allow_html=True)
+# ---------------- A. greeting (owner name and form of address from Settings; local time) ----------------
+try:
+    now = datetime.now(ZoneInfo(os.environ.get("LARIS_TZ", "Asia/Kuala_Lumpur")))
+except Exception:
+    now = datetime.now()
+greet = "Good morning" if now.hour < 12 else "Good afternoon" if now.hour < 18 else "Good evening"
+who = ss["owner"] if ss.get("title") in (None, "", "(none)") else f"{ss['title']} {ss['owner']}"
+st.markdown(ui.page_header(f"Week of {as_of:%d %b %Y}", f"{greet}, {who}.",
+                           "Welcome to LARIS. Here's your shop at a glance."), unsafe_allow_html=True)
 
-# ---------------- A. insights recap ----------------
-found = planning.insights(ctx)
-if not any(level in ("URGENT", "WARNING") for level, _, _ in found):
-    st.markdown('<div class="lr-insight info">Your inventory is generally on track. Review the suggested order below.'
-                '</div>', unsafe_allow_html=True)
-for level, text, page in found[:4]:
-    a, b = st.columns([6, 1.2], vertical_alignment="center")
+# ---------------- B. insights panel: every figure from planning.business_summary ----------------
+s = planning.business_summary(ctx)
+b, rs, sa, pr, inv, iss = s["budget"], s["restock"], s["sales"], s["profit"], s["inventory"], s["issues"]
+scale = max(b["available_rm"], b["order_rm"], 1)
+left = b["remaining_rm"]
+chg = sa["change_pct"]
+gp_ok = sa["last_7_days_rm"] > 0 and np.isfinite(pr["gross_profit_7d_rm"]) and pr["products_without_cost"] < len(
+    ctx["plan"])
+issues = []
+if iss["forecast_unavailable"]:
+    issues.append(f"{len(iss['forecast_unavailable'])} without a forecast")
+if iss["unusual_recent_sales"]:
+    issues.append(f"{len(iss['unusual_recent_sales'])} with unusual sales")
+if iss["baseline_forecast"]:
+    issues.append(f"{len(iss['baseline_forecast'])} on a simple forecast")
+st.markdown(ui.hero(
+    eyebrow="THIS WEEK'S ORDER",
+    lead=f"{b['products_in_order']} products in the order · {len(rs['running_out'])} may run out before the next delivery",
+    big=ui.money(b["order_rm"]), big_note=f"of your {ui.money(b['available_rm'])} budget",
+    fill=b["order_rm"] / scale, marker=b["available_rm"] / scale,
+    legend=(f"{ui.money(left)} left" if left >= -0.5 else f"Over budget by {ui.money(-left)}")
+           + (f" · the full recommended order is {ui.money(b['full_order_rm'])}" if b["budget_limited"] else ""),
+    stats=[("Restock", f"{len(rs['buy_more'])} to buy more", f"{len(rs['running_out'])} may run out",
+            "risk" if rs["running_out"] else None),
+           ("Sales, last 7 days", ui.money(sa["last_7_days_rm"]),
+            f"{chg:+.1f}% vs week before" if chg is not None and np.isfinite(chg) else "no earlier week", None),
+           ("Gross profit, 7 days", ui.money(pr["gross_profit_7d_rm"]) if gp_ok else "–",
+            f"{pr['margin_pct_7d']:.1f}% margin" if gp_ok else "needs cost prices", "lime" if gp_ok else None),
+           ("Inventory", f"{len(inv['low_stock']) + len(inv['out_of_stock'])} low · {len(inv['excess'])} excess",
+            f"stock worth {ui.money(inv['stock_value_rm'])} at cost", None),
+           ("Needs a look", str(len(iss["forecast_unavailable"]) + len(iss["unusual_recent_sales"])),
+            ", ".join(issues) or "no data problems", None)]), unsafe_allow_html=True)
+
+for i, (level, text, letter) in enumerate(planning.insights(ctx)[:3]):
+    a, c = st.columns([6, 1.1], vertical_alignment="center")
     a.markdown(f'<div class="lr-insight {level.lower()}">{ui.status_chip(level)}{escape(text)}</div>',
                unsafe_allow_html=True)
-    b.page_link(page, label="Review", icon=":material/arrow_forward:")
+    with c:
+        ui.tool_button(letter, "Review", key=f"ins_{i}")
 
-# ---------------- B. order summary + send ----------------
-order_rm, budget = ctx["order_rm"], ctx["budget_rm"]
-left = budget - order_rm
-lines = [f"RM {left:,.0f} of your budget left." if left >= -0.5 else
-         f"<b>Your order exceeds your budget by RM {-left:,.0f}.</b>"]
-if ctx["budget_limited"]:
-    lines.append(f"Your budget doesn't cover the full recommended order (RM {ctx['ideal_rm']:,.0f}), so this is the "
-                 "best order within it.")
-n_adj = int(plan["adjusted"].sum())
-if n_adj:
-    lines.append(f"Includes your changes to {n_adj} product(s).")
-with st.container(border=True):
-    a, b = st.columns([3, 2], vertical_alignment="center")
-    a.markdown(f'<div class="lr-big">Your order: {ui.money(order_rm)} <small>of {ui.money(budget)}</small></div>'
-               f'<p class="lr-muted" style="margin-top:6px">{" ".join(lines)}</p>', unsafe_allow_html=True)
-    with b:
-        has_order = bool((plan["order_qty"] > 0).any())
-        msg = planning.order_message(plan, ctx["shop"], as_of, ctx["ref"])
-        st.link_button("Send order on WhatsApp", planning.whatsapp_url(msg, ss.get("supplier_phone")),
-                       type="primary", icon=":material/send:", use_container_width=True, disabled=not has_order)
-        st.caption("Opens a WhatsApp draft for you to check and send. LARIS doesn't send anything."
-                   if has_order else "Nothing to order this week.")
-        st.page_link("views/send.py", label="Edit or track this order", icon=":material/fact_check:")
+# ---------------- C. the assistant ----------------
+try:
+    secrets = dict(st.secrets)
+except Exception:
+    secrets = {}
+cfg = assistant.config(secrets)
+chat = ss.setdefault("chat", [])
+memory = ss.setdefault("chat_mem", {})
+SOURCE = {"ai": "AI answer · numbers from LARIS's calculations",
+          "fallback": "Quick answer from LARIS's own calculations (AI assistant not set up; see Settings › Assistant)",
+          "error": "AI unavailable · quick answer from LARIS's own calculations", "app": "LARIS"}
+SUGGESTIONS = ["What should I restock this week?", "How much should I spend on replenishment?",
+               "Which products are selling best?", "How much profit did I make this month?",
+               "Which products are at risk of running out?", "Which of those is the most urgent?"]
 
-# ---------------- C. order list, grouped by action ----------------
-st.markdown('<div class="lr-section">Your order list</div>', unsafe_allow_html=True)
-pick = st.segmented_control("Show", ["All"] + [planning.ACTION_LABEL[a] for a in ui.ACTIONS], default="All",
-                            key="home_filter", label_visibility="collapsed") or "All"
-st.markdown(ui.label("ESTIMATED", "estimated") + '<span class="lr-muted">RM impact compares LARIS\'s quantity with '
-            "reordering last week's sales (expected lost profit plus waste). It's an estimate, not guaranteed savings."
-            "</span>", unsafe_allow_html=True)
+# verify an action the owner confirmed on the previous run, against the rebuilt plan
+v = ss.pop("chat_verify", None)
+if v:
+    pid, qty, name = v
+    plan = ctx["plan"].set_index("product")
+    if pid in plan.index and plan.at[pid, "order_qty"] == qty:
+        chat.append({"role": "assistant", "source": "app", "content":
+                     f"Done: this week's order for **{name}** is now **{qty:,} units** "
+                     f"({ui.money(plan.at[pid, 'order_rm'])}). You can change it back in LARIS › R · Recommend."})
+    else:
+        chat.append({"role": "assistant", "source": "app",
+                     "content": f"Sorry, the change for {name} didn't apply. Nothing in your order was changed."})
 
 
-def product_row(r):
-    with st.container(key=f"row_{r.Index}"):
-        a, b, c, d = st.columns([3.1, 2.1, 3.2, 1.3], vertical_alignment="center")
-        price = r.unit_cost + r.margin
-        margin = f"{r.margin / price:.0%} margin" if price > 0 else "no price"
-        a.markdown(f'<span class="lr-name">{escape(r.name)}</span><br>{ui.action_chip(r.action)}'
-                   f'{ui.must_chip(r.must_have)}<span class="lr-muted">{margin}</span>', unsafe_allow_html=True)
-        mine = f'<br><span class="lr-muted">Your change · LARIS suggests {r.qty:,.0f}</span>' if r.adjusted else ""
-        b.markdown(f'<div class="lr-qty">{r.order_qty:,.0f} <span>to order · usually {r.usual:,.0f}</span></div>{mine}',
-                   unsafe_allow_html=True)
-        impact = f'<span class="lr-impact">{escape(r.impact_txt)}</span><br>' if r.impact_txt else ""
-        c.markdown(f'{impact}<span class="lr-muted">{escape(r.risk)}</span>', unsafe_allow_html=True)
-        with d:
-            ui.why_button(r.product, HERE, key=f"why_{r.product}")
-            with st.popover("Adjust", use_container_width=True):
-                k = f"adj_{r.product}"
-                st.number_input(f"Quantity for {r.name}", min_value=0.0, step=float(r.pack_size), format="%.0f",
-                                value=float(r.order_qty), key=k)
-                st.button("Use this quantity", key=f"set_{r.product}", on_click=ui.set_qty_from,
-                          args=(r.product, k), type="primary")
-                if r.adjusted:
-                    st.button(f"Back to LARIS's {r.qty:,.0f}", key=f"clr_{r.product}", on_click=ui.clear_qty,
-                              args=(r.product,))
+def _confirm(i):
+    m = chat[i]
+    p = m["proposal"]
+    m["pending"] = False
+    plan = ss["ctx"]["plan"]
+    qty = p.get("proposed_qty")
+    if p.get("product_id") not in set(plan["product"]) or not isinstance(qty, int) or not 0 <= qty <= T.MAX_QTY:
+        chat.append({"role": "assistant", "source": "app", "content": "That change isn't valid any more, so nothing "
+                                                                      "was changed."})
+        return
+    ui.set_qty_value(p["product_id"], qty)
+    ss["chat_verify"] = (p["product_id"], qty, p["name"])
 
 
-for action in ui.ACTIONS:
-    label = planning.ACTION_LABEL[action]
-    group = plan[plan["action"] == action]
-    if pick not in ("All", label) or group.empty:
-        continue
-    if action == "MAINTAIN" and pick == "All":
-        with st.expander(f"{label} ({len(group)}): {planning.ACTION_HELP[action]}"):
-            for r in group.itertuples():
-                product_row(r)
-        continue
-    st.markdown(f'<div class="lr-section">{label.upper()} ({len(group)})</div>'
-                f'<p class="lr-help">{planning.ACTION_HELP[action]}</p>', unsafe_allow_html=True)
-    for r in group.itertuples():
-        product_row(r)
-if pick != "All" and plan[plan["action"].map(planning.ACTION_LABEL) == pick].empty:
-    st.info(f"No products in '{pick}' this week.")
+def _cancel(i):
+    chat[i]["pending"] = False
+    chat.append({"role": "assistant", "source": "app", "content": "Cancelled. Nothing was changed."})
 
-# ---------------- D. shortcuts ----------------
-st.markdown('<div class="lr-section">Go deeper</div>', unsafe_allow_html=True)
-for col, (path, text) in zip(st.columns(5), [("views/look_ahead.py", "L · Look Ahead"),
-                                             ("views/alerts.py", "A · Alert Before Stockout"),
-                                             ("views/waste.py", "R · Reduce Waste"),
-                                             ("views/budget.py", "I · Invest Within Budget"),
-                                             ("views/send.py", "S · Send & Sync")]):
-    col.page_link(path, label=text)
+
+def _from_pill():
+    if ss.get("chat_pill"):
+        ss["chat_q"] = ss["chat_pill"]
+    ss["chat_pill"] = None
+
+
+with st.container(border=True, key="chatcard"):
+    a, c = st.columns([5, 1.2], vertical_alignment="center")
+    a.markdown('<div class="lr-eyebrow">Ask LARIS</div><span class="lr-muted">'
+               + ("AI assistant on. " if cfg["enabled"] else "Quick answers (AI assistant not set up). ")
+               + "Answers use your shop's numbers; LARIS never sends orders or changes stock by itself.</span>",
+               unsafe_allow_html=True)
+    if chat:
+        c.button("Clear chat", key="chat_clear", use_container_width=True,
+                 on_click=lambda: (ss.update(chat=[], chat_mem={})))
+    log = st.container(height=430, border=False)
+    with log:
+        if not chat:
+            with st.chat_message("assistant", avatar=":material/storefront:"):
+                st.markdown(f"{greet}, {who}. What would you like to know about your shop today?")
+        for i, m in enumerate(chat):
+            with st.chat_message(m["role"], avatar=":material/storefront:" if m["role"] == "assistant"
+                                 else ":material/person:"):
+                st.markdown(m["content"])
+                if m["role"] == "assistant":
+                    st.caption(SOURCE.get(m.get("source"), ""))
+                    if m.get("proposal") and m.get("pending"):
+                        x, y, _ = st.columns([1, 1, 3])
+                        x.button("Confirm", key=f"chat_ok_{i}", type="primary", on_click=_confirm, args=(i,))
+                        y.button("Cancel", key=f"chat_no_{i}", on_click=_cancel, args=(i,))
+    st.pills("Try asking", SUGGESTIONS, key="chat_pill", on_change=_from_pill, label_visibility="collapsed")
+    typed = st.chat_input("Ask about stock, sales, profit or this week's order…", key="chat_in")
+
+question = typed or ss.pop("chat_q", None)
+if question:
+    chat.append({"role": "user", "content": question})
+    with st.spinner("Checking your shop's numbers…"):
+        r = assistant.ask(question, chat[:-1], ctx, cfg, memory)
+    chat.append({"role": "assistant", "content": r["text"], "source": r["source"], "tools": r["tools"],
+                 "proposal": r["proposal"], "pending": bool(r["proposal"])})
+    st.rerun()

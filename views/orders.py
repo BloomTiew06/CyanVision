@@ -35,7 +35,7 @@ k[2].markdown(ui.kpi("BUDGET LEFT" if left >= 0 else "OVER BUDGET", ui.money(abs
 k[3].markdown(ui.kpi("FIRST DELIVERY", f"{arrive:%a %d %b}" if arrive is not None else "–",
                      "if ordered today (your delivery days)"), unsafe_allow_html=True)
 st.caption(f"Supplier: {ss.get('supplier_name') or 'not set'}"
-           f"{' · WhatsApp ' + ss['supplier_phone'] if ss.get('supplier_phone') else ''}. Change it in Settings.")
+           f"{' · WhatsApp ' + ss['supplier_phone'] if ss.get('supplier_phone') else ''}. Change it in Settings › Supplier.")
 
 # ---------------- B. review / edit, then share ----------------
 ui.section("1. Check the order", "Change any quantity, then save. Your changes show on every page; LARIS's own "
@@ -128,40 +128,3 @@ if rec.get("history"):
     with st.expander("Order history"):
         for h in reversed(rec["history"]):
             st.markdown(f"- {h['at']}: **{h['status']}**{' (' + h['note'] + ')' if h.get('note') else ''}")
-
-# ---------------- E. alerts and reminders ----------------
-ui.section("Alerts and reminders")
-prefs = store.get("prefs", {})
-names = dict(zip(plan["product"], plan["name"]))
-
-
-def _save_prefs():
-    store.put("prefs", {**store.get("prefs", {}), "urgent": ss["pf_urgent"], "evening": ss["pf_evening"],
-                        "muted": ss["pf_muted"], "snooze_until": str(ss["pf_snooze"]) if ss["pf_snooze"] else None})
-
-
-a, b = st.columns(2)
-a.toggle("Urgent stock alerts", value=prefs.get("urgent", True), key="pf_urgent", on_change=_save_prefs)
-a.toggle("Evening summary", value=prefs.get("evening", False), key="pf_evening", on_change=_save_prefs)
-b.multiselect("Mute alerts for these products", list(names), default=[p for p in prefs.get("muted", []) if p in names],
-              format_func=names.get, key="pf_muted", on_change=_save_prefs,
-              help="Muted products are hidden from A · Alert Before Stockout.")
-b.date_input("Snooze order reminders until", value=pd.Timestamp(prefs["snooze_until"]).date()
-             if prefs.get("snooze_until") else None, key="pf_snooze", on_change=_save_prefs)
-st.markdown(ui.label("NOT CONNECTED", "planned") + '<span class="lr-muted">These preferences are saved, but LARIS has '
-            "no notification service yet, so no alerts or reminders are actually sent. Muting works inside the app."
-            "</span>", unsafe_allow_html=True)
-
-# ---------------- F. reorder levels ----------------
-ui.section("Reorder levels", "When stock falls to the reorder point, order up to the maximum. Calculated from the "
-                             "forecast and your delivery days, not fixed numbers.")
-lv = planning.reorder_levels(ctx)
-st.dataframe(lv.assign(state=lv["below"].map({True: "Below reorder point", False: "OK"}))
-             [["name", "stock", "reorder_point", "max_level", "state"]], hide_index=True, use_container_width=True,
-             column_config={"name": "Product", "stock": st.column_config.NumberColumn("Stock", format="%d"),
-                            "reorder_point": st.column_config.NumberColumn("Reorder point", format="%d"),
-                            "max_level": st.column_config.NumberColumn("Order up to", format="%d"), "state": "Now"})
-st.caption(f"Reorder point = expected sales during the delivery time + safety stock for a {ctx['service']:.0%} chance of "
-           "not running out (assumes forecast errors are roughly normal). Order up to = expected sales until the "
-           "following delivery (capped by shelf life) + the same safety stock. Order records are saved in "
-           "state/laris_state.json on this computer.")

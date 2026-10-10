@@ -78,7 +78,9 @@ Three layers: **(1) the AI model** (offline, `pipeline.py`) → **(2) risk asses
 | `inventory.py` | Pure decision functions: stockout risk, bridge top-up, dead stock, budget allocation, risk categories, priority |
 | `laris_core.py` | Shared per-week context for the app: risk, explanation, allocation, the pitch-scenario rule |
 | `laris_ui.py`, `.streamlit/config.toml`, `assets/` | Look and feel (green theme, logo) |
-| `app.py`, `views/*.py` | Streamlit app (top navigation): Home; LARIS tools L · Look Ahead, A · Alert Before Stockout, R · Reduce Waste, I · Invest Within Budget, S · Send & Sync; Manage: My Products (table + cards), Sales & Profitability; Product Intelligence opens from any product. `app.py` builds the one shared planning context every page reads |
+| `app.py`, `views/*.py` | Streamlit app (top navigation): Home (insights + assistant), LARIS (one workspace, letters L/A/R/I/S), Products, Orders, Settings; product detail opens from any product. `app.py` builds the one shared planning context every page reads |
+| `workspace/*.py` | The five LARIS tools (L Look Up, A Analyse, R Recommend, I Inventory, S Sales), drawn inside `views/laris.py` |
+| `assistant.py`, `assistant_tools.py` | The Home assistant: allowlisted read-only business tools over the shared context, an OpenAI-compatible client, and a labelled quick-answer fallback |
 | `planning.py` | Page logic derived from the shared context (alerts, look-ahead options, waste, budget breakdown, sales and gross profit, product validation, WhatsApp draft); no Streamlit, tested in `tests/test_laris2.py` |
 | `store.py` | Local JSON store (`state/laris_state.json`, git-ignored) for events, alert/waste decisions, order status records and preferences |
 | `product_settings.csv` | Per-product cost, margin, shelf life, lead time, review cycle, pack size, must-have. **All PLACEHOLDERS** |
@@ -129,3 +131,29 @@ Three layers: **(1) the AI model** (offline, `pipeline.py`) → **(2) risk asses
 - Accuracy numbers come only from the held-out test period. Simulated numbers are labelled SIMULATED with
   their assumptions. Placeholders are labelled. If a simple rule beats the model somewhere, say so.
 - RM values and stock levels in the demo are inputs, not data.
+
+
+## 11. LARIS 2.1 notes
+
+**Forecast column fix.** Root cause: the Look Ahead table's column headed "Forecast" held a reliability note
+("Less certain" or an empty string), so it looked blank for every reliable forecast; the forecast itself was in
+another column, and the data and joins were fine. A deeper gap: nothing recorded where a forecast came from, so a
+product with no forecast showed 0, the same as a real forecast of 0. Fix: `assess_products` now sets
+`forecast_source` (`model` = AI model scaled to the shop, `baseline` = last week's sales, `unavailable` = neither),
+`plan_table` carries `forecast_7d` (NaN only when unavailable), and every screen and the assistant read that one value
+(`planning.forecast_text` shows "Forecast unavailable"). Regression test:
+`tests/test_laris2.py::test_forecast_column_is_filled_and_missing_is_explicit`.
+
+**Assistant setup (optional).** Without settings, Home answers common questions with labelled quick answers from
+LARIS's own calculations. To use an AI model, set before starting the app (environment variables or
+`.streamlit/secrets.toml`):
+
+| Variable | Meaning |
+|---|---|
+| `AI_API_KEY` | API key for any OpenAI-compatible chat-completions service |
+| `AI_MODEL` | Model name from that service |
+| `AI_BASE_URL` | Optional; default `https://api.openai.com/v1` |
+
+The model only chooses tools from `assistant_tools.TOOL_SPECS`; the tools do every calculation. It never sees the
+owner's name or supplier contacts, keeps the last 10 messages for follow-ups, and can only *propose* an order-quantity
+change, which the owner confirms on Home and LARIS then checks against the rebuilt plan. Test it in Settings › Assistant.

@@ -47,34 +47,34 @@ def whatsapp_url(message, phone=""):
 
 # ---------------- Home: insights recap ----------------
 def insights(ctx):
-    """Plain-language findings, most urgent first. Each is (level, text, page). Only data-supported findings."""
+    """Plain-language findings, most urgent first. Each is (level, text, LARIS tool letter). Data-supported only."""
     plan, rows = ctx["plan"], ctx["rows"].set_index("product")
     out = []
     urgent = plan[plan["urgent"]]
     must_u, other_u = urgent[urgent["must_have"]], urgent[~urgent["must_have"]]
     if len(must_u):
         out.append(("URGENT", f"{len(must_u)} must-have product(s) may run out before your next delivery: "
-                              f"{', '.join(must_u['name'])}.", "views/alerts.py"))
+                              f"{', '.join(must_u['name'])}.", "R"))
     if len(other_u):
         out.append(("URGENT", f"{len(other_u)} other product(s) may run out before your next delivery.",
-                    "views/alerts.py"))
+                    "R"))
     if ctx["order_rm"] > ctx["budget_rm"] + 0.5:
         out.append(("WARNING", f"Your order exceeds your budget by RM {ctx['order_rm'] - ctx['budget_rm']:,.0f}.",
-                    "views/budget.py"))
+                    "R"))
     elif ctx["budget_limited"]:
         short = plan[(plan["ideal"] > 0) & (plan["qty"] < plan["ideal"])]
         out.append(("WARNING", f"Your budget leaves RM {ctx['ideal_rm'] - ctx['totals']['spent_rm']:,.0f} of the "
                                f"recommended order unfilled; {len(short)} product(s) get less than they need.",
-                    "views/budget.py"))
+                    "R"))
     stop = plan[plan["action"] == "STOP"]
     if len(stop):
         rm = float(rows.loc[stop["product"], "expected_expire_rm"].sum())
         out.append(("WARNING", f"{len(stop)} product(s) have more stock than they're likely to sell in time"
-                               + (f" (about RM {rm:,.0f} may expire)." if rm >= 1 else "."), "views/waste.py"))
+                               + (f" (about RM {rm:,.0f} may expire)." if rm >= 1 else "."), "R"))
     rising = plan[plan["trend"] == "Growing"]
     if len(rising):
         out.append(("INFO", f"{len(rising)} product(s) are expected to sell noticeably more next week.",
-                    "views/look_ahead.py"))
+                    "L"))
     return out
 
 
@@ -139,7 +139,7 @@ RANKINGS = {"Biggest increase": ("change", False), "Most units": ("fc7", False),
 def daily_forecast(ctx, product):
     """The same daily forecast the plan used: model pattern x the shop's scaling, or flat recent sales."""
     r = ctx["rows"].set_index("product").loc[product]
-    if r["ratio"] > 0:
+    if r["forecast_source"] == "model":
         return ctx["week"]["fc_wide"][product].to_numpy() * r["ratio"]
     return np.full(7, r["demand_last7"] / 7)
 
@@ -288,21 +288,24 @@ def reorder_levels(ctx):
 PERIODS = {"Last 7 days": 7, "Last 28 days": 28, "Last 90 days": 90, "All available": None}
 
 
-def sales_summary(ctx, days=28):
-    """Recorded sales per product over the last `days` days before the planning week (None = all available),
-    priced with the shop's selling price and cost. Gross profit = revenue - cost of goods sold (not net profit).
-    Products without history only have their 'sold last 7 days' figure, so they count in the 7-day period only."""
+def sales_summary(ctx, days=28, offset=0):
+    """Recorded sales per product over `days` days ending `offset` days before the planning week (days=None = all
+    available), priced with the shop's selling price and cost. Gross profit = revenue - cost of goods sold (not net
+    profit). Products without a model history only have their 'sold last 7 days' figure, so they count in the most
+    recent 7-day period only."""
     week, rows = ctx["week"], ctx["rows"]
     as_of, scale, past = week["as_of"], ctx["scale"], week["past"]
-    first = past["date"].min() if len(past) else as_of - pd.Timedelta(days=7)
-    start = max(first, as_of - pd.Timedelta(days=days)) if days else first
-    units_hist = past[(past["date"] >= start) & (past["date"] < as_of)].groupby("product")["y"].sum()
+    end = as_of - pd.Timedelta(days=offset)
+    first = past["date"].min() if len(past) else end - pd.Timedelta(days=7)
+    start = max(first, end - pd.Timedelta(days=days)) if days else first
+    start = min(start, end)
+    units_hist = past[(past["date"] >= start) & (past["date"] < end)].groupby("product")["y"].sum()
     out = []
     for r in rows.itertuples():
         price = r.unit_cost + r.margin
-        if r.ratio > 0:
+        if r.forecast_source == "model":
             units, has_hist = float(units_hist.get(r.product, 0.0)) * scale * r.ratio, True
-        elif days == 7:
+        elif days == 7 and offset == 0:
             units, has_hist = float(r.demand_last7), True
         else:
             units, has_hist = np.nan, False
@@ -319,13 +322,14 @@ def sales_summary(ctx, days=28):
     gp, known_rev = float(known["gross_profit"].sum()), float(known["revenue"].sum())
     totals = {"revenue": float(df["revenue"].sum(skipna=True)), "cogs": float(known["cogs"].sum()),
               "gross_profit": gp, "margin_pct": gp / known_rev * 100 if known_rev > 0 else np.nan,
-              "start": start, "end": as_of - pd.Timedelta(days=1), "days": int((as_of - start).days),
+              "start": start, "end": end - pd.Timedelta(days=1), "days": int((end - start).days),
               "no_history": int((~df["has_history"]).sum()), "no_cost": int((~df["cost_known"]).sum())}
     return df, totals
 
 
 def profit_insights(ctx, summary):
-    """Findings that link sales performance to stock decisions. Each is (title, text, product, page)."""
+    """Findings that link sales performance to stock decisions. Each is (title, text, product, tool letter or
+    page path)."""
     plan, rows = ctx["plan"].set_index("product"), ctx["rows"].set_index("product")
     s = summary[summary["has_history"] & (summary["revenue"] > 0)].set_index("product")
     if s.empty:
@@ -339,20 +343,20 @@ def profit_insights(ctx, summary):
         name, stock_rm = pl["name"], (r["on_hand"] + r["on_order"]) * r["unit_cost"]
         if p in top_rev and (pl["urgent"] or pl["action"] == "RESTOCK"):
             out.append(("High sales, low stock", f"{name} is one of your top sellers by revenue and may run short "
-                                                 "before the next delivery.", p, "views/alerts.py"))
+                                                 "before the next delivery.", p, "R"))
         elif p in top_margin and pl["cover_days"] < r["lead_time"]:
             out.append(("High margin, running low", f"{name} earns one of your best margins, but its stock may not "
-                                                    "last until the delivery.", p, "views/alerts.py"))
+                                                    "last until the delivery.", p, "R"))
         if pl["cover_days"] > 14 and stock_rm >= 50:
             out.append(("High stock, slow sales", f"About RM {stock_rm:,.0f} is tied up in {name}, which may take "
-                                                  f"{pl['cover_days']:.0f} days to sell.", p, "views/waste.py"))
+                                                  f"{pl['cover_days']:.0f} days to sell.", p, "R"))
         mp = s.at[p, "margin_pct"]
         if p in top_rev and pd.notna(mp) and mp < 15:
             out.append(("High sales, thin margin", f"{name} sells a lot but keeps only {mp:.0f}% as gross margin. "
                                                    "Check its cost and selling price.", p, "views/products.py"))
         if pl["trend"] == "Declining":
             out.append(("Sales expected to drop", f"{name} is expected to sell {abs(pl['change']):.0%} less next "
-                                                  "week.", p, "views/look_ahead.py"))
+                                                  "week.", p, "L"))
     return out
 
 
@@ -424,36 +428,139 @@ def validate_products(edited, old, columns):
     return pd.DataFrame(rows, columns=columns), errors, warnings
 
 
-# ---------------- My Products: card view ----------------
-SORTS = {"Most urgent": None, "Highest revenue": ("revenue", False), "Highest gross profit": ("gross_profit", False),
-         "Highest margin %": ("margin_pct", False), "Name (A–Z)": ("name", True), "Lowest stock": ("stock", True),
-         "Highest stock": ("stock", False), "Fastest-selling": ("sold7", False), "Slowest-selling": ("sold7", True)}
-FILTERS = ["All products", "Must-have", "Buy more", "Buy less", "Don't reorder", "As usual", "May run out",
-           "Expiry risk"]
+# ---------------- forecasts, shared by Look Up, Recommend, Home and the assistant ----------------
+SOURCE_LABEL = {"model": "AI model", "baseline": "Last week's sales (no model)", "unavailable": "Forecast unavailable"}
 
 
-def product_cards(ctx, sort="Most urgent", flt="All products", search=""):
-    """Plan rows plus 7-day revenue and gross profit, filtered, searched and sorted for the card view."""
+def forecast_text(value, source):
+    """'26' for a forecast (including a real 0), 'Forecast unavailable' when there is none."""
+    return "Forecast unavailable" if source == "unavailable" or pd.isna(value) else f"{value:,.0f}"
+
+
+# ---------------- L: look up ----------------
+def lookup_table(ctx, query=""):
+    """One row per product: stock, sales, the canonical 7-day forecast (NaN only when unavailable), reorder levels
+    and this week's order, all from the shared context."""
     plan, rows = ctx["plan"], ctx["rows"].set_index("product")
-    s7 = sales_summary(ctx, 7)[0].set_index("product")
-    ps = plan["product"]
-    df = plan.assign(stock=[rows.at[p, "on_hand"] + rows.at[p, "on_order"] for p in ps],
-                     sold7=[rows.at[p, "demand_last7"] for p in ps],
-                     revenue=s7.loc[ps, "revenue"].to_numpy(), gross_profit=s7.loc[ps, "gross_profit"].to_numpy(),
-                     margin_pct=s7.loc[ps, "margin_pct"].to_numpy(),
-                     expiry=[bool(rows.at[p, "dead_flag"] and rows.at[p, "perishable"]) for p in ps])
-    if search:
-        df = df[df["name"].str.contains(search, case=False, regex=False)]
-    by_label = {v: k for k, v in ACTION_LABEL.items()}
-    if flt == "Must-have":
-        df = df[df["must_have"]]
-    elif flt in by_label:
-        df = df[df["action"] == by_label[flt]]
-    elif flt == "May run out":
-        df = df[df["urgent"]]
-    elif flt == "Expiry risk":
-        df = df[df["expiry"]]
-    if SORTS.get(sort):
-        col, asc = SORTS[sort]
-        df = df.sort_values(col, ascending=asc, na_position="last")
+    lv = reorder_levels(ctx).set_index("product")
+    out = []
+    for p in plan.itertuples():
+        r = rows.loc[p.product]
+        out.append({"product": p.product, "name": p.name, "stock": r["on_hand"] + r["on_order"],
+                    "sold7": r["demand_last7"], "forecast_7d": p.forecast_7d,
+                    "forecast": forecast_text(p.forecast_7d, p.forecast_source),
+                    "source": SOURCE_LABEL[p.forecast_source], "cover_days": p.cover_days,
+                    "reorder_point": lv.at[p.product, "reorder_point"], "order_qty": p.order_qty,
+                    "action": ACTION_LABEL[p.action], "must_have": p.must_have})
+    df = pd.DataFrame(out)
+    if query and len(df):
+        df = df[df["name"].str.contains(query.strip(), case=False, regex=False)]
     return df.reset_index(drop=True)
+
+
+# ---------------- I: inventory ----------------
+STOCK_RANK = {"Out of stock": 0, "Low": 1, "Excess": 2, "OK": 3}
+
+
+def inventory_table(ctx):
+    """Stock status per product: Out of stock, Low (runs out before an order placed today arrives), Excess (more
+    than it can sell in time), OK. Value at cost only where a cost price exists."""
+    plan, rows = ctx["plan"].set_index("product"), ctx["rows"]
+    lv = reorder_levels(ctx).set_index("product")
+    out = []
+    for r in rows.itertuples():
+        pl = plan.loc[r.product]
+        stock = r.on_hand + r.on_order
+        if stock <= 0:
+            status = "Out of stock"
+        elif pl["urgent"] or pl["cover_days"] < r.lead_time:
+            status = "Low"
+        elif r.dead_flag:
+            status = "Excess"
+        else:
+            status = "OK"
+        out.append({"product": r.product, "name": r.name, "stock": stock, "daily": r.demand_7d / 7,
+                    "cover_days": pl["cover_days"], "status": status, "lead_time": r.lead_time,
+                    "value_rm": stock * r.unit_cost if r.unit_cost > 0 else np.nan,
+                    "reorder_point": lv.at[r.product, "reorder_point"], "max_level": lv.at[r.product, "max_level"],
+                    "forecast_source": r.forecast_source})
+    df = pd.DataFrame(out)
+    if len(df):
+        df = df.assign(_r=df["status"].map(STOCK_RANK)).sort_values(["_r", "cover_days"]).drop(columns="_r")
+    return df.reset_index(drop=True)
+
+
+# ---------------- A / S: trends ----------------
+def sales_compare(ctx, days=7):
+    """Revenue for the last `days` vs the `days` before, over products with recorded history in both periods."""
+    cur, ct = sales_summary(ctx, days)
+    prev, pt = sales_summary(ctx, days, offset=days)
+    both = cur["has_history"] & prev["has_history"] & (prev["revenue"] > 0) & (pt["days"] == days)
+    now_rm, before_rm = float(cur.loc[both, "revenue"].sum()), float(prev.loc[both, "revenue"].sum())
+    return {"days": days, "revenue_rm": now_rm, "previous_rm": before_rm if both.any() else np.nan,
+            "change_pct": (now_rm / before_rm - 1) * 100 if before_rm > 0 else np.nan,
+            "products_compared": int(both.sum()), "period": (ct["start"], ct["end"]),
+            "previous_period": (pt["start"], pt["end"])}
+
+
+def weekly_sales(ctx, weeks=8):
+    """Revenue and gross profit for each of the last `weeks` full weeks before the planning week."""
+    out = []
+    for w in range(weeks):
+        df, t = sales_summary(ctx, 7, offset=7 * w)
+        if t["days"] < 7:
+            break
+        out.append({"week_start": t["start"], "revenue": t["revenue"], "gross_profit": t["gross_profit"]})
+    return pd.DataFrame(out).sort_values("week_start").reset_index(drop=True) if out else pd.DataFrame()
+
+
+# ---------------- one business summary: Home's panel and the assistant both read this ----------------
+def _names(df, col="name", n=None):
+    names = list(df[col])
+    return names[:n] if n else names
+
+
+def business_summary(ctx):
+    plan, rows = ctx["plan"], ctx["rows"]
+    inv = inventory_table(ctx)
+    s7, t7 = sales_summary(ctx, 7)
+    cmp = sales_compare(ctx, 7)
+    urgent = plan[plan["urgent"]]
+    restock = plan[plan["action"] == "RESTOCK"]
+    known_cost = inv["value_rm"].notna()
+    return {
+        "week": {"start": str(ctx["week"]["as_of"].date()), "end": str(ctx["week"]["end"].date())},
+        "budget": {"available_rm": ctx["budget_rm"], "order_rm": ctx["order_rm"],
+                   "recommended_order_rm": ctx["totals"]["spent_rm"], "full_order_rm": ctx["ideal_rm"],
+                   "remaining_rm": ctx["budget_rm"] - ctx["order_rm"], "budget_limited": ctx["budget_limited"],
+                   "products_in_order": int((plan["order_qty"] > 0).sum())},
+        "restock": {"buy_more": _names(restock), "running_out": _names(urgent),
+                    "most_urgent": [{"name": r.name, "order_qty": r.order_qty, "stock_days": round(r.cover_days, 1),
+                                     "reason": r.risk} for r in urgent.head(3).itertuples()]},
+        "sales": {"last_7_days_rm": t7["revenue"], "period": [str(t7["start"].date()), str(t7["end"].date())],
+                  "previous_7_days_rm": cmp["previous_rm"], "change_pct": cmp["change_pct"],
+                  "products_compared": cmp["products_compared"]},
+        "profit": {"gross_profit_7d_rm": t7["gross_profit"], "margin_pct_7d": t7["margin_pct"],
+                   "products_without_cost": t7["no_cost"],
+                   "note": "Gross profit = revenue - cost of goods; running costs are not included."},
+        "inventory": {"out_of_stock": _names(inv[inv["status"] == "Out of stock"]),
+                      "low_stock": _names(inv[inv["status"] == "Low"]), "excess": _names(inv[inv["status"] == "Excess"]),
+                      "stock_value_rm": float(inv.loc[known_cost, "value_rm"].sum()),
+                      "products_without_cost": int((~known_cost).sum())},
+        "issues": {"forecast_unavailable": _names(plan[plan["forecast_source"] == "unavailable"]),
+                   "baseline_forecast": _names(plan[plan["forecast_source"] == "baseline"]),
+                   "unusual_recent_sales": _names(rows[rows["anomaly"]]),
+                   "less_reliable_forecast": _names(rows[rows["low_confidence"]])},
+    }
+
+
+def product_trends(ctx, days=7):
+    """Units and revenue per product for the last `days` vs the `days` before (products with history in both)."""
+    cur, _ = sales_summary(ctx, days)
+    prev, _ = sales_summary(ctx, days, offset=days)
+    df = cur[["product", "name", "units", "revenue", "has_history"]].merge(
+        prev[["product", "units", "revenue", "has_history"]], on="product", suffixes=("", "_prev"))
+    df = df[df["has_history"] & df["has_history_prev"]].copy()
+    df["change_pct"] = np.where(df["units_prev"] > 0, (df["units"] / df["units_prev"].where(df["units_prev"] > 0) - 1)
+                                * 100, np.nan)
+    return df.drop(columns=["has_history", "has_history_prev"]).reset_index(drop=True)
