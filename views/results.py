@@ -134,8 +134,9 @@ with t3:
                     f"({dq['rule']}).")
 with t4:
     sim = metrics["simulation"]
-    st.markdown(ui.label("SIMULATED", "simulated") + f" {sim['label']}. Lead time {sim['lead_time_days']} days, "
-                f"ordering every {sim['review_days']} days.", unsafe_allow_html=True)
+    st.markdown(ui.label("SIMULATED", "simulated") + " **Ordering from the AI forecast vs a moving-average rule** "
+                f"(no cash limit; lead time {sim['lead_time_days']} days, ordering every {sim['review_days']} days).",
+                unsafe_allow_html=True)
     h = sim.get("headline_matched_fill_rate")
     if h:
         chg = h["stock_change_pct"]
@@ -147,13 +148,55 @@ with t4:
     st.altair_chart(alt.Chart(fr).mark_line(point=True).encode(
         x=alt.X("days_of_cover:Q", title="average stock held (days of demand)", scale=alt.Scale(zero=False)),
         y=alt.Y("fill_rate:Q", title="share of demand served", axis=alt.Axis(format="%"), scale=alt.Scale(zero=False)),
-        color=alt.Color("policy:N", title=None, scale=alt.Scale(range=[ui.GREEN, "#9AA59F"]),
+        color=alt.Color("policy:N", title=None,
+                        scale=alt.Scale(domain=["AI forecast (LARIS)", "28-day average + safety stock"],
+                                        range=[ui.GREEN, "#9AA59F"]),
                         legend=alt.Legend(orient="bottom")),
         tooltip=["policy", "z", "fill_rate", "days_of_cover"]), use_container_width=True)
     st.caption("Each point is one service-level setting. Up and to the left is better: more demand served with less stock.")
     st.markdown("**Assumptions**\n" + "\n".join(f"- {x}" for x in sim["assumptions"]))
-    if "budget_simulation" not in metrics:
-        st.info("Budget replay (LARIS vs 'order last week's sales' and other usual rules at the same budget) not run yet.")
+    bs = metrics.get("budget_simulation")
+    st.divider()
+    st.markdown(ui.label("SIMULATED", "simulated") + " **Same cash, different decisions.** "
+                + (f"Replay of the test period ({bs['period'][0]} to {bs['period'][1]}) for stores "
+                   f"{', '.join(bs['stores'])}, real sales as demand." if bs else ""), unsafe_allow_html=True)
+    if bs:
+        pct = st.segmented_control("Cash available (share of the ideal order)", list(bs["totals_by_budget"]),
+                                   default="75%" if "75%" in bs["totals_by_budget"] else None, key="sim_pct")
+        pct = pct or list(bs["totals_by_budget"])[0]
+        tb = pd.DataFrame(bs["totals_by_budget"][pct]).T
+        tb = tb.assign(family=["LARIS" if i.startswith("LARIS") else "Usual practice" if i.startswith("Usual")
+                               else "Partial LARIS" for i in tb.index])
+        st.altair_chart(alt.Chart(tb.reset_index(names="policy")).mark_bar().encode(
+            x=alt.X("lost_margin_plus_waste_rm:Q", title="lost margin + expiry waste (RM, all stores)"),
+            y=alt.Y("policy:N", sort="x", title=None, axis=alt.Axis(labelLimit=320)),
+            color=alt.Color("family:N", title=None, scale=alt.Scale(domain=["LARIS", "Partial LARIS", "Usual practice"],
+                                                                     range=[ui.GREEN, "#7FB89A", "#B9C2BD"])),
+            tooltip=["policy", alt.Tooltip("lost_margin_rm:Q", format=",.0f"), alt.Tooltip("waste_rm:Q", format=",.0f"),
+                     alt.Tooltip("must_have_short_units:Q", format=",.0f"), alt.Tooltip("fill_rate:Q", format=".1%")])
+            .properties(height=260), use_container_width=True)
+        st.dataframe(tb[["lost_margin_rm", "waste_rm", "must_have_short_units", "fill_rate", "stockout_days",
+                         "spent_rm", "ending_stock_rm"]].style.format(
+            {"lost_margin_rm": "{:,.0f}", "waste_rm": "{:,.0f}", "must_have_short_units": "{:,.0f}",
+             "fill_rate": "{:.1%}", "stockout_days": "{:,.0f}", "spent_rm": "{:,.0f}", "ending_stock_rm": "{:,.0f}"}),
+            use_container_width=True)
+        wins = bs["laris_win_rate_by_store"].get(pct, {})
+        if wins:
+            st.markdown("**Stores where LARIS had lower lost margin + waste:** "
+                        + "; ".join(f"{k}: {v:.0%}" for k, v in wins.items()))
+        st.markdown("**Does it hold if the placeholder settings are wrong?** (75% cash)")
+        sens = pd.DataFrame([{"Scenario": k, "LARIS lowest vs every usual rule": "yes" if v["laris_lowest_vs_usual"]
+                              else "no", **{f"wins vs {u.replace('Usual: ', '')}": w
+                                            for u, w in v["win_rate_vs_usual"].items()}}
+                             for k, v in bs["sensitivity_75pct"].items()])
+        st.dataframe(sens.style.format({c: "{:.0%}" for c in sens.columns if c.startswith("wins")}),
+                     hide_index=True, use_container_width=True)
+        if not bs["conclusion_holds_in_all_scenarios"]:
+            failed = [k for k, v in bs["sensitivity_75pct"].items() if not v["laris_lowest_vs_usual"]]
+            st.warning("The advantage does not hold in every scenario: " + ", ".join(failed) + ".")
+        st.markdown("**Assumptions**\n" + "\n".join(f"- {x}" for x in bs["assumptions"]))
+    else:
+        st.info("Budget replay not run yet (pipeline.py, or pipeline.py --sim-only on existing outputs).")
 with t5:
     st.markdown(f"""
 - **Training and test data:** {metrics['data_source']}. Not Malaysian. Results show the method works on real

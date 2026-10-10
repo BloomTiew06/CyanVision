@@ -62,6 +62,10 @@ def parse_args():
     p.add_argument("--history-days", type=int, default=56, help="history exported for charts")
     p.add_argument("--settings", default=str(Path(__file__).parent / "product_settings.csv"),
                    help="per-product settings (lead time, shelf life, costs); defaults are placeholders")
+    p.add_argument("--sim-stores", type=int, default=10,
+                   help="stores in the budget replay, spread from smallest to largest (0 = skip)")
+    p.add_argument("--sim-only", action="store_true",
+                   help="rerun only the budget replay on existing outputs in --out (no retraining)")
     p.add_argument("--holdout-stores", type=int, default=10,
                    help="stores left out of a second training run and scored on the test period, as a test on "
                         "unseen shops (default 10; capped at a third of the stores; 0 = skip)")
@@ -432,10 +436,46 @@ def unseen_store_test(model_params, tr, te, methods, holdout, test_start):
     }
 
 
+def run_budget_sim(fc, sig, settings_path, n_stores, out):
+    """SIMULATED budget replay (budget_sim.py); writes budget_sim.csv and returns the summary."""
+    import time
+    from budget_sim import pick_stores, simulate_budget
+    from inventory import load_settings
+    t0 = time.time()
+    stores = pick_stores(fc, n_stores)
+    print(f"Budget replay (SIMULATED) on stores {stores}...")
+    df, summary = simulate_budget(fc, sig, load_settings(settings_path), stores)
+    df.to_csv(out / "budget_sim.csv", index=False)
+    summary["runtime_seconds"] = round(time.time() - t0, 1)
+    for pct, pols in summary["totals_by_budget"].items():
+        print(f"  Budget {pct} of the ideal order (sum over stores; lost margin + waste, RM):")
+        for pol, r in pols.items():
+            print(f"    {pol:<40} {r['lost_margin_plus_waste_rm']:>14,.0f}   must-have units short "
+                  f"{r['must_have_short_units']:>12,.0f}")
+    print(f"  Conclusion holds in every sensitivity scenario: {summary['conclusion_holds_in_all_scenarios']} "
+          f"({summary['runtime_seconds']} s)")
+    return summary
+
+
+def sim_only(a):
+    out = Path(a.out)
+    fc = pd.read_parquet(out / "forecasts.parquet")
+    fc["date"] = pd.to_datetime(fc["date"])
+    fc["store"] = fc["store"].astype(str)
+    sig = pd.read_csv(out / "sigma.csv", dtype={"store": str})
+    metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
+    metrics["budget_simulation"] = run_budget_sim(fc, sig, a.settings, a.sim_stores, out)
+    (out / "metrics.json").write_text(
+        json.dumps(metrics, indent=2, default=lambda o: o.item() if hasattr(o, "item") else str(o)),
+        encoding="utf-8")
+
+
 def main():
     a = parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
+    if a.sim_only:
+        return sim_only(a)
     from sklearn.ensemble import HistGradientBoostingRegressor
     from sklearn.inspection import permutation_importance
 
@@ -610,6 +650,8 @@ def main():
         "test_by_volume_tier": by_tier,
         **({"unseen_stores": unseen} if unseen else {}),
         "alert_backtest": alert_bt,
+        **({"budget_simulation": run_budget_sim(keep, sig.reset_index(), a.settings, a.sim_stores, out)}
+           if a.sim_stores > 0 else {}),
         "band_coverage_90": band_coverage_90,
         "lead_time_interval_coverage": {
             "label": "MEASURED on the test period: share of actual L-day sales inside the forecast interval "
