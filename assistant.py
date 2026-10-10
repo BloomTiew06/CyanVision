@@ -11,6 +11,7 @@ import json
 import os
 import re
 import socket
+import time
 import urllib.error
 import urllib.request
 
@@ -25,8 +26,11 @@ Rules:
 - Get every number from the tools. Never estimate, invent or recalculate revenue, profit, stock or quantities.
 - If a tool says data is missing or unavailable, say so plainly. Never make up product names or figures.
 - Say which figures are recorded sales, which are LARIS calculations, and which are forecasts or estimates.
-- You cannot send orders, place purchases or change stock. To change an order quantity, call propose_order_change
-  and tell the owner to press Confirm below your message. Never say a change was made.
+- You cannot send or place orders, buy anything, or change stock, and neither can a button. LARIS never places
+  orders: the owner sends the order themselves from the Orders page (it opens a WhatsApp draft they send).
+- Only after you call propose_order_change may you mention a Confirm button, and then only to change that one
+  product's quantity in this week's order. Never tell the owner to press Confirm for anything else, and never say
+  a change was made.
 - Answer in plain English (no jargon), in this shape: a direct answer; the key figures (short list or small table);
   one or two sentences of why; the recommended next step. Use RM. Keep it under about 150 words unless asked."""
 
@@ -39,20 +43,31 @@ def config(secrets=None):
     """AI settings from environment variables (or Streamlit secrets passed in). Enabled only with a key AND a model."""
     get = lambda k, d="": os.environ.get(k) or (secrets or {}).get(k) or d
     key, model = get("AI_API_KEY"), get("AI_MODEL")
+    off = os.environ.get("LARIS_AI_DISABLED") == "1"   # kill switch (tests use it so they never call a service)
     return {"api_key": key, "model": model, "base_url": get("AI_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
-            "enabled": bool(key and model)}
+            "enabled": bool(key and model) and not off}
 
 
-def http_transport(cfg, payload):
-    """POST to {base_url}/chat/completions. Raises ProviderError with a plain explanation on any failure."""
+def http_transport(cfg, payload, retries=1):
+    """POST to {base_url}/chat/completions. Raises ProviderError with a plain explanation on any failure.
+    A rate limit (429) is retried once after a short wait (free tiers allow only a few requests a minute)."""
     req = urllib.request.Request(f"{cfg['base_url']}/chat/completions", data=json.dumps(payload).encode("utf-8"),
                                  headers={"Authorization": f"Bearer {cfg['api_key']}",
-                                          "Content-Type": "application/json"})
+                                          "Content-Type": "application/json",
+                                          # some providers' firewalls reject Python's default user agent
+                                          "User-Agent": "LARIS/2.1"})
     try:
         with urllib.request.urlopen(req, timeout=TIMEOUT_S) as r:
             return json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
-        msg = {401: "the AI key was rejected", 403: "the AI key isn't allowed to use this model",
+        if e.code == 429 and retries > 0:
+            try:
+                wait = min(float(e.headers.get("Retry-After", 3)), 8)
+            except (TypeError, ValueError):
+                wait = 3
+            time.sleep(wait)
+            return http_transport(cfg, payload, retries - 1)
+        msg = {401: "the AI key was rejected", 403: "the AI service refused the request (the key may not be allowed to use this model)",
                404: "the AI model or address wasn't found", 429: "the AI service is busy or out of credit"}.get(
             e.code, f"the AI service returned an error ({e.code})")
         raise ProviderError(msg) from e
@@ -63,7 +78,11 @@ def http_transport(cfg, payload):
 
 
 def _ai_answer(question, history, ctx, cfg, transport):
-    messages = [{"role": "system", "content": SYSTEM}]
+    week = ctx["week"]
+    today = (f"\nLARIS is replaying past data: treat {week['as_of']:%A %d %B %Y} as today and the planning week as "
+             f"{week['as_of']:%d %b} to {week['end']:%d %b %Y}. Use dates exactly as the tools give them; never "
+             "compare them with the real calendar.")
+    messages = [{"role": "system", "content": SYSTEM + today}]
     messages += [{"role": m["role"], "content": m["content"]} for m in history[-HISTORY_TURNS:]
                  if m["role"] in ("user", "assistant")]
     messages.append({"role": "user", "content": question})

@@ -130,6 +130,8 @@ def test_missing_configuration_is_reported_not_crashed(monkeypatch):
     monkeypatch.setenv("AI_API_KEY", "k")
     assert not A.config()["enabled"]              # a key without a model is not enough
     monkeypatch.setenv("AI_MODEL", "m")
+    assert not A.config()["enabled"]              # kill switch from conftest wins
+    monkeypatch.delenv("LARIS_AI_DISABLED")
     assert A.config()["enabled"] and A.config()["base_url"].startswith("https://")
 
 
