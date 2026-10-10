@@ -5,3 +5,4 @@ outputs_mock/
 __pycache__/
 .pytest_cache/
 *.zip
+state/

@@ -12,6 +12,23 @@ import pandas as pd
 from inventory import (TAU_ACT, TIER_RANK, _normal_loss, allocate_budget, assess, categorize, dead_stock,
                        horizon_demand, make_item, priority, product_settings, score_allocation)
 
+# Sample kedai runcit (ILLUSTRATIVE): item names, RM prices and weekly sales are made up for the demo. Each item
+# replays the daily sales pattern of one Favorita product family, scaled to these weekly sales.
+SAMPLE_SHOP = {  # family: (item, cost RM, selling price RM, units sold last 7 days)
+    "GROCERY I": ("Maggi Curry 5-pack", 4.20, 5.20, 60),
+    "BEVERAGES": ("Milo 1kg", 15.50, 18.90, 20),
+    "DAIRY": ("Fresh milk 1L", 6.20, 7.50, 35),
+    "BREAD/BAKERY": ("White bread loaf", 3.40, 4.10, 70),
+    "EGGS": ("Eggs, grade B (tray of 30)", 11.00, 13.50, 25),
+    "POULTRY": ("Fresh chicken 1kg", 9.00, 11.00, 30),
+    "PRODUCE": ("Sawi (vegetables) 500g", 2.00, 3.00, 40),
+    "MEATS": ("Beef 500g", 18.00, 22.00, 10),
+    "FROZEN FOODS": ("Frozen burger patties 12pc", 9.50, 12.00, 15),
+    "CLEANING": ("Dishwashing liquid 900ml", 4.50, 6.00, 12),
+    "PERSONAL CARE": ("Shampoo 400ml", 12.00, 15.90, 8),
+    "DELI": ("Fishballs 500g", 6.00, 7.90, 20),
+}
+
 QGRID = np.round(np.linspace(0.01, 0.99, 99), 2)   # same grid as pipeline.uncertainty_table
 QCOLS = [f"q{int(round(x * 100)):02d}" for x in QGRID]
 
@@ -25,7 +42,7 @@ def conformal_quantiles(unc, product, L):
         u = unc[(unc["L"] == L) & (unc["product"] == "ALL")]
     return None if u.empty else u[QCOLS].iloc[0].to_numpy(float)
 
-COVER_PATTERN = [1.5, 6, 2.5, 12, 4, 9, 1, 7, 3, 10, 5, 8]   # default stock = N days of forecast (a mix)
+COVER_PATTERN = [1.5, 6, 4, 12, 0.8, 1, 3.5, 4, 1.5, 10, 0.5, 3]   # default stock = N days of forecast (a mix)
 PRESETS = {
     "Mixed week": {"budget_pct": 60, "cover": {}, "default": None},
     "Normal week": {"budget_pct": 100, "cover": {}, "default": 6.0},
@@ -33,8 +50,8 @@ PRESETS = {
                      "default": None},
     "Sparse history": {"budget_pct": 75, "cover": {}, "default": 6.0, "widest_band": 0.8},
 }
-INPUT_COLUMNS = ["product", "Name", "Must-have", "On hand", "On order", "Unit cost (RM)", "Margin (RM)",
-                 "Shelf life (days)", "Lead time (days)", "Review (days)", "Pack size"]
+INPUT_COLUMNS = ["product", "Name", "Must-have", "On hand", "On order", "Sales last 7 days", "Unit cost (RM)",
+                 "Margin (RM)", "Shelf life (days)", "Lead time (days)", "Review (days)", "Pack size"]
 Z90 = 1.645
 
 
@@ -81,14 +98,17 @@ def default_inputs(week, settings, sig, store, preset="Mixed week"):
     rows = []
     for i, prod in enumerate(week["products"]):
         s = product_settings(settings, prod)
-        mean = float(week["fc_wide"][prod].mean())
+        name, cost, price, sales7 = SAMPLE_SHOP.get(prod, (s["display_name"], s["unit_cost_rm"],
+                                                           s["unit_cost_rm"] + s["margin_rm"], None))
+        if sales7 is None:
+            sales7 = round(float(week["last7"].get(prod, 0.0)))
         cover = p["cover"].get(prod, p["default"] if p["default"] is not None else COVER_PATTERN[i % len(COVER_PATTERN)])
         if widest == prod:
             cover = p["widest_band"] * int(s["lead_time_days"])
         rows.append({
-            "product": prod, "Name": f"{s['icon']} {s['display_name']}".strip(), "Must-have": bool(s["must_have"]),
-            "On hand": float(round(mean * cover)), "On order": 0.0,
-            "Unit cost (RM)": float(s["unit_cost_rm"]), "Margin (RM)": float(s["margin_rm"]),
+            "product": prod, "Name": f"{s['icon']} {name}".strip(), "Must-have": bool(s["must_have"]),
+            "On hand": float(round(sales7 / 7 * cover)), "On order": 0.0, "Sales last 7 days": float(sales7),
+            "Unit cost (RM)": float(cost), "Margin (RM)": round(float(price) - float(cost), 2),
             "Shelf life (days)": int(s["shelf_life_days"]), "Lead time (days)": int(s["lead_time_days"]),
             "Review (days)": int(s["review_days"]), "Pack size": int(s["pack_size"]),
         })
@@ -135,8 +155,18 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0, unc=None,
     rows, items = [], []
     for _, r in inputs.iterrows():
         prod = r["product"]
-        daily = week["fc_wide"][prod].to_numpy() if prod in week["fc_wide"] else np.zeros(7)
-        sigma, fallback = sigma_for(sig, store, prod, daily, scale)
+        # The model's daily pattern is scaled to the shop's own recent sales; a product with no sales history in
+        # the data (e.g. added by the user) gets a flat forecast at its recent sales rate.
+        sales7, data7 = float(r["Sales last 7 days"]), float(week["last7"].get(prod, 0.0))
+        if prod in week["fc_wide"] and data7 > 0:
+            ratio = sales7 / data7
+            daily = week["fc_wide"][prod].to_numpy() * ratio
+            sigma, fallback = sigma_for(sig, store, prod, daily, scale * ratio)
+        else:
+            ratio = 0.0
+            daily = np.full(7, sales7 / 7)
+            sigma, fallback = max(0.5, 0.3 * sales7 / 7), True
+        sigma = max(sigma, 1e-9)   # zero recent sales scales the error to 0; avoid dividing by it below
         lead, rev, shelf = int(r["Lead time (days)"]), int(r["Review (days)"]), int(r["Shelf life (days)"])
         cost, margin, pack = float(r["Unit cost (RM)"]), float(r["Margin (RM)"]), int(r["Pack size"])
         on_hand, on_order, must = float(r["On hand"]), float(r["On order"]), bool(r["Must-have"])
@@ -160,12 +190,14 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0, unc=None,
         for name in ("promo", "holiday", "payday"):
             col = f"pred_no_{name}"
             if col in wp:
-                effects[name] = float((wp["pred_model"] - wp[col]).sum()) * scale
+                effects[name] = float((wp["pred_model"] - wp[col]).sum()) * scale * ratio
         hist_n = int(week["past"][week["past"]["product"] == prod]["y"].notna().sum())
         m_err, n_err, _ = _track_record(week["past"], prod, week["as_of"])
-        anomaly, anomaly_why = _anomaly(week["past"], prod, week["as_of"], sigma / scale if scale else sigma)
+        anomaly, anomaly_why = _anomaly(week["past"], prod, week["as_of"], sigma / (scale * ratio) if ratio else sigma)
         low_why = []
-        if hist_n < 28:
+        if hist_n == 0:
+            low_why.append("no sales history, so the forecast simply repeats your recent sales")
+        elif hist_n < 28:
             low_why.append(f"only {hist_n} days of sales history")
         if fallback:
             low_why.append("no measured forecast error for this product")
@@ -177,9 +209,10 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0, unc=None,
         row = {**a, "product": prod, "name": r["Name"], "must_have": must, "lead_time": lead,
                "review": rev, "shelf_life": shelf, "unit_cost": cost, "margin": margin, "pack_size": pack,
                "on_hand": on_hand, "on_order": on_order, "sigma": sigma, "band_pct": band_pct,
-               "demand_last7": float(week["last7"].get(prod, 0.0)), "window_short": window_short,
+               "demand_last7": sales7, "window_short": window_short, "ratio": ratio,
                "dead_flag": d["flag"], "perishable": d["perishable"], "days_of_cover": d["days_of_cover"],
                "expected_expire_units": d["expected_expire_units"], "expected_expire_rm": d["expected_expire_rm"],
+               "demand_shelf_life": d["demand_shelf_life"],
                "dead_action": d["action"], "low_confidence": bool(low_why), "low_why": low_why,
                "anomaly": anomaly, "anomaly_why": anomaly_why, "model_err28": m_err, "naive_err28": n_err,
                "promo_days": int(week["promo_days"].get(prod, 0)), "holiday": week["holiday"],
@@ -254,8 +287,7 @@ def explain(row):
     if np.isfinite(row["band_pct"]):
         out.append(("Calculation", f"Likely range ±{row['band_pct']:.0%} over 7 days, from the model's measured error."))
     avail = row["on_hand"] + row["on_order"]
-    rod = row["run_out_day"]
-    lasts = "beyond 7 days" if rod is None or pd.isna(rod) else f"about {int(rod)} day(s)"
+    lasts = _days(avail / (fc7 / 7)) if fc7 > 0 else "no sales expected"
     out.append(("Calculation", f"Stock of {avail:,.0f} lasts {lasts}; delivery takes {row['lead_time']} day(s)."))
     out.append(("Calculation", f"{row['p_stockout']:.0%} chance of running out before the delivery arrives "
                                f"(from the {row['uncertainty']}; LARIS alerts at {row['tau_act']:.0%} or more, a level "
@@ -278,46 +310,158 @@ def explain(row):
     return out
 
 
-def build_context(fc, sig, settings, store, as_of, inputs, budget_pct, scale=1.0, service=0.95,
-                  unc=None, alert_cfg=None):
-    """Everything the pages need, computed once per run."""
+def build_context(fc, sig, settings, store, as_of, inputs, budget_rm=None, scale=1.0, service=0.95,
+                  unc=None, alert_cfg=None, protect_must_have=True, adjust=None, extra_rm=50.0):
+    """The one shared planning context every page reads, computed once per run.
+
+    budget_rm: cash for this order (None = the full recommended order). protect_must_have: the optimiser's
+    strategy (True = essentials first, then value per RM; False = value per RM only). adjust: the owner's
+    quantity overrides {product: qty}; they change the order (order_qty / order_rm) but never the recommendation
+    (qty), so both stay visible."""
     week = week_view(fc, store, as_of, scale)
     rows, items = assess_products(week, sig, store, inputs, service, scale, unc, alert_cfg)
-    ideal_alloc, ideal_tot = allocate_budget(items, None)
-    budget_rm = round(ideal_tot["ideal_rm"] * budget_pct / 100.0, 2)
-    alloc, tot = allocate_budget(items, budget_rm)
-    names = dict(zip(rows["product"], rows["name"])) if len(rows) else {}
+    ctx = {"week": week, "rows": rows, "items": items, "store": store, "scale": scale, "service": service,
+           "protect_must_have": protect_must_have, "empty": not items}
+    if not items:
+        return {**ctx, "plan": pd.DataFrame(), "alloc": pd.DataFrame(), "totals": {}, "ideal_rm": 0.0,
+                "budget_rm": float(budget_rm or 0), "order_rm": 0.0, "budget_limited": False, "scenario": None}
+    _, ideal_tot = allocate_budget(items, None, protect_must_have=protect_must_have)
+    budget = ideal_tot["ideal_rm"] if budget_rm is None else max(0.0, float(budget_rm))
+    alloc, tot = allocate_budget(items, budget, protect_must_have=protect_must_have)
+    names = dict(zip(rows["product"], rows["name"]))
     alloc["name"] = alloc["product"].map(names)
-    # "With RM X more you'd add ..."
-    extra = max(10.0, round(ideal_tot["ideal_rm"] * 0.10, -1))
-    more_alloc, _ = allocate_budget(items, budget_rm + extra)
-    more = (more_alloc.set_index("product")["qty"] - alloc.set_index("product")["qty"])
-    more = [(names.get(p, p), q) for p, q in more.items() if q > 0]
-    compare = compare_lastweek(week, inputs, items, alloc, budget_rm, scale)
-    return {"week": week, "rows": rows, "items": items, "alloc": alloc, "totals": tot,
-            "ideal_totals": ideal_tot, "budget_rm": budget_rm, "budget_pct": budget_pct,
-            "more_rm": extra, "more": more, "store": store, "scale": scale, "service": service,
-            "compare": compare}
+    plan = plan_table(rows, alloc, items)
+    adjust = adjust or {}
+    plan["order_qty"] = [float(adjust.get(p, q)) for p, q in zip(plan["product"], plan["qty"])]
+    plan["adjusted"] = plan["order_qty"] != plan["qty"]
+    plan["order_rm"] = plan["order_qty"] * plan["unit_cost"]
+    return {**ctx, "plan": plan, "alloc": alloc, "totals": tot, "ideal_rm": ideal_tot["ideal_rm"],
+            "budget_rm": budget, "order_rm": float(plan["order_rm"].sum()),
+            "budget_limited": tot["spent_rm"] < ideal_tot["ideal_rm"] - 0.5,
+            "scenario": budget_scenario(items, alloc, budget, extra_rm, names, protect_must_have)}
 
 
-def compare_lastweek(week, inputs, items, alloc, budget_rm, scale=1.0):
-    """ESTIMATE: LARIS's order vs 'order what sold in the last review period, cut pro-rata to the
-    budget', both scored with the same forecast distribution."""
-    inp = inputs.set_index("product")
-    past = week["past"]
-    need = []
-    for it in items:
-        rev = int(inp.loc[it["product"], "Review (days)"])
-        sold = past[(past["product"] == it["product"]) & (past["date"] >= week["as_of"] - pd.Timedelta(days=rev))]
-        need.append(float(sold["y"].sum()) * scale)
-    need = np.array(need)
-    cost = np.array([it["unit_cost"] for it in items])
-    pack = np.array([it["pack_size"] for it in items])
-    if (need * cost).sum() > budget_rm > 0:
-        need = need * budget_rm / (need * cost).sum()
-    need = np.floor(need / pack) * pack
-    return {"LARIS order": score_allocation(items, alloc["qty"].to_numpy()),
-            "Order last week's sales (pro-rata cut)": score_allocation(items, need)}
+def budget_scenario(items, alloc, budget, extra, names, protect_must_have=True):
+    """What `extra` RM more would add, and the estimated drop in expected lost profit + waste (an ESTIMATE from
+    the same forecast distribution the optimiser uses)."""
+    more, _ = allocate_budget(items, budget + extra, protect_must_have=protect_must_have)
+    added = more.set_index("product")["qty"] - alloc.set_index("product")["qty"]
+    loss = lambda q: (lambda s: s["exp_lost_margin_rm"] + s["exp_waste_rm"])(score_allocation(items, q))
+    return {"extra": extra, "added": [(names.get(p, p), q) for p, q in added.items() if q > 0],
+            "saves": loss(alloc["qty"].to_numpy()) - loss(more["qty"].to_numpy()),
+            "spent_more": float(more["spend_rm"].sum() - alloc["spend_rm"].sum())}
+
+
+ACTION_RANK = {"RESTOCK": 0, "STOP": 1, "REDUCE": 2, "MAINTAIN": 3}
+
+
+def _days(x):
+    """Days of stock in words (stock / average daily forecast), the same measure the product page shows."""
+    if not np.isfinite(x):
+        return "no sales expected"
+    return f"about {x:.1f} days" if round(x, 1) < 3 else f"about {x:,.0f} days"
+
+
+def plan_table(rows, alloc, items):
+    """One recommendation per product, compared with simply reordering last week's sales (the 'usual order'):
+    RESTOCK (order clearly more), REDUCE (clearly less), STOP (dead stock: don't reorder), MAINTAIN.
+    impact_rm = expected lost profit + expected waste of the usual order minus that of LARIS's order (an ESTIMATE
+    from the forecast distribution; positive = LARIS's order is expected to lose less). Ranked by urgency, then
+    impact."""
+    a = alloc.set_index("product")
+    it = {x["product"]: x for x in items}
+    loss = lambda x, q: (lambda s: s["exp_lost_margin_rm"] + s["exp_waste_rm"])(score_allocation([x], [q]))
+    out = []
+    for _, r in rows.iterrows():
+        p, x = r["product"], it[r["product"]]
+        pack = x["pack_size"]
+        qty, ideal = float(a.at[p, "qty"]), float(a.at[p, "ideal_qty"])
+        usual = float(round(r["demand_last7"] * r["review"] / 7 / pack) * pack)
+        fc7, last7, lead = r["demand_7d"], r["demand_last7"], int(r["lead_time"])
+        avail = r["on_hand"] + r["on_order"]
+        cover = avail / (fc7 / 7) if fc7 > 0 else float("inf")
+        change = fc7 / last7 - 1 if last7 > 0 else 0.0
+        trend = "Growing" if change > 0.1 else "Declining" if change < -0.1 else "Stable"
+        stockout = r["category"] == "STOCKOUT_IMMINENT"
+        if r["dead_flag"]:
+            action = "STOP"
+        elif stockout or (ideal > usual * 1.2 and ideal - usual >= pack):
+            action = "RESTOCK"
+        elif ideal < usual * 0.8:
+            action = "REDUCE"
+        else:
+            action = "MAINTAIN"
+        impact = loss(x, usual) - loss(x, qty)
+
+        rod = r["run_out_day"]
+        spoils = x["overstock_cost"] >= x["unit_cost"] - 1e-9 and cover < 0.8 * r["window"]
+        if stockout:
+            risk = (f"Likely to run out in {_days(cover)}; the next delivery takes {lead} day(s)."
+                    if rod is not None and not pd.isna(rod) else
+                    f"{r['p_stockout']:.0%} chance of running out before the next delivery ({lead} day(s)).")
+        elif r["dead_flag"] and r["perishable"]:
+            risk = (f"About {r['expected_expire_units']:,.0f} units may expire unsold: {_days(cover)} of stock, "
+                    f"{r['shelf_life']}-day shelf life.")
+        elif r["dead_flag"]:
+            risk = f"Overstocked: {_days(cover)} of stock is tying up cash."
+        elif trend == "Declining":
+            risk = f"Sales expected to fall {abs(change):.0%} this week."
+        elif action == "RESTOCK":
+            risk = f"Stock lasts {_days(cover)}, not enough until the following delivery."
+        elif action == "REDUCE" and spoils:
+            risk = f"Spoils within {r['shelf_life']} day(s), so leftovers get thrown away."
+        elif action == "REDUCE":
+            risk = f"Stock lasts {_days(cover)}, enough to need less than usual."
+        else:
+            risk = f"Stock lasts {_days(cover)}."
+
+        if action == "STOP":
+            rec = "Don't reorder" + ("; put it on sale before it expires" if r["perishable"] else "; consider a promotion")
+        elif action == "RESTOCK":
+            rec = (f"Order {qty:,.0f} units (you'd usually order {usual:,.0f})" if qty > usual else
+                   f"Order {qty:,.0f} units today")
+            if qty < ideal:
+                rec += f"; your budget covers {qty:,.0f} of the {ideal:,.0f} needed"
+        elif action == "REDUCE":
+            rec = f"Reduce the order from {usual:,.0f} to {qty:,.0f} units"
+        else:
+            rec = f"Order {qty:,.0f} units, as usual" if qty else "No order needed this week"
+
+        cash = max(0.0, usual - qty) * x["unit_cost"]
+        if action == "RESTOCK":
+            impact_txt = f"Avoids about RM {impact:,.0f} in lost profit" if impact >= 1 else "Limited by your budget"
+        elif action in ("REDUCE", "STOP") and impact >= 0.9 * cash and impact >= 1:
+            impact_txt = f"Avoids about RM {impact:,.0f} of stock likely to go to waste"
+        elif action in ("REDUCE", "STOP"):
+            impact_txt = f"Frees RM {cash:,.0f} cash" + (f", avoids about RM {impact:,.0f} in likely losses"
+                                                          if impact >= 1 else "")
+        else:
+            impact_txt = ""
+
+        sold = f"Expected to sell {fc7:,.0f} next week" + (
+            f", up {change:.0%} on last week" if trend == "Growing" else
+            f", down {abs(change):.0%} on last week" if trend == "Declining" else ", about the same as last week")
+        why = {
+            "RESTOCK": (f"{sold}; current stock may not last until the next supplier delivery." if stockout else
+                        f"{sold}; current stock and your usual order won't cover it until the next order arrives."),
+            "REDUCE": (f"{sold}; it spoils within {r['shelf_life']} day(s), so ordering a little less than last "
+                       "week's sales is expected to lose less than throwing leftovers away." if spoils else
+                       f"{sold}; the stock you have already covers most of it, so last week's order would leave extra."),
+            "STOP": f"{sold}; the stock you have would take {_days(cover)} to sell"
+                    + (", longer than its shelf life." if r["perishable"] else "."),
+            "MAINTAIN": f"{sold}; your usual order fits.",
+        }[action]
+        out.append({"product": p, "name": r["name"], "action": action, "must_have": r["must_have"],
+                    "risk": risk, "rec": rec, "impact_rm": impact, "impact_txt": impact_txt, "why": why,
+                    "qty": qty, "ideal": ideal, "usual": usual, "spend_rm": qty * x["unit_cost"],
+                    "unit_cost": x["unit_cost"], "margin": x["margin"], "pack_size": pack,
+                    "trend": trend, "change": change, "cover_days": cover, "urgent": stockout})
+    df = pd.DataFrame(out)
+    if len(df):
+        df["_u"] = np.where(df["urgent"], 0, np.where(df["action"] == "MAINTAIN", 2, 1))
+        df["_i"] = df["impact_rm"].clip(lower=0) + df["action"].map(ACTION_RANK) * 1e-6
+        df = df.sort_values(["_u", "_i"], ascending=[True, False]).drop(columns=["_u", "_i"]).reset_index(drop=True)
+    return df
 
 
 def demo_week(fc, settings):
@@ -341,22 +485,3 @@ def demo_week(fc, settings):
         if rise > best:
             best, best_d = rise, d
     return store, best_d, best
-
-
-def sales_value_series(week, inputs, sig, store, scale=1.0, history_days=14):
-    """Expected sales in RM/day for the week (forecast x placeholder price) with a 90% range
-    (product errors assumed independent), plus actual RM/day for the previous days."""
-    price = (inputs.set_index("product")["Unit cost (RM)"] + inputs.set_index("product")["Margin (RM)"])
-    fw = week["fc_wide"]
-    cols = [c for c in fw.columns if c in price.index]
-    exp = (fw[cols] * price[cols]).sum(axis=1)
-    var = sum((sigma_for(sig, store, c, fw[c], scale)[0] * price[c]) ** 2 for c in cols)
-    band = Z90 * sqrt(var)
-    fut = pd.DataFrame({"date": fw.index, "rm": exp.values, "lo": np.maximum(0, exp.values - band),
-                        "hi": exp.values + band})
-    past = week["past"]
-    past = past[past["date"] >= week["as_of"] - pd.Timedelta(days=history_days)]
-    past = past[past["product"].isin(cols)]
-    hist = (past.assign(rm=past["y"] * scale * past["product"].map(price)).groupby("date")["rm"].sum()
-            .reset_index())
-    return fut, hist

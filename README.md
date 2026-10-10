@@ -60,11 +60,11 @@ Pipeline options:
 
 | | Track capability | What it does | Code |
 |---|---|---|---|
-| **L** Lihat ke depan | Detect and predict | 7-day forecast per store x product family, with a range from measured error; model what-if effects of promotions, holidays, payday | `pipeline.py` (model, `uncertainty_table`), `views/forecast.py` |
-| **A** Amaran stok habis | Detect, categorize, prioritize, explain | P(running out before delivery), risk categories, tiers (Act today / This order / Watch), RM at risk, bridge top-up, explanation card | `inventory.assess`, `categorize`, `priority`; `laris_core.assess_products`, `explain`; `views/alerts.py` |
-| **R** Rendahkan pembaziran | Detect, explain | Stock that will expire unsold or ties up cash; skip or discount | `inventory.dead_stock`, `views/waste.py` |
-| **I** Ikut bajet | Decide | Best order list for the cash: must-haves first up to expected demand, then value per RM; "with RM X more"; estimate vs ordering last week's sales | `inventory.allocate_budget`, `score_allocation`; `views/orders.py` |
-| **S** Semak hasil | Prove it | Accuracy vs 3 simple rules with CIs; unseen stores; range coverage; alert backtest (false alarms); budget replay vs usual ordering rules | `pipeline.py`, `budget_sim.py`, `views/results.py` |
+| **L** Lihat ke depan | Detect and predict | 7-day forecast per store x product family, with a range from measured error; model what-if effects of promotions, holidays, payday | `pipeline.py` (model, `uncertainty_table`), `views/look_ahead.py`, `views/product.py` |
+| **A** Amaran stok habis | Detect, categorize, prioritize, explain | P(running out before delivery), risk categories, tiers (Act today / This order / Watch), RM at risk, bridge top-up, explanation card | `inventory.assess`, `categorize`, `priority`; `laris_core.assess_products`, `explain`, `plan_table`; `planning.alert_table`; `views/alerts.py`, `views/home.py` |
+| **R** Rendahkan pembaziran | Detect, explain | Stock that will expire unsold or ties up cash; skip or discount | `inventory.dead_stock`, `planning.waste_table`, `views/waste.py` |
+| **I** Ikut bajet | Decide | Best order list for the cash: must-haves first up to expected demand, then value per RM; "with RM X more"; estimate vs ordering last week's sales | `inventory.allocate_budget`, `score_allocation`; `planning.strategy_compare`, `laris_core.budget_scenario`; `views/budget.py` |
+| **S** Semak hasil | Prove it | Accuracy vs 3 simple rules with CIs; unseen stores; range coverage; alert backtest (false alarms); budget replay vs usual ordering rules | `pipeline.py`, `budget_sim.py` (metrics.json; SIMULATED replay line on I · Invest Within Budget; range coverage on charts). In the app, S is Send & Sync: `views/send.py` |
 
 Three layers: **(1) the AI model** (offline, `pipeline.py`) → **(2) risk assessment and prioritisation**
 (live, `inventory.py` + `laris_core.py`) → **(3) the budget optimiser** (live, `inventory.allocate_budget`).
@@ -78,7 +78,9 @@ Three layers: **(1) the AI model** (offline, `pipeline.py`) → **(2) risk asses
 | `inventory.py` | Pure decision functions: stockout risk, bridge top-up, dead stock, budget allocation, risk categories, priority |
 | `laris_core.py` | Shared per-week context for the app: risk, explanation, allocation, the pitch-scenario rule |
 | `laris_ui.py`, `.streamlit/config.toml`, `assets/` | Look and feel (green theme, logo) |
-| `app.py`, `views/*.py` | Streamlit app: Dashboard, Sales forecast, Risk alerts, Waste reduction, Budget & orders, Results, Settings |
+| `app.py`, `views/*.py` | Streamlit app (top navigation): Home; LARIS tools L · Look Ahead, A · Alert Before Stockout, R · Reduce Waste, I · Invest Within Budget, S · Send & Sync; Manage: My Products (table + cards), Sales & Profitability; Product Intelligence opens from any product. `app.py` builds the one shared planning context every page reads |
+| `planning.py` | Page logic derived from the shared context (alerts, look-ahead options, waste, budget breakdown, sales and gross profit, product validation, WhatsApp draft); no Streamlit, tested in `tests/test_laris2.py` |
+| `store.py` | Local JSON store (`state/laris_state.json`, git-ignored) for events, alert/waste decisions, order status records and preferences |
 | `product_settings.csv` | Per-product cost, margin, shelf life, lead time, review cycle, pack size, must-have. **All PLACEHOLDERS** |
 | `make_mock_data.py` | Mock data in the Favorita format, for building before the download |
 | `tests/` | pytest: decision logic, pipeline helpers, budget replay, headless app checks |

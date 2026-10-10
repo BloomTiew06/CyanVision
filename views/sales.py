@@ -1,0 +1,86 @@
+from html import escape
+
+import altair as alt
+import streamlit as st
+
+import laris_ui as ui
+import planning
+
+ss = st.session_state
+ctx = ss["ctx"]
+ui.require_plan(ctx)
+HERE = "views/sales.py"
+
+period = st.segmented_control("Period", list(planning.PERIODS), default="Last 28 days", key="sales_period") \
+    or "Last 28 days"
+df, tot = planning.sales_summary(ctx, planning.PERIODS[period])
+st.markdown(ui.label("SAMPLE DATA", "placeholder") + f'<span class="lr-muted">{tot["start"]:%d %b %Y} – '
+            f'{tot["end"]:%d %b %Y} ({tot["days"]} days). Recorded sales are replayed sample data scaled to this shop, '
+            "priced with your selling prices and costs: illustrative, not real business results.</span>",
+            unsafe_allow_html=True)
+
+# ---------------- A. summary ----------------
+k = st.columns(4)
+k[0].markdown(ui.kpi("REVENUE", ui.money(tot["revenue"]), "units sold × selling price"), unsafe_allow_html=True)
+k[1].markdown(ui.kpi("COST OF GOODS SOLD", ui.money(tot["cogs"]), "units sold × cost price"), unsafe_allow_html=True)
+k[2].markdown(ui.kpi("GROSS PROFIT", ui.money(tot["gross_profit"]), "revenue − cost of goods"), unsafe_allow_html=True)
+k[3].markdown(ui.kpi("GROSS MARGIN", f"{tot['margin_pct']:.1f}%" if tot["margin_pct"] == tot["margin_pct"] else "–",
+                     "gross profit ÷ revenue"), unsafe_allow_html=True)
+notes = ["Gross figures: rent, wages, electricity and other running costs aren't included, so this is not net profit."]
+if tot["no_history"]:
+    notes.append(f"{tot['no_history']} product(s) have no sales history for this period and are left out.")
+if tot["no_cost"]:
+    notes.append(f"{tot['no_cost']} product(s) have no cost price, so they're left out of profit and margin.")
+st.caption(" ".join(notes))
+
+# ---------------- B/C. revenue and gross profit rankings ----------------
+n = st.segmented_control("Show", ["Top 5", "Top 10", "Top 20", "All"], default="Top 10", key="sales_top") or "Top 10"
+limit = None if n == "All" else int(n.split()[1])
+
+
+def ranking(col, title):
+    d = df.dropna(subset=[col])
+    d = d[d[col] != 0].sort_values(col, ascending=False)
+    d = d.head(limit) if limit else d
+    if d.empty:
+        st.caption("No data for this period.")
+        return
+    base = alt.Chart(d).encode(y=alt.Y("name:N", sort="-x", title=None, axis=alt.Axis(labelLimit=220)))
+    bars = base.mark_bar(color=ui.GREEN, cornerRadiusEnd=2).encode(
+        x=alt.X(f"{col}:Q", title=title), tooltip=["name", alt.Tooltip(f"{col}:Q", format=",.2f", title=title)])
+    text = base.mark_text(align="left", dx=4, color=ui.CHARCOAL, fontSize=11).encode(
+        x=f"{col}:Q", text=alt.Text(f"{col}:Q", format=",.0f"))
+    st.altair_chart((bars + text).properties(height=max(160, 28 * len(d))), use_container_width=True)
+
+
+a, b = st.columns(2)
+with a:
+    ui.section("Revenue by product", "What brings money in.")
+    ranking("revenue", "Revenue (RM)")
+with b:
+    ui.section("Gross profit by product", "What you keep after the cost of goods. High revenue isn't always high profit.")
+    ranking("gross_profit", "Gross profit (RM)")
+
+# ---------------- D. margin ----------------
+ui.section("Gross margin %", "The share of each ringgit of sales you keep. A high percentage on a slow seller can still "
+                             "mean little profit in RM.")
+m = df.dropna(subset=["margin_pct"]).sort_values("margin_pct", ascending=False)
+st.dataframe(m[["name", "units", "revenue", "gross_profit", "margin_pct"]], hide_index=True, use_container_width=True,
+             column_config={"name": "Product", "units": st.column_config.NumberColumn("Units sold", format="%.0f"),
+                            "revenue": st.column_config.NumberColumn("Revenue (RM)", format="%.0f"),
+                            "gross_profit": st.column_config.NumberColumn("Gross profit (RM)", format="%.0f"),
+                            "margin_pct": st.column_config.ProgressColumn("Gross margin", format="%.0f%%", min_value=0,
+                                                                          max_value=100)})
+st.caption("Products with no revenue in this period or no cost price aren't ranked.")
+
+# ---------------- E. insights ----------------
+ui.section("What to look at", "Findings that connect sales to your stock decisions.")
+found = planning.profit_insights(ctx, df)
+if not found:
+    st.caption("Nothing stands out for this period.")
+for i, (title, text, product, page) in enumerate(found[:8]):
+    a, b, c = st.columns([5, 1.2, 1.2], vertical_alignment="center")
+    a.markdown(f"**{escape(title)}.** {escape(text)}")
+    with b:
+        ui.why_button(product, HERE, key=f"si_why_{i}", label="View product")
+    c.page_link(page, label="Review", icon=":material/arrow_forward:")

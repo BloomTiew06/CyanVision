@@ -58,25 +58,35 @@ def test_categorize_and_priority():
     assert priority(row)[0] != "Act today"
 
 
-PAGES = ["dashboard.py", "forecast.py", "alerts.py", "waste.py", "orders.py", "results.py", "settings.py"]
+PAGES = ["home.py", "look_ahead.py", "alerts.py", "waste.py", "budget.py", "send.py", "products.py", "sales.py",
+         "product.py"]
 
 
-def test_pitch_scenario_and_budget_slider(monkeypatch):
+def test_editing_products_changes_the_plan(monkeypatch):
     out = ROOT / "outputs_mock"
     if not (out / "metrics.json").exists():
         pytest.skip("run make_mock_data.py and pipeline.py --out outputs_mock first")
+    import pandas as pd
     from streamlit.testing.v1 import AppTest
     monkeypatch.setenv("SHELFSIGNAL_OUT", str(out))
-    monkeypatch.setenv("LARIS_PAGE", "settings.py")
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120)
     at.run()
-    at.button[0].click().run()
     assert not at.exception, [e.value for e in at.exception]
-    assert at.session_state["preset"] == "Tight budget"
-    spent_tight = at.session_state["ctx"]["totals"]["spent_rm"]
-    at.session_state["budget_pct"] = 100
+    inp = at.session_state["inputs"].copy()
+    prod = inp["product"].iloc[0]
+    before = at.session_state["ctx"]["plan"].set_index("product").loc[prod]
+    # Sales jump and the shelf is empty -> restock more than before; a new product gets its own recommendation.
+    inp.loc[inp["product"] == prod, ["Sales last 7 days", "On hand"]] = [before["usual"] * 4 + 50, 0]
+    new = {**inp.iloc[0].to_dict(), "product": "Kopi O 3-in-1", "Name": "Kopi O 3-in-1", "On hand": 0,
+           "Sales last 7 days": 40}
+    at.session_state["inputs"] = pd.concat([inp, pd.DataFrame([new])], ignore_index=True)
+    at.session_state["budget_rm"] = 1e6
     at.run()
-    assert at.session_state["ctx"]["totals"]["spent_rm"] > spent_tight
+    assert not at.exception, [e.value for e in at.exception]
+    plan = at.session_state["ctx"]["plan"].set_index("product")
+    assert plan.loc[prod, "action"] == "RESTOCK" and plan.loc[prod, "qty"] > before["qty"]
+    assert plan.loc["Kopi O 3-in-1", "action"] == "RESTOCK" and plan.loc["Kopi O 3-in-1", "qty"] > 0
+    assert set(plan["action"]) <= {"RESTOCK", "REDUCE", "STOP", "MAINTAIN"}
 
 
 @pytest.mark.parametrize("page", PAGES)

@@ -297,7 +297,7 @@ def _pack_values(mu, sd, position, pack, cs, co):
     Value of one unit at stock level y = cs * P(D > y) - co * P(D <= y) (y + 0.5 for continuity).
     These values fall as stock rises, so the positive packs form a prefix.
     """
-    if cs <= 0:
+    if cs <= 0 or co <= 0:   # no margin, or no cost to value leftovers by (missing cost price): don't order
         return np.zeros(0)
     y_star = mu + sd * float(norm.ppf(cs / (cs + co)))
     n_units = int(max(0, ceil(y_star - position)) + pack)
