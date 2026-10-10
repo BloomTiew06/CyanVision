@@ -58,7 +58,6 @@ try:
 except (OSError, ValueError, KeyError) as e:
     st.error(f"LARIS couldn't read its forecast files in {OUT} ({e}). Rerun pipeline.py to regenerate them.")
     st.stop()
-is_mock = "MOCK" in metrics.get("data_source", "")
 
 # path, menu title, icon, eyebrow, headline, subtitle (pages with a headline get the shared header)
 PAGES = [
@@ -124,11 +123,12 @@ build = lambda budget: core.build_context(
 if ss["budget_rm"] is None:   # first visit: a round budget that covers the full recommended order
     ss["budget_rm"] = float(ceil(build(None)["ideal_rm"] / 50) * 50)
 ctx = build(ss["budget_rm"])
-ss["ctx"] = {**ctx, "metrics": metrics, "fc": fc, "sig": sig, "settings": settings, "is_mock": is_mock,
+# plain description of the training data for the page footer and Settings (no development-only wording)
+source = metrics.get("data_source", "sample data")
+source = "sample sales data" if "MOCK" in source.upper() else source
+ss["ctx"] = {**ctx, "metrics": metrics, "fc": fc, "sig": sig, "settings": settings, "data_source": source,
              "inputs": ss["inputs"], "ref": planning.order_ref(store_id, as_of), "shop": ss["shop_name"]}
 ui.topbar(ss["shop_name"], ss["shop_place"])
-if is_mock and pg.title != "Home":   # Home shows the same notice inside its hero
-    st.markdown(ui.mock_pill(), unsafe_allow_html=True)
 for msg in ss.pop("flash", []):
     st.toast(msg)
 _, _, _, eyebrow, headline, subtitle = meta[pg.title]
@@ -143,6 +143,6 @@ else:   # every other page sits on one glass card so its content stands off the 
 st.divider()
 st.caption("**About these numbers.** Product names, prices, stock and weekly sales are an illustrative sample shop. "
            f"Each product's daily sales pattern and forecast come from a machine-learning model trained on "
-           f"{metrics.get('data_source', 'sample data')}, scaled to the shop's weekly sales; this is not Malaysian sales "
+           f"{source}, scaled to the shop's weekly sales; this is not Malaysian sales "
            "data and the model has not learned Malaysian paydays, festivals or local events. RM impacts are estimates, "
            "replay comparisons are simulations, and LARIS never sends messages or places orders by itself.")

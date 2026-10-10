@@ -172,8 +172,6 @@ hr {border-color: var(--line) !important;}
 .lr-estimated {background: var(--neutral-bg); color: var(--neutral-fg);}
 .lr-simulated {background: #F6E7C2; color: #6E4A0C;}
 .lr-planned {background: transparent; color: var(--text2); border: 1px dashed var(--btn-border);}
-.lr-mock {display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font-size: 13.5px;
-          background: var(--mock-bg); border: 1px solid var(--mock-border); color: var(--mock-fg); margin: 2px 0 10px;}
 
 /* KPI cards: one grid row, equal heights */
 .lr-kpis {display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 6px 0 14px;}
@@ -186,8 +184,7 @@ hr {border-color: var(--line) !important;}
 /* Home: compact hero, order panel, Ask LARIS beside it */
 .lr-hero {padding: 0 0 14px; text-align: center;}
 .lr-hero-top {display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 14px;}
-.lr-hero-top .lr-mock {margin: 0; padding: 3px 12px; font-size: 12.5px;}
-.lr-hero .lr-eyebrow {font-size: 13px; margin-bottom: 4px;}
+.lr-hero-top .lr-hero .lr-eyebrow {font-size: 13px; margin-bottom: 4px;}
 [data-testid="stMarkdownContainer"] h1.lr-h1 {font-weight: 700; padding: 0; font-size: clamp(32px, 3.6vw, 50px);
         line-height: 1.1; letter-spacing: -0.03em; color: var(--text); margin: 6px 0 0; text-align: center;}
 .lr-hero .lr-sub {font-size: 17px; margin: 4px auto 0;}
@@ -561,11 +558,6 @@ def product_table(df, key, back, **kwargs):
 
 
 # ---------------- shared pieces of the new layout ----------------
-def mock_pill():
-    return ('<div class="lr-mock" role="note"><span aria-hidden="true">ⓘ</span>'
-            "Mock data for development only. Do not present these numbers.</div>")
-
-
 def ribbon(uid, top=0):
     """Decorative S-curve glow: wide lime haze, mid green, thin light line. Sits behind the content."""
     d = "M-120 430 C 260 140, 560 600, 920 330 S 1460 110, 1600 240"

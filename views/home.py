@@ -31,7 +31,7 @@ greet = "Good morning" if now.hour < 12 else "Good afternoon" if now.hour < 18 e
 who = ss["owner"] if ss.get("title") in (None, "", "(none)") else f"{ss['title']} {ss['owner']}"
 st.markdown(ui.ribbon("rb_hero", top=-40)
             + f'<div class="lr-hero"><div class="lr-hero-top"><div class="lr-eyebrow" style="margin:0">Week of '
-              f'{as_of:%d %b %Y} · replay</div>{ui.mock_pill() if ctx.get("is_mock") else ""}</div>'
+              f'{as_of:%d %b %Y} · replay</div></div>'
               f'<h1 class="lr-h1">{escape(greet)}, {escape(who)}.</h1>'
               '<p class="lr-sub">Here\'s your shop at a glance. This week\'s order is ready for you to review.</p>'
               "</div>", unsafe_allow_html=True)

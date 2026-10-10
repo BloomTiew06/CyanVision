@@ -280,7 +280,6 @@ def test_labels_and_no_claims_of_sending(monkeypatch):
     for page, tool in (("home.py", None), ("orders.py", None), ("laris.py", "S"), ("laris.py", "R"),
                        ("settings.py", None)):
         at = _app(monkeypatch, page, tool)
-        assert any("Mock data for development only" in m.value for m in at.markdown)
         text = " ".join(m.value for m in at.markdown) + " " + " ".join(c.value for c in at.caption)
         for phrase in ("message sent", "sent automatically", "order was placed", "order has been placed", "synced with"):
             assert phrase not in text.lower()

@@ -173,7 +173,7 @@ with st.expander("Sample data (demo only)", icon=":material/dataset:"):
     a.selectbox("Week to replay", days, format_func=lambda d: f"{d:%d %b} – {d + pd.Timedelta(days=6):%d %b %Y}",
                 **ui.bind("set_week", "as_of"))
     b.selectbox("Sales pattern from store", stores, **ui.bind("set_store", "store"))
-    st.caption(f"Data source: {ctx['metrics'].get('data_source', 'unknown')}.")
+    st.caption(f"Data source: {ctx['data_source']}.")
 
     def _reset():
         for k in ("inputs_key", "inputs", "budget_rm"):
