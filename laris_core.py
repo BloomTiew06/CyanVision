@@ -129,6 +129,12 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0):
         fc7 = a["demand_7d"]
         band_pct = Z90 * sigma * sqrt(7) / fc7 if fc7 > 0 else float("inf")
 
+        effects = {}
+        wp = week["window"][week["window"]["product"] == prod]
+        for name in ("promo", "holiday", "payday"):
+            col = f"pred_no_{name}"
+            if col in wp:
+                effects[name] = float((wp["pred_model"] - wp[col]).sum()) * scale
         hist_n = int(week["past"][week["past"]["product"] == prod]["y"].notna().sum())
         m_err, n_err, _ = _track_record(week["past"], prod, week["as_of"])
         anomaly, anomaly_why = _anomaly(week["past"], prod, week["as_of"], sigma / scale if scale else sigma)
@@ -150,7 +156,8 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0):
                "expected_expire_units": d["expected_expire_units"], "expected_expire_rm": d["expected_expire_rm"],
                "dead_action": d["action"], "low_confidence": bool(low_why), "low_why": low_why,
                "anomaly": anomaly, "anomaly_why": anomaly_why, "model_err28": m_err, "naive_err28": n_err,
-               "promo_days": int(week["promo_days"].get(prod, 0)), "holiday": week["holiday"]}
+               "promo_days": int(week["promo_days"].get(prod, 0)), "holiday": week["holiday"],
+               "effects": effects}
         row["category"], row["label"] = categorize(row)
         row["tier"], row["rm_at_risk"], row["act_by"] = priority(row)
         row["action"] = action_text(row)
@@ -191,15 +198,27 @@ def explain(row):
     'Your setting' (shop inputs, placeholders by default), 'Track record', 'Caution'."""
     out = []
     fc7, last7 = row["demand_7d"], row["demand_last7"]
-    change = f"{fc7 / last7 - 1:+.0%} vs last 7 days' {last7:,.0f}" if last7 > 0 else "no sales in the last 7 days"
+    if last7 <= 0:
+        change = "no sales in the last 7 days"
+    elif abs(fc7 / last7 - 1) < 0.005:
+        change = f"about the same as last 7 days' {last7:,.0f}"
+    else:
+        change = f"{fc7 / last7 - 1:+.0%} vs last 7 days' {last7:,.0f}"
     out.append(("AI forecast", f"Expected to sell {fc7:,.0f} in the next 7 days ({change})."))
-    drivers = []
-    if row["promo_days"]:
-        drivers.append(f"a promotion on {row['promo_days']} day(s)")
-    if row["holiday"]:
-        drivers.append("a public holiday")
-    if drivers:
-        out.append(("AI forecast", "The model takes into account " + " and ".join(drivers) + " this week."))
+    fx = row.get("effects") or {}
+    names = {"promo": f"the planned promotion ({row['promo_days']} day(s))", "holiday": "the public holiday",
+             "payday": "payday"}
+    shown = False
+    for k, v in fx.items():
+        if abs(v) >= max(1.0, 0.02 * fc7):
+            out.append(("AI what-if", f"The model estimates {names[k]} {'adds' if v > 0 else 'removes'} about "
+                                      f"{abs(v):,.0f} units this week (same model re-run without it)."))
+            shown = True
+    if not shown and not fx:
+        drivers = ([f"a promotion on {row['promo_days']} day(s)"] if row["promo_days"] else []) + \
+                  (["a public holiday"] if row["holiday"] else [])
+        if drivers:
+            out.append(("AI forecast", "The model takes into account " + " and ".join(drivers) + " this week."))
     if np.isfinite(row["band_pct"]):
         out.append(("Calculation", f"Likely range ±{row['band_pct']:.0%} over 7 days, from the model's measured error."))
     avail = row["on_hand"] + row["on_order"]

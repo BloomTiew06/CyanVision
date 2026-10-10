@@ -23,7 +23,8 @@ st.markdown(ui.CSS, unsafe_allow_html=True)
 
 
 @st.cache_data
-def load_outputs(out_dir):
+def load_outputs(out_dir, stamp=None):
+    """stamp = metrics.json modification time, so a pipeline rerun refreshes the cache."""
     out = Path(out_dir)
     metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
     fc = pd.read_parquet(out / "forecasts.parquet")
@@ -44,7 +45,7 @@ def load_product_settings(path):
 if not (OUT / "metrics.json").exists():
     st.error(f"No pipeline outputs in {OUT}. Run:  python pipeline.py --data <folder with train.csv> --out outputs")
     st.stop()
-metrics, fc, sig, frontier, imp, per = load_outputs(str(OUT))
+metrics, fc, sig, frontier, imp, per = load_outputs(str(OUT), (OUT / "metrics.json").stat().st_mtime)
 settings = load_product_settings(str(ROOT / "product_settings.csv"))
 is_mock = "MOCK" in metrics["data_source"]
 

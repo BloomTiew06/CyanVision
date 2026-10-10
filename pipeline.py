@@ -109,6 +109,24 @@ def load(data_dir, stores, families):
     return df, holidays, source
 
 
+def suspect_zero_runs(S, min_run=5, min_median=5.0):
+    """Days that are probably not real zero demand: runs of `min_run`+ consecutive zero sales in a
+    series whose median daily sales is at least `min_median` (a stockout, a store not yet open, or
+    missing data). Returns a boolean date x series array. These rows are kept as model inputs but
+    excluded from training targets and from every evaluation."""
+    out = np.zeros(S.shape, dtype=bool)
+    med = S.median(skipna=True)
+    for j, col in enumerate(S.columns):
+        if not med[col] >= min_median:
+            continue
+        z = (S[col] == 0).to_numpy().astype(int)
+        d = np.diff(np.concatenate(([0], z, [0])))
+        for s, e in zip(np.nonzero(d == 1)[0], np.nonzero(d == -1)[0]):
+            if e - s >= min_run:
+                out[s:e, j] = True
+    return out
+
+
 def build_long(df, holidays):
     df = df.copy()
     df["sid"] = df["store"].astype(str) + "|" + df["product"]
@@ -135,6 +153,7 @@ def build_long(df, holidays):
     long = pd.DataFrame({"date": np.repeat(dates.values, n_s), "sid": np.tile(sids.values, n_d)})
     for name, W in feats.items():
         long[name] = W.to_numpy(dtype=float).ravel()
+    long["suspect_zero"] = suspect_zero_runs(S).ravel()
     long["open"] = np.repeat(open_day.values, n_s)
     parts = long["sid"].str.split("|", n=1, expand=True)
     long["store"], long["product"] = parts[0], parts[1]
@@ -157,6 +176,78 @@ def scores(y, p):
     y, p = np.asarray(y, float), np.asarray(p, float)
     return {"MAE": float(np.abs(y - p).mean()), "WMAPE": wmape(y, p),
             "bias": float((p - y).sum() / max(y.sum(), 1e-9))}
+
+
+def bootstrap_wape_diff(wk, a, b, n_boot=1000, seed=0):
+    """WAPE(a) - WAPE(b) on 7-day totals with a 95% CI from resampling whole series.
+    Negative = method a has lower error than method b."""
+    per = wk.groupby(level=0).apply(lambda g: pd.Series({
+        "y": g["y"].sum(), "ea": (g["y"] - g[a]).abs().sum(), "eb": (g["y"] - g[b]).abs().sum()}))
+    y, ea, eb = per["y"].to_numpy(), per["ea"].to_numpy(), per["eb"].to_numpy()
+    point = (ea.sum() - eb.sum()) / max(y.sum(), 1e-9)
+    idx = np.random.default_rng(seed).integers(0, len(per), (n_boot, len(per)))
+    boots = (ea[idx].sum(1) - eb[idx].sum(1)) / np.maximum(y[idx].sum(1), 1e-9)
+    return {"diff": float(point), "ci95": [float(np.percentile(boots, 2.5)), float(np.percentile(boots, 97.5))]}
+
+
+QGRID = np.round(np.linspace(0.01, 0.99, 99), 2)
+
+
+def lead_time_ratios(part, L, pred_col="pred_model"):
+    """Relative error of L-day forecast totals, (actual - forecast) / forecast, for every series and
+    start day whose whole L-day window lies inside `part` (suspect-zero days excluded)."""
+    y = part.assign(y=part["y"].where(~part["suspect_zero"])).pivot(index="date", columns="sid", values="y")
+    p = part.pivot(index="date", columns="sid", values=pred_col)
+    full = pd.date_range(y.index.min(), y.index.max())
+    yL = y.reindex(full).rolling(L, min_periods=L).sum().shift(-(L - 1))
+    pL = p.reindex(full).reindex(columns=y.columns).rolling(L, min_periods=L).sum().shift(-(L - 1))
+    r = pd.DataFrame({"yL": yL.stack(future_stack=True), "pL": pL.stack(future_stack=True)}).dropna()
+    r = r[r["pL"] > 0].reset_index()
+    r.columns = ["date", "sid", "yL", "pL"]
+    r["ratio"] = (r["yL"] - r["pL"]) / r["pL"]
+    r["product"] = r["sid"].str.split("|", n=1).str[1]
+    return r
+
+
+def uncertainty_table(va, horizons=range(1, 8)):
+    """Split-conformal error quantiles of L-day totals from the VALIDATION period, per product
+    (pooled over stores) and for all products together ('ALL')."""
+    rows = []
+    for L in horizons:
+        r = lead_time_ratios(va, L)
+        for prod, g in list(r.groupby("product")) + [("ALL", r)]:
+            if len(g) < 20:
+                continue
+            q = np.quantile(g["ratio"], QGRID)
+            rows.append({"product": prod, "L": L, "n": len(g), **{f"q{int(round(x * 100)):02d}": v
+                                                                for x, v in zip(QGRID, q)}})
+    return pd.DataFrame(rows)
+
+
+def interval_coverage(te, sig, unc, horizons=(1, 3, 7), levels=(0.5, 0.8, 0.9, 0.95)):
+    """Share of TEST L-day totals inside the forecast interval, for the conformal intervals
+    (validation quantiles) and the normal sigma*sqrt(L) intervals, plus their mean relative width."""
+    from scipy.stats import norm
+    out = {"conformal": {}, "normal": {}, "width_conformal": {}, "width_normal": {}}
+    for L in horizons:
+        r = lead_time_ratios(te, L)
+        if r.empty:
+            continue
+        u = unc[unc["L"] == L].set_index("product")
+        s = r["sid"].map(sig["sigma_d"]).to_numpy() * np.sqrt(L)
+        for lv in levels:
+            lo_c, hi_c = f"q{int(round((1 - lv) / 2 * 100)):02d}", f"q{int(round((1 + lv) / 2 * 100)):02d}"
+            prod = r["product"].where(r["product"].isin(u.index), "ALL")
+            qlo, qhi = prod.map(u[lo_c]).to_numpy(), prod.map(u[hi_c]).to_numpy()
+            inside_c = (r["yL"] >= r["pL"] * (1 + qlo)) & (r["yL"] <= r["pL"] * (1 + qhi))
+            z = float(norm.ppf((1 + lv) / 2))
+            inside_n = (r["yL"] - r["pL"]).abs() <= z * s
+            key = f"L{L}_{int(lv * 100)}"
+            out["conformal"][key] = float(inside_c.mean())
+            out["normal"][key] = float(inside_n.mean())
+            out["width_conformal"][key] = float(np.nanmean((qhi - qlo)))
+            out["width_normal"][key] = float(np.nanmean(2 * z * s / r["pL"].to_numpy()))
+    return out
 
 
 def main():
@@ -187,17 +278,24 @@ def main():
         loss="poisson", max_iter=a.max_iter, learning_rate=0.06, max_leaf_nodes=63,
         min_samples_leaf=40, l2_regularization=1.0, categorical_features=cat_idx or None,
         early_stopping=False, random_state=0)
+    n_suspect = int(long["suspect_zero"].sum())
+    print(f"Suspect zero-sales days (excluded from training targets and evaluation): {n_suspect:,} "
+          f"in {long.loc[long['suspect_zero'], 'sid'].nunique()} series")
     print("Training...")
-    model.fit(tr[FEATURES], tr["y"])
+    trf = tr[~tr["suspect_zero"]]
+    model.fit(trf[FEATURES], trf["y"])
     long["pred_model"] = np.clip(model.predict(long[FEATURES]), 0, None)
     long["pred_naive7"] = long["lag7"]
     long["pred_ma28"] = long["rm28"]
+    long["pred_dow4"] = long["dow4"]
 
-    te = long[long["split"] == "test"].copy()
-    va = long[long["split"] == "val"].copy()
+    te_all = long[long["split"] == "test"].copy()
+    te = te_all[~te_all["suspect_zero"]].copy()
+    va = long[(long["split"] == "val") & ~long["suspect_zero"]].copy()
     methods = {"Model (gradient boosting)": "pred_model",
                "Seasonal naive (same day last week)": "pred_naive7",
-               "28-day moving average": "pred_ma28"}
+               "28-day moving average": "pred_ma28",
+               "Same weekday, 4-week mean": "pred_dow4"}
     daily = {m: scores(te["y"], te[c].fillna(0)) for m, c in methods.items()}
 
     te["week"] = (te["date"] - test_start).dt.days // 7
@@ -205,6 +303,14 @@ def main():
     full_weeks = full_weeks[full_weeks == 7].index
     wk = te[te["week"].isin(full_weeks)].groupby(["sid", "week"])[["y"] + list(methods.values())].sum()
     weekly = {m: scores(wk["y"], wk[c]) for m, c in methods.items()}
+    boot = {m: bootstrap_wape_diff(wk, "pred_model", c) for m, c in methods.items() if c != "pred_model"}
+
+    # Error by volume tier (series split into thirds by mean test sales): where does the model help?
+    vol = te.groupby("sid")["y"].mean()
+    tier = pd.qcut(vol.rank(method="first"), 3, labels=["low volume", "mid volume", "high volume"])
+    te["tier"] = te["sid"].map(tier)
+    by_tier = {str(t): {m: wmape(g["y"], g[c].fillna(0)) for m, c in methods.items()}
+               for t, g in te.groupby("tier", observed=True)}
 
     fam_rows = []
     for prod, g in te.groupby("product"):
@@ -229,11 +335,18 @@ def main():
     s_te = te["sid"].map(sig["sigma_d"])
     band_coverage_90 = float(((te["y"] - te["pred_model"]).abs() <= 1.645 * s_te).mean())
 
+    # Lead-time uncertainty: error quantiles of L-day totals from VALIDATION (split conformal),
+    # checked on TEST against the simpler sigma * sqrt(L) normal band.
+    print("Estimating lead-time uncertainty...")
+    unc = uncertainty_table(long[long["split"] == "val"])
+    unc.to_csv(out / "uncertainty.csv", index=False)
+    coverage = interval_coverage(te_all, sig, unc)
+
     # Simulation on the TEST window: same order-up-to rule, only the forecast differs.
     print("Simulating replenishment policies...")
     hist_all = long.set_index(["sid", "date"])["y"]
     sim_rows = []
-    for sid, g in te.sort_values("date").groupby("sid"):
+    for sid, g in te_all.sort_values("date").groupby("sid"):
         if g["y"].sum() <= 0 or sid not in sig.index:
             continue
         history = hist_all.loc[sid]
@@ -276,9 +389,16 @@ def main():
     pd.DataFrame({"feature": FEATURES, "importance": imp.importances_mean}) \
         .sort_values("importance", ascending=False).to_csv(out / "importance.csv", index=False)
 
-    keep = long[long["date"] >= test_start - pd.Timedelta(days=a.history_days)]
-    keep[["date", "sid", "store", "product", "y", "promo", "holiday", "split",
-          "pred_model", "pred_naive7", "pred_ma28"]].to_parquet(out / "forecasts.parquet", index=False)
+    # Model what-if driver effects for the explanation cards: the same model, re-run with one known
+    # driver switched off. pred_model - pred_no_X = what the model attributes to X on that day.
+    keep = long[long["date"] >= test_start - pd.Timedelta(days=a.history_days)].copy()
+    for name in ("promo", "holiday", "payday"):
+        X = keep[FEATURES].copy()
+        X[name] = 0
+        keep[f"pred_no_{name}"] = np.clip(model.predict(X), 0, None)
+    keep[["date", "sid", "store", "product", "y", "promo", "holiday", "payday", "split", "suspect_zero",
+          "pred_model", "pred_naive7", "pred_ma28", "pred_dow4", "pred_no_promo", "pred_no_holiday",
+          "pred_no_payday"]].to_parquet(out / "forecasts.parquet", index=False)
 
     metrics = {
         "data_source": source,
@@ -288,7 +408,22 @@ def main():
         "n_series": int(long["sid"].nunique()),
         "test_daily": daily,
         "test_weekly_totals": weekly,
+        "model_vs_baselines_7day_ci": {
+            "label": "MEASURED: WAPE(model) - WAPE(baseline) on 7-day totals, 95% CI from resampling series; "
+                     "negative = model more accurate",
+            **boot},
+        "test_by_volume_tier": by_tier,
         "band_coverage_90": band_coverage_90,
+        "lead_time_interval_coverage": {
+            "label": "MEASURED on the test period: share of actual L-day sales inside the forecast interval "
+                     "(key L{days}_{level}); conformal = validation error quantiles, normal = sigma*sqrt(L)",
+            **coverage},
+        "data_quality": {
+            "suspect_zero_days": n_suspect,
+            "series_with_suspect_zeros": int(long.loc[long["suspect_zero"], "sid"].nunique()),
+            "rule": "5+ consecutive zero-sales days in a series whose median is >= 5 per day "
+                    "(possible stockout, closure or missing data); excluded from training targets and evaluation",
+        },
         "simulation": {
             "label": "SIMULATED on historical test-period sales; not measured savings",
             "lead_time_days": a.lead_time, "review_days": a.review,
@@ -309,8 +444,16 @@ def main():
     print("Held-out test accuracy (7-day totals, what ordering depends on):")
     for mth, s in weekly.items():
         print(f"  {mth:<38} WMAPE {s['WMAPE']:.3f}")
+    print("Model minus baseline, 7-day WMAPE (95% CI; negative = model better):")
+    for mth, bt in boot.items():
+        print(f"  vs {mth:<35} {bt['diff']:+.3f}  [{bt['ci95'][0]:+.3f}, {bt['ci95'][1]:+.3f}]")
     print(f"Uncertainty band check: {band_coverage_90:.1%} of test days fell inside the 90% band "
           "(near 90% = honest band; much lower = band too narrow, raise safety stock)")
+    for L in (1, 3, 7):
+        k = f"L{L}_90"
+        if k in coverage["conformal"]:
+            print(f"  {L}-day totals inside the 90% interval: conformal {coverage['conformal'][k]:.1%}, "
+                  f"normal {coverage['normal'][k]:.1%}")
     if headline:
         chg = headline["stock_change_pct"]
         print(f"\nSIMULATED: to reach the same {headline['matched_fill_rate']:.1%} fill rate, the model policy holds "

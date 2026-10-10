@@ -35,6 +35,32 @@ with t1:
                                    "Bias": "{:+.1%}"}), hide_index=True, use_container_width=True)
     if not best.startswith("Model"):
         st.warning(f"On 7-day totals, '{best}' beat the model on this test period.")
+    ci = {k: v for k, v in metrics.get("model_vs_baselines_7day_ci", {}).items() if k != "label"}
+    if ci:
+        st.markdown("**Is the difference real?** Model minus each simple rule, 7-day totals, with a 95% "
+                    "confidence interval from resampling products and stores (negative = the model is better).")
+        st.dataframe(pd.DataFrame([{"Compared with": k, "WAPE difference": v["diff"], "95% CI low": v["ci95"][0],
+                                    "95% CI high": v["ci95"][1],
+                                    "Verdict": "model better" if v["ci95"][1] < 0 else
+                                    ("rule better" if v["ci95"][0] > 0 else "no clear difference")}
+                                   for k, v in ci.items()]).style.format(
+            {"WAPE difference": "{:+.1%}", "95% CI low": "{:+.1%}", "95% CI high": "{:+.1%}"}),
+            hide_index=True, use_container_width=True)
+    if "test_by_volume_tier" in metrics:
+        st.markdown("**Where does the model help?** Daily WAPE by sales volume (series split into thirds).")
+        st.dataframe(pd.DataFrame(metrics["test_by_volume_tier"]).T.style.format("{:.1%}"), use_container_width=True)
+    cov = metrics.get("lead_time_interval_coverage")
+    if cov:
+        st.markdown("**Is the uncertainty honest?** Share of actual sales totals that fell inside the forecast's "
+                    "range on the test period (closer to the target level is better).")
+        rows_cov = []
+        for key, val in cov["conformal"].items():
+            L, lv = key[1:].split("_")
+            rows_cov.append({"Days ahead (total)": int(L), "Target": int(lv) / 100, "Validation-error range": val,
+                             "Normal σ√L range": cov["normal"][key]})
+        st.dataframe(pd.DataFrame(rows_cov).style.format({"Target": "{:.0%}", "Validation-error range": "{:.1%}",
+                                                          "Normal σ√L range": "{:.1%}"}),
+                     hide_index=True, use_container_width=True)
     a, b = st.columns(2)
     a.markdown("**Accuracy by product (test WAPE)**")
     a.dataframe(per.set_index("product").drop(columns="test_units").style.format("{:.1%}"), use_container_width=True)
@@ -55,6 +81,11 @@ with t3:
         st.json(metrics["unseen_stores"])
     else:
         st.info("Not run yet. Unseen-store and noisy-data tests come in the next pipeline steps.")
+    dq = metrics.get("data_quality")
+    if dq:
+        st.markdown(f"**Data quality:** {dq['suspect_zero_days']:,} suspect zero-sales days in "
+                    f"{dq['series_with_suspect_zeros']} series were excluded from training and evaluation "
+                    f"({dq['rule']}).")
 with t4:
     sim = metrics["simulation"]
     st.markdown(ui.label("SIMULATED", "simulated") + f" {sim['label']}. Lead time {sim['lead_time_days']} days, "
