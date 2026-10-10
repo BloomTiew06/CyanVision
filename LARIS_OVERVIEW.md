@@ -35,20 +35,20 @@ Cash is the real constraint:
 | **I** | **Ikut bajet** | Stay within budget | Builds the best order list for the cash available, protecting must-have items (e.g. eggs, bread) first. |
 | **S** | **Semak hasil** | Check the results | Shows forecast accuracy against simple rules, and how LARIS compares with the usual ordering method at the same budget. |
 
-**How it works:** a machine-learning forecast (tested against two simple rules on data it never saw) feeds a budget optimiser. The optimiser spends each ringgit where it protects the most margin, with each product's own delivery cycle and shelf life taken into account.
+**How it works (three layers):**
+1. **AI model:** a machine-learning forecast of each product's sales for the next 7 days, with a range from its measured errors. It is tested against three simple rules on weeks and stores it never saw.
+2. **Risk assessment:** it spots what will run out before the delivery or expire unsold, names the type of problem, ranks it by the ringgit at stake and explains why, in plain language.
+3. **Budget optimiser:** it spends each ringgit where it protects the most margin, must-haves first, with each product's own delivery cycle and shelf life taken into account.
 
-## Impact *(fill in after the real-data run)*
+## Impact *(fill in from `outputs/metrics.json` after the real-data run; never from mock data)*
 
-- **Measured:** forecast error [x%] vs "same day last week" [y%].
-- **Simulated:** at the same budget:
-  - lost margin [RM a] vs [RM b] for the usual "split by last month's sales" rule;
-  - waste [RM c] vs [RM d];
-  - must-have items short [n] vs [m].
+- **Measured (held-out weeks of real data):** 7-day forecast error [x%] vs [y%] for the best simple rule, 95% CI of the difference [a to b]; on stores the model never saw: [x%] vs [y%].
+- **Measured on real sales with simulated stock:** at the same stockout catch rate as a min-stock rule, false alarms on [p%] vs [q%] of no-stockout cases.
+- **Simulated (same cash, same suppliers, real sales replayed across [n] stores):** lost margin + waste [RM a] vs [RM b] for "order last week's sales"; must-have units short [n] vs [m]; LARIS better in [k] of [n] stores; holds under the sensitivity checks: [yes / no, except ...].
+- **Not yet shown:** real savings in a Malaysian shop, owner comprehension, time saved. These need the pilot.
 - **Wider:** fewer empty shelves for neighbourhood customers, less cash locked in stock, fewer expired perishables.
-- **Illustration (made-up shop, not a result):** with RM 600 against a RM 1,055 ideal order:
-  - LARIS halved expected waste (RM 99 vs RM 198);
-  - it cut lost margin from RM 55 to RM 33;
-  - it cut must-have shortfalls from 18.8 to 7.5 units.
+
+> **Illustration only. A made-up shop, not a result; do not use on the proof slide.** With RM 600 against a RM 1,055 ideal order, an early hand-worked example had LARIS halving expected waste (RM 99 vs RM 198), cutting lost margin from RM 55 to RM 33 and must-have shortfalls from 18.8 to 7.5 units.
 
 ## Finance
 

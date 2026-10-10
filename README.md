@@ -1,79 +1,129 @@
-# ShelfSignal: starter kit
+# LARIS: Biar laris, jangan habis.
 
-Forecast each product's demand for the next 7 days, flag what will run out before the next delivery,
-and recommend how much to order today. Read PLAN.md for the why; this file is the how.
+A budget-aware restocking assistant for small Malaysian grocers (kedai runcit, minimarts). Hackathon
+Track 1, **Predictive Model Track: Predict Early, Decide Better**.
 
-## 1. Set up (5 min)
+LARIS **predicts** each product's sales for the next 7 days with a machine-learning model, **spots** what
+will run out before the next delivery or expire unsold, **ranks** those problems by what they could cost,
+**explains** each one in plain language, and **decides** the best order list for the cash available.
+
+Read `LARIS_OVERVIEW.md` for the why, `LARIS_BUILD.md` for the method, `PITCH_PLAN.md` for the pitch.
+This file is the how.
+
+## 1. Set up
+
+Python 3.10+ with the packages in `requirements.txt`:
 
 ```
 pip install -r requirements.txt
 ```
 
-Python 3.10+.
+On the team laptop, `python` opens the Microsoft Store. Use the Anaconda interpreter instead (it already
+has everything installed):
 
-## 2. See it work on MOCK data (2 min, no download)
-
-```
-python make_mock_data.py
-python pipeline.py --data data_mock --out outputs
-streamlit run app.py
+```powershell
+$PY = "$env:USERPROFILE\anaconda3\python.exe"
 ```
 
-The app shows a red MOCK banner. Never present these numbers.
+## 2. See it work on MOCK data (about 2 minutes, no download)
 
-## 3. Real data: Kaggle "Store Sales - Time Series Forecasting"
+```powershell
+& $PY make_mock_data.py
+& $PY pipeline.py --data data_mock --out outputs_mock
+& $PY -m pytest -q
+$env:SHELFSIGNAL_OUT = "outputs_mock"; & $PY -m streamlit run app.py
+```
 
-1. Log in to Kaggle, open https://www.kaggle.com/competitions/store-sales-time-series-forecasting and click **Join Competition** (accept the rules).
-2. Either download the zip from the Data tab, or use the CLI:
-   ```
-   pip install kaggle
-   # put kaggle.json (Account > Create New Token) in %USERPROFILE%\.kaggle\ on Windows or ~/.kaggle/ on Mac/Linux
-   kaggle competitions download -c store-sales-time-series-forecasting -p data/store-sales
-   ```
-3. Unzip into `data/store-sales/`, so that `data/store-sales/train.csv` exists:
-   - Windows PowerShell: `Expand-Archive data\store-sales\store-sales-time-series-forecasting.zip data\store-sales`
-4. Run the pipeline and the app:
-   ```
-   python pipeline.py --data data/store-sales --out outputs
-   streamlit run app.py
-   ```
+The app shows a red MOCK banner. Never present mock numbers.
 
-Useful pipeline options:
-- `--stores 1 2 3`: only some stores (faster).
-- `--families "EGGS,DAIRY,POULTRY"`: only some product families. The pipeline prints the available names.
-- `--lead-time 2`: lead time used in the simulation.
+## 3. Real data: Kaggle "Store Sales - Time Series Forecasting" (Corporacion Favorita, Ecuador)
+
+1. Log in to Kaggle, open https://www.kaggle.com/competitions/store-sales-time-series-forecasting, click
+   **Join Competition** and accept the rules (you must do this yourself).
+2. Download the zip from the Data tab and unzip it so that `data\store-sales\train.csv` exists:
+   `Expand-Archive store-sales-time-series-forecasting.zip data\store-sales`
+3. Run the pipeline (timed) and the app:
+   ```powershell
+   Measure-Command { & $PY pipeline.py --data data/store-sales --out outputs | Out-Host }
+   Remove-Item Env:SHELFSIGNAL_OUT -ErrorAction SilentlyContinue; & $PY -m streamlit run app.py
+   ```
+   If training takes more than about 5 minutes, add `--max-iter 150` and say so on the slides.
+
+Pipeline options:
+- `--stores 1 2 3`, `--families "EGGS,DAIRY"`: subsets (faster). The pipeline prints the available names.
+- `--holdout-stores 10`: stores left out of a second training run, to test on unseen shops (0 = skip).
+- `--sim-stores 10`: stores in the budget replay (0 = skip). `--sim-only` reruns just the replay.
+- `--settings product_settings.csv`: lead times, shelf lives, costs, must-haves (placeholders).
 - `--max-iter 150`: faster training.
 
-**Fallback data:** Kaggle "Store Item Demand Forecasting Challenge" (`demand-forecasting-kernels-only`). Put its `train.csv` in a folder and point `--data` at it; the format is detected automatically. It has no promotions or holidays.
+## 4. How LARIS maps to the code
 
-## 4. Files
+| | Track capability | What it does | Code |
+|---|---|---|---|
+| **L** Lihat ke depan | Detect and predict | 7-day forecast per store x product family, with a range from measured error; model what-if effects of promotions, holidays, payday | `pipeline.py` (model, `uncertainty_table`), `views/forecast.py` |
+| **A** Amaran stok habis | Detect, categorize, prioritize, explain | P(running out before delivery), risk categories, tiers (Act today / This order / Watch), RM at risk, bridge top-up, explanation card | `inventory.assess`, `categorize`, `priority`; `laris_core.assess_products`, `explain`; `views/alerts.py` |
+| **R** Rendahkan pembaziran | Detect, explain | Stock that will expire unsold or ties up cash; skip or discount | `inventory.dead_stock`, `views/waste.py` |
+| **I** Ikut bajet | Decide | Best order list for the cash: must-haves first up to expected demand, then value per RM; "with RM X more"; estimate vs ordering last week's sales | `inventory.allocate_budget`, `score_allocation`; `views/orders.py` |
+| **S** Semak hasil | Prove it | Accuracy vs 3 simple rules with CIs; unseen stores; range coverage; alert backtest (false alarms); budget replay vs usual ordering rules | `pipeline.py`, `budget_sim.py`, `views/results.py` |
 
-| File | Owner | What it does |
-|---|---|---|
-| `pipeline.py` | P1 (S, K) | S: data, features, forecast model and error spread. K: baselines, metrics, band check, simulation. Writes `outputs/` |
-| `inventory.py` | P2 (T, O) | T: stockout risk and CRITICAL/ORDER/OK status. O: order quantity and ranking. Also the policy simulation |
-| `app.py` | P3 | Streamlit demo in sections T, O, S, K; reads only `outputs/` |
-| `make_mock_data.py` | Anyone | Mock data in the Favorita format, for building before the download |
+Three layers: **(1) the AI model** (offline, `pipeline.py`) → **(2) risk assessment and prioritisation**
+(live, `inventory.py` + `laris_core.py`) → **(3) the budget optimiser** (live, `inventory.allocate_budget`).
 
-## 5. Output contract (`outputs/`, written by pipeline.py, read by app.py)
+## 5. Files
 
-| File | Columns / content |
+| File | What it does |
 |---|---|
-| `forecasts.parquet` | date, sid, store, product, y (actual), promo, holiday, split (train/val/test), pred_model, pred_naive7, pred_ma28 |
-| `sigma.csv` | sid, store, product, mean_daily_val, sigma_d (daily forecast-error std from validation) |
-| `metrics.json` | data_source, splits, test_daily, test_weekly_totals (per method: MAE, WMAPE, bias), simulation (label, assumptions, headline) |
-| `per_product_metrics.csv` | test WMAPE per product for each method |
-| `importance.csv` | permutation importance per feature (validation sample) |
-| `sim_frontier.csv` | policy, z, demand, sold, lost, stockout_days, days_of_cover, fill_rate |
+| `pipeline.py` | Data, features, model, baselines, evaluation (CIs, volume tiers, unseen stores, range coverage, alert backtest), budget replay; writes `outputs/` |
+| `budget_sim.py` | SIMULATED day-by-day replay: LARIS vs usual ordering rules at the same cash, with sensitivity scenarios |
+| `inventory.py` | Pure decision functions: stockout risk, bridge top-up, dead stock, budget allocation, risk categories, priority |
+| `laris_core.py` | Shared per-week context for the app: risk, explanation, allocation, the pitch-scenario rule |
+| `laris_ui.py`, `.streamlit/config.toml`, `assets/` | Look and feel (green theme, logo) |
+| `app.py`, `views/*.py` | Streamlit app: Dashboard, Sales forecast, Risk alerts, Waste reduction, Budget & orders, Results, Settings |
+| `product_settings.csv` | Per-product cost, margin, shelf life, lead time, review cycle, pack size, must-have. **All PLACEHOLDERS** |
+| `make_mock_data.py` | Mock data in the Favorita format, for building before the download |
+| `tests/` | pytest: decision logic, pipeline helpers, budget replay, headless app checks |
 
-## 6. Status
+## 6. Output contract (`outputs/`, written by pipeline.py, read by the app)
 
-- **Implemented and tested** end to end on mock data in the Favorita format and on a sample in the Store Item format. The app was run headlessly and checked in a browser.
-- **Not yet run on the real Kaggle data**, so there are no real accuracy numbers yet. Run step 3 first.
-- **Not built:** CSV upload, scenario preset buttons, deployment.
+| File | Content |
+|---|---|
+| `forecasts.parquet` | date, sid, store, product, y, promo, holiday, payday, split, suspect_zero, pred_model, pred_naive7, pred_ma28, pred_dow4, pred_no_promo, pred_no_holiday, pred_no_payday |
+| `sigma.csv` | daily forecast-error spread per series (validation period) |
+| `uncertainty.csv` | validation error quantiles of L-day totals per product (L = 1..7) |
+| `metrics.json` | test accuracy, CIs, volume tiers, unseen stores, range coverage, data quality, alert backtest, budget replay, frontier simulation |
+| `alert_eval.csv`, `budget_sim.csv`, `sim_frontier.csv` | detail behind the backtest and the simulations |
+| `per_product_metrics.csv`, `importance.csv` | test error per product; permutation importance |
 
-## 7. Honesty rules for the pitch
+## 7. Measured vs simulated vs placeholder
+
+| Kind | What | Where it comes from |
+|---|---|---|
+| **MEASURED** | Forecast error (WAPE) vs 3 simple rules, with 95% CIs; error by volume tier; error on unseen stores; share of actual sales inside the forecast range | Held-out test period of the real data; the model never saw those dates |
+| **MEASURED on real sales, SIMULATED stock** | Alert precision, recall, false-alarm rate; ranking quality; calibration | Real future sales against a grid of stock levels (the data has no stock records); thresholds chosen on validation |
+| **SIMULATED** | Lost margin, waste, must-have shortfalls of LARIS vs usual ordering rules at the same budget; frontier chart | Replay of real test-period sales with stated assumptions; never a claim of real savings |
+| **ESTIMATE** | Expected lost margin / waste on the Budget & orders page | The forecast distribution and placeholder costs |
+| **PLACEHOLDER** | Costs, margins, shelf lives, lead times, pack sizes, must-haves, goodwill cost, shop size, shop profile and persona | `product_settings.csv` and Settings; replace with a shop's own numbers |
+
+## 8. Status
+
+- **Built and tested on MOCK data:** everything above (37 tests pass; every page renders headlessly).
+- **Not yet run on the real Kaggle data**, so there are no real numbers yet. Run step 3 first; until then
+  the Results page shows mock values under a MOCK banner.
+- **Not demonstrable with this data:** performance on Malaysian shops, true stockouts (alerts are tested
+  with simulated stock), real costs, whether owners find the advice clear, time saved, real savings.
+  These need a pilot (3 shops, 4 weeks).
+
+## 9. Known limitations
+
+- Favorita data is product **families** at supermarket volume, not SKUs in a small shop. The Shop size
+  setting scales forecasts for illustration only (linear scaling understates uncertainty at small volumes).
+- Sales stand in for demand; past stockouts hide some true demand.
+- Stock age is unknown, so expiry risk assumes fresh stock.
+- Placeholder costs drive the allocation; the budget replay reports how its conclusion changes when they move.
+
+## 10. Honesty rules for the pitch
 
 - Say "trained and tested on Corporacion Favorita (Ecuador) public data". Never call it Malaysian data.
-- Accuracy numbers come only from the held-out test period. The simulation is labelled SIMULATED, with its assumptions.
+- Accuracy numbers come only from the held-out test period. Simulated numbers are labelled SIMULATED with
+  their assumptions. Placeholders are labelled. If a simple rule beats the model somewhere, say so.
 - RM values and stock levels in the demo are inputs, not data.

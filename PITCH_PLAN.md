@@ -1,58 +1,59 @@
-# LARIS: pitch deck plan
+# LARIS: pitch plan (3 minutes + 2 minutes Q&A)
 
-**Assumption:** a 5-minute pitch plus Q&A. A 3-minute cut is at the end. Bracketed items `[like this]` must be filled with real numbers or quotes. Never invent them.
+**Core judging question:** *Does your model help someone make a better decision, and can you prove it?*
+The pitch answers it with one realistic scenario and the full chain:
+**Prediction → Categorisation → Prioritisation → Explanation → Recommended action → Measurable evaluation.**
 
-**Story arc:** one shopkeeper's Wednesday → two costly mistakes → cash is the real constraint → LARIS decides where the money goes → live demo → proof → why it's different → how it reaches shops → honesty → close.
+Bracketed items `[like this]` must be filled from `outputs/metrics.json` after the real-data run, or left
+out. Never use mock numbers, and never invent numbers or quotes.
 
-## Slides
+## The scenario
 
-| # | Slide | On the slide | What to say | Time |
-|---|---|---|---|---|
-| 1 | **LARIS: Biar laris, jangan habis.** | Name, tagline, "Budget-aware restocking for small Malaysian shops", team, Track 1 | "Every shopkeeper wishes 'semoga laris'. We help them sell well without running out or running out of cash." | 0:10 |
-| 2 | **It's Wednesday. Encik Hafiz has RM [1,500] and 300 products.** | Persona card *(illustrative composite)*: minimart in Shah Alam, supplier takes 3 days, orders every Wednesday | "He has to decide today what to buy for next week, with limited cash and no idea what next week brings." | 0:20 |
-| 3 | **Two costly mistakes, both found too late** | Two columns. Too little: the shelf empties before the lorry arrives, the sale is lost and the customer goes elsewhere. Too much: cash stuck in slow stock, perishables expire | "He only finds out at the empty shelf, or at month end when the cash is gone." | 0:30 |
-| 4 | **Cash is the real constraint** | Three big numbers: **33.3%** of micro enterprises have banking access (vs 74.6% of large firms); **57.8%** of firms seeking financing need it for working capital (ACCCIM, 1H 2026, 791 firms); **42%** of SMEs name cash flow a top concern (Airwallex, 2026, 415 SMEs). Footnote: SMEs in general. Add `[shop-owner quote]` if you get one | "Small shops can't just order everything. Every ringgit has to go to the right shelf." | 0:30 |
-| 5 | **Today's tools don't decide where the money goes** | Eyeballing shelves; fixed low-stock alerts; "order what sold last week"; cutting at random when cash is short | "None of these looks at next week's demand, the supplier's lead time and the cash together." | 0:20 |
-| 6 | **LARIS** | Five letters, one line each: **L**ook ahead: 7-day forecast · **A**lert: what runs out before delivery · **R**educe dead stock: what won't sell before it expires · **I**nvest the budget: the best order list for this week's cash · **S**how proof | "Five steps, one decision: what to order this Wednesday with the money you have." | 0:30 |
-| 7 | **How LARIS decides** | Flow diagram: sales history → forecast with uncertainty → stockout and dead-stock risk → budget allocation → order list. Under the budget step: "each ringgit goes where it protects the most margin" | "The forecast beats two simple rules on data it never saw. Then every ringgit goes, one by one, to the order that protects the most margin." | 0:30 |
-| 8 | **Live demo** | Switch to the app (backup: recorded video) | Script: (1) A: "3 products run out before delivery." (2) I: a judge drags the budget from RM 2,000 to RM 1,000; LARIS protects the fast staples and cuts slow perishables. (3) R: the dead-stock card. (4) L: one product's forecast and band. (5) S: "reveal what actually happened." | 1:30 |
-| 9 | **Proof** | Two panels, clearly labelled. **Measured** (held-out data): 7-day forecast error `[x%]` vs `[y%]` same-day-last-week and `[z%]` 28-day average; `[n%]` of real sales inside the 90% band. **Simulated** (same budget): lost margin `[RM a]` vs `[RM b]` for "split by last month's sales"; waste `[RM c]` vs `[RM d]`; holds when margins move ±30% `[yes/no]` | "Measured where we can, simulated where we must, and we label which is which." | 0:30 |
-| 10 | **Why LARIS is different** | 3-column table. Fixed low-stock alerts *(check 2-3 local POS products first)*: react after the fact. Forecast-only tools: say what sells, not what to buy with the cash you have. **LARIS:** forecast + lead time + budget in one decision | "Others predict. LARIS decides where the money goes." | 0:20 |
-| 11 | **How it reaches shops** | Three channels: POS vendors embed it, distributors offer it to the shops they supply, shop subscription. Next step: 3-shop pilot for 4 weeks, comparing stockout days and stock held vs their previous 4 weeks | "Shops already have the data, in their POS. LARIS runs on their own sales export." | 0:20 |
-| 12 | **Honest about the limits** | Trained and tested on public grocery data (Corporacion Favorita, Ecuador). No public Malaysian product-level data exists; we checked. Costs, margins and shelf life are the shop's inputs. Advice, not automatic ordering. Uncertainty is always shown | "We'd rather show you the limits than oversell. A real shop plugs in its own data." | 0:20 |
-| 13 | **Biar laris, jangan habis.** | Tagline, one line ask (pilot shops, POS partner), team contacts | "Help us find our first three shops." | 0:10 |
+"Tight-budget Wednesday". In the app: Settings → **Load the pitch scenario**. The store and week are chosen
+by a stated rule, not by hand: the median-volume store, and the Wednesday with the largest predicted rise
+in must-have demand. Stock comes from the "Tight budget" preset; cash is 60% of the ideal order. Set Shop
+size in Settings if you want small-shop RM figures, and say that it is scaled.
 
-**Total: about 5:20.** Rehearse to land under 5:00.
+## Script
 
-## 3-minute cut
+| Time | Slide / screen | What to say |
+|---|---|---|
+| 0:00–0:20 | **Problem and user.** Persona card *(illustrative)*: a minimart owner orders every Wednesday with limited cash | "Every week he guesses what to restock before he knows next week's demand. He finds out too late: an empty shelf before the lorry comes, or cash stuck in stock that expires." Cash is the constraint: ACCCIM 1H 2026 (SMEs in general, not grocers specifically). |
+| 0:20–0:35 | **LARIS in one line**, the three layers | "An AI forecast spots the problems early, LARIS ranks them by what they'd cost, and a budget optimiser turns them into an order list that fits the cash." |
+| 0:35–2:05 | **Live demo** (below) | |
+| 2:05–2:45 | **Proof**: three labelled panels | MEASURED: 7-day forecast error `[x%]` vs `[y%]` for the best simple rule (CI `[a to b]`), also on stores the model never saw. MEASURED on real sales with simulated stock: false alarms `[p%]` vs `[q%]` for a min-stock rule at the same catch rate. SIMULATED: same cash and suppliers, lost margin + waste `[RM a]` vs `[RM b]` for "order last week's sales", must-have units short `[n]` vs `[m]`, better in `[k]` of `[n]` stores; holds under the sensitivity checks `[yes / except ...]`. |
+| 2:45–3:00 | **Limits and ask** | "Trained on real grocery data from Ecuador, not Malaysia; costs are the shop's own inputs; the next step is a 4-week pilot in 3 shops. Help us find them." |
 
-Keep slides 1, 3 (absorb 2 into it), 4, 6, 8 (shortened to 60 s), 9 and 13. Fold 10's one-liner into 13 and 12's into 9.
+### Live demo (90 seconds)
 
-## Backup slides (for Q&A only)
+1. **Predict (Dashboard, then Sales forecast).** "[n] problems spotted before they happen, RM [x] at stake." Open the must-have product with the biggest rise: forecast, range, and "the model estimates payday adds about [n] units".
+2. **Categorize (Risk alerts).** Point at the chips: "Runs out before delivery", "Expiry risk", "Demand surge". "Not just abnormal: it says which problem."
+3. **Prioritize.** "Ranked by urgency, then by the ringgit at stake, with an act-by day."
+4. **Explain.** Open the top card: prediction, evidence, chance of running out, RM at risk, confidence, and the tags that say which lines come from the AI.
+5. **Act (Budget & orders, 60% cash).** Must-haves protected first; dead stock skipped; "with RM X more you'd add ...". Point at the ESTIMATE line vs ordering last week's sales.
+6. **Evaluate (Sales forecast, Reveal).** Toggle "Reveal what actually happened": real sales against the forecast for that week.
 
-- **B1. Model details:** features, lag-7 rule, train/validation/test dates, baselines.
-- **B2. The allocation method:** value of each unit = margin x P(sells) - overstock cost x P(doesn't); greedy by value per ringgit; reduces to the newsvendor with no budget limit.
-- **B3. Simulation assumptions:** sales used as demand (censored), fixed lead time, weekly orders, costs and margins as inputs.
-- **B4. Data audit:** what Malaysian data exists and why it can't train the model.
-- **B5. Next vertical:** restaurants and bazaar stalls (cook quantities), once kitchen data exists.
+## Q&A (2 minutes): prepared answers
 
-## Q&A answers to rehearse
-
-- **Why not just a moving average?** Point to slide 9's measured numbers. If the model loses on some products, say so.
-- **This isn't Malaysian data.** Correct, and none exists publicly. The method is proven on real retail data, and a shop retrains on its own POS export.
-- **Where do costs and margins come from?** The shop enters them. Every policy is compared under the same assumptions, and the ±30% check shows the conclusion holds.
-- **What if the forecast is wrong?** The band and safety stock are sized from measured error. A false alarm costs a few days of extra stock, shown in the simulation.
-- **Don't shopkeepers already know what sells?** They know the pattern. They can't compute which 20 of 300 items deserve the last RM 500 this week.
-- **Who pays?** POS vendors as a feature, distributors, shop subscription.
+1. **"It's not Malaysian data."** Correct; no public Malaysian product-level data exists. We show the method on real grocery data, including stores the model never saw. A shop retrains on its own POS export.
+2. **"How do you know about stockouts without stock data?"** We test alerts on real future sales against a grid of stock levels, and say so. The pilot measures real stockouts.
+3. **"Why not just a moving average?"** Results → Forecast accuracy: error vs three simple rules with confidence intervals. Where a rule wins, the app says so.
+4. **"Too many false alarms?"** Results → Alert quality: false-alarm rate at the same catch rate as a min-stock rule; the threshold was set on earlier weeks; low-confidence items never become "Act today".
+5. **"Your costs are made up."** They're the shop's inputs. Results → Decision quality shows whether the conclusion survives ±30% margins, shelf lives and late deliveries, and where it doesn't.
+6. **"A simulation isn't reality."** Agreed. It's labelled SIMULATED with its assumptions; the pilot is the real test.
+7. **"What does the AI actually do vs rules?"** The forecast and the what-if driver effects are the model; probabilities are calculated from its measured errors; categories, thresholds and costs are rules or settings. Every explanation line is tagged.
+8. **"What if the data is missing or odd?"** Suspicious zero runs are excluded; thin or unreliable data shows "Not enough reliable data: check manually".
+9. **"Is this overkill for a kedai runcit?"** One list of problems, one order list, reasons in BM/EN, runs on a laptop.
+10. **"Why trust the probabilities?"** The reliability chart and range coverage, measured on held-out weeks.
 
 ## Before you present
 
-- [ ] Real numbers on slide 9, from the pipeline on Kaggle data
-- [ ] Budget allocator (I) and dead-stock check (R) built, or the demo can't show them
-- [ ] One real shop-owner quote for slide 4, or leave it out
-- [ ] Check 2-3 local POS products' low-stock features before using slide 10's claim
-- [ ] Team names and contacts on slides 1 and 13
+- [ ] Real-data run done (`README.md` step 3); every bracket above filled from `outputs/metrics.json`, or the line cut
+- [ ] If the model loses to a simple rule anywhere, say so on the proof slide
+- [ ] Persona labelled illustrative; one real shop-owner quote only if you actually get one
+- [ ] Shop size: either 1.0 (data scale) or a stated scaling, captioned
 - [ ] Backup screen recording of the demo
+- [ ] Team names and contacts on the first and last slides
 
 ## Sources
 

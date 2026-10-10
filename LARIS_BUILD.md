@@ -1,134 +1,118 @@
-# LARIS: prototype build plan
+# LARIS: build and method
 
-Track 1, **Predict Early, Decide Better**. LARIS *predicts* what will run out or go to waste before the next delivery, and *decides* how to spend a limited budget to prevent it.
+Track 1, **Predictive Model Track: Predict Early, Decide Better**. LARIS *predicts* what will run out or go
+to waste before the next delivery, *categorizes* and *ranks* those risks by what they could cost,
+*explains* each one, and *decides* how to spend a limited budget to prevent them.
 
 ## 1. Track fit
 
 | Track asks | LARIS answer | Letter |
 |---|---|---|
-| Spot the problem before it's expensive | 7-day sales forecast; products that run out before the next delivery; stock that will expire unsold | **L**, **A**, **R** |
-| Help someone decide what to do | The best order list for the cash available, must-haves first; a bridge buy for urgent gaps; skip or discount dead stock | **I**, **A**, **R** |
-| Credible evidence | Accuracy vs simple rules on data the model never saw; simulated comparison at the same budget, labelled | **S** |
+| **Detect and predict** | 7-day demand forecast with a measured range; chance of running out before delivery; stock that will expire unsold; demand surges; unusual recent sales | **L**, **A**, **R** |
+| **Categorize** | Named risk types: runs out before delivery, needs this order, expiry risk, cash tied up, demand surge, unusual recent sales, not enough reliable data | **A**, **R** |
+| **Prioritize** | Tiers (Act today / This order / Watch), then RM at risk if nothing is done, with an act-by day | **A** |
+| **Explain** | Card per alert: prediction, evidence (incl. the model's own what-if driver effects and its recent track record), RM impact, confidence, action; every line tagged AI forecast / Calculation / Your setting | **A**, **R**, **L** |
+| **Decide** | Best order list for the cash available, must-haves first; bridge top-up; skip or discount dead stock | **I**, **A**, **R** |
+| **Prove it** | Measured accuracy vs 3 simple rules (with CIs, on unseen stores too); alert backtest; budget replay vs usual ordering rules (SIMULATED) | **S** |
 
-## 2. Architecture (offline-first, no servers)
+## 2. Architecture (offline model, live decisions, no servers)
 
 ```
-sales.csv  +  product_settings.csv
-      |
-      v
-pipeline.py  (run once, about 1-3 min)        -> outputs/  forecasts, error spread, metrics, simulation
-      |
-      v
-app.py (Streamlit)  <- shop inputs: stock on hand, on order, budget, must-have ticks
-      |
-      +-- inventory.py: run-out risk (A), dead stock (R), budget allocation (I)
+sales.csv (+ promotions, holidays)               shop inputs + product_settings.csv (placeholders)
+      |                                                     |
+      v                                                     |
+[1] pipeline.py  (run once)  -> outputs/                    |
+    forecast, error spread, L-day error quantiles,          |
+    what-if driver effects, evaluation, alert backtest,     |
+    budget replay (budget_sim.py)                           |
+      |                                                     v
+      +----> [2] risk assessment + prioritisation (inventory.py, laris_core.py), live
+                  -> category, tier, RM at risk, explanation
+             [3] budget optimiser (inventory.allocate_budget), live
+                  -> order list within the cash, cut reasons
+                        |
+                        v
+             app.py + views/ (Streamlit, green multipage design)
 ```
 
-**Design choices:**
-- **No database and no API.** The app reads precomputed files, so the demo can't break on a network failure.
-- **No LLM.** Explanations are templated from the numbers, so nothing is made up.
-- **Replay mode.** "Today" is any date in the held-out test period, so "reveal what actually happened" works.
+No database, no web API, no LLM: explanations are templated from the numbers, so nothing is made up.
+"Today" is a replay date in the held-out test period, so "reveal what actually happened" works.
 
-## 3. Tech stack
+## 3. Predictive model (layer 1)
 
-| Layer | Choice | Why |
+- **Targets:** daily units per store x product family for the next 7 days; total demand over the
+  product's lead time (for P(stockout before delivery)); unsold units by expiry (for dead stock).
+- **Model:** one global `HistGradientBoostingRegressor` (Poisson loss). Chosen over per-series ARIMA/ETS
+  (about 1,800 series, slow, no cross-learning, weak with promotions), Prophet (slow, extra dependency),
+  deep learning (needs a GPU, little gain at family level, harder to explain) and LightGBM (same family,
+  extra dependency). Fast on CPU, handles zeros and missing lags.
+- **Leakage rule:** every feature uses sales at least 7 days old, plus things known in advance (calendar,
+  payday, national holidays, planned promotions). One model forecasts all 7 days without recursion.
+- **Features:** lags 7/14/21/28; same-weekday 4-week mean; 7/28-day rolling mean, spread, zero share;
+  day of week, day of month, month, payday, holiday; planned and recent promotions; store and product.
+- **Baselines:** same day last week; 28-day average; same weekday, 4-week mean.
+- **Split:** train, then validation (42 days: error spread, error quantiles, thresholds), then test
+  (63 days: every reported number).
+- **Uncertainty:** daily error spread per series, and error quantiles of L-day totals from validation
+  (split conformal). The alert backtest picks whichever gives better-calibrated probabilities on validation.
+- **Data quality:** runs of 5+ zero-sales days in a busy series are flagged (possible stockout, closure,
+  missing data) and excluded from training targets and evaluation.
+- **Explanations from the model:** the same model re-run with the promotion, holiday or payday switched
+  off gives each driver's effect on the week ("the promotion adds about 66 units").
+
+## 4. Risk assessment and prioritisation (layer 2)
+
+- **Run-out risk:** P(demand over lead time > stock + on order), from the forecast and the chosen
+  uncertainty model. Alert ("Runs out before delivery") at a threshold chosen on the validation period.
+- **Bridge top-up:** expected shortfall before the order lands, rounded up to packs, from a wholesaler.
+- **Dead stock:** E[(stock - demand over shelf life)+]; flagged if cover exceeds the shelf life (or 4
+  weeks for long-life items). Action: skip the reorder, move to the front or discount.
+- **Other categories:** needs this order (below the order-up-to level), demand surge (forecast at least
+  1.3x last week), unusual recent sales (2+ days outside +/-3 sigma, or a zero run), not enough reliable
+  data (short history, missing error estimate, a range wider than the forecast, or the model doing worse
+  than "same day last week" on this product lately; never escalates to Act today).
+- **Priority:** tier, then RM at risk if nothing is done (stockout: units short x (margin + goodwill for
+  must-haves); expiry: RM expiring; overstock: cash tied up x holding rate), with an act-by day.
+
+## 5. Budget optimiser (layer 3)
+
+- Each product's window = lead time + min(review cycle, shelf life).
+- Value of the next pack = (margin + goodwill if must-have) x P(it sells) - overstock cost x P(it doesn't);
+  overstock cost = unit cost if it would expire, else a 2% holding cost.
+- Must-have packs are bought first until the item covers its expected demand; then every pack competes on
+  value per ringgit until the cash runs out. Packs that don't fit are skipped and cheaper ones still
+  considered. With no cash limit this is the newsvendor critical fractile.
+- Output: quantity, ideal quantity, RM, expected units short, expected waste, and why anything was cut.
+
+## 6. Evaluation (S)
+
+| Dimension | Metric | Label |
 |---|---|---|
-| Language | Python 3.10+ | Whole team can read it; one language end to end |
-| Data | pandas, pyarrow (parquet) | Fast enough for about 1M rows; no database needed |
-| Forecast model (L) | scikit-learn HistGradientBoostingRegressor, Poisson loss | Fast on CPU, handles categories natively, suits counts with many zeros |
-| Uncertainty | Validation-period forecast errors + normal approximation (scipy) | Safety stock and stockout chances come from measured error, not guesses |
-| Decision engine (A, R, I) | numpy/scipy: greedy marginal allocation | Optimal for this problem shape, explainable, no solver to install |
-| Evaluation (S) | Chronological train / validation / test; WMAPE, MAE, bias; band coverage; policy simulation | Fair, leakage-free, reproducible |
-| UI | Streamlit + Altair | Interactive sliders and tables in pure Python; already built |
-| Run / deploy | Local laptop (primary); Streamlit Community Cloud (optional) | Fewest moving parts; backup screen recording |
-| Data | Kaggle Store Sales (Corporacion Favorita, Ecuador); fallback: Store Item Demand | Real daily retail sales with promotions and holidays |
-| Dev tools | Git/GitHub; Kiro credits optional (claim before 10 Oct); Grafilab not needed (no GPU) | Never depend on credits |
+| Forecast | WAPE (daily, 7-day totals), MAE, bias vs 3 rules; bootstrap 95% CI of the difference; by volume tier; on stores left out of training | MEASURED |
+| Uncertainty | Share of actual L-day sales inside the 50/80/90/95% ranges; Brier score; reliability | MEASURED |
+| Alerts | Precision, recall, false-alarm rate, PR-AUC vs a min-stock rule and a last-week rule; share of real RM loss in the top 20% of ranked cases | MEASURED on real sales, SIMULATED stock |
+| Decisions | Lost margin, expiry waste, must-have units short, fill rate, stockout days, cash in stock: LARIS vs the same optimiser with simpler forecasts, vs a pro-rata cut, vs three usual-practice rules, at 50/75/100% cash, across a size-stratified store sample; win rate by store; sensitivity (margins +/-30%, goodwill 0/6, shelf lives +/-30%, deliveries 1 day late) | SIMULATED |
+| Usefulness | Order fits the budget (asserted); owner comprehension and time saved | By design / needs a pilot |
 
-## 4. Components and status
+## 7. Tests (`pytest`)
 
-| Letter | Module | What it computes | Status |
-|---|---|---|---|
-| **L** Lihat ke depan | `pipeline.py` | 7-day forecast per store x product; error spread from validation | **Built**, tested on mock data; real-data run pending |
-| **A** Amaran stok habis | `inventory.assess` | Chance of running out before delivery; run-out day; CRITICAL / ORDER / OK; **bridge buy** quantity | Built; **add** bridge buy and per-product lead time + review cycle |
-| **R** Rendahkan pembaziran | `inventory.dead_stock` (new) | Days of cover vs shelf life; expected units expiring; action: skip reorder or discount | **New** (small) |
-| **I** Ikut bajet | `inventory.allocate_budget` (new) | Best order list within budget; must-have items protected; pack sizes; what got cut and why | **New** (core differentiator) |
-| **S** Semak hasil | `pipeline.py` metrics + `simulate_budget` (new) | Accuracy vs 2 baselines; band coverage; LARIS vs 3 allocation rules at 50/75/100% budget; ±30% margin check | Metrics **built**; budget simulation **new** |
-| App | `app.py` | LARIS sections with Malay titles and English subtitles; budget slider; must-have ticks; dead-stock card | **Update** |
-| Settings | `product_settings.csv` (new) | Per product: unit cost, margin, shelf life, lead time, review days, pack size, must-have | **New**; defaults labelled as placeholders |
+Allocator: never over budget (200 random cases), equals brute force with equal pack costs and stays within
+one pack otherwise, must-haves cut last, pack sizes, newsvendor limit. Dead stock, categories and tiers,
+low confidence never Act today. Pipeline helpers (zero runs, bootstrap CI, L-day windows, alert threshold
+chosen on validation). Budget replay (budget respected, units conserved, fast allocator equals the exact
+greedy). Every app page renders headlessly; the pitch scenario loads; more budget spends more.
 
-## 5. Model (L)
+## 8. Demo scenario
 
-- **Target:** daily units per store x product for the next 7 days.
-- **Leakage rule:** every input uses sales from 7+ days earlier, plus things known in advance (calendar, holidays, planned promotions). One model therefore forecasts all 7 days, with no recursion.
-- **Features:**
-  - lags at 7, 14, 21 and 28 days; same-weekday 4-week mean
-  - 7/28-day rolling mean and spread; zero-sales share
-  - day of week, month, payday, holiday
-  - planned and recent promotions
-  - store and product
-- **Baselines:** same day last week; 28-day average.
-- **Split:** train, then validation (42 days, used only for error spread), then test (63 days, all reported numbers).
-- **Metrics:** WMAPE on daily and 7-day totals, MAE, bias, and the share of actuals inside the 90% band.
-
-## 6. Decision engine
-
-**A (run-out):**
-- P(run out before delivery) = P(demand over lead time > stock + on order). The spread is sigma x sqrt(lead time).
-- **CRITICAL** if the run-out day falls within the lead time.
-- **Bridge buy:** expected shortfall before the order lands, rounded up. Suggest buying it from a wholesaler.
-
-**R (dead stock):**
-- Expected units unsold by expiry = E[(stock - demand over shelf life)+].
-- Flag if the units held cover more days than the shelf life (or more than 4 weeks for non-perishables).
-- Action: skip the reorder, plus a discount or bundle suggestion.
-
-**I (budget allocation):**
-- For each product, use its own window: lead time + review cycle, capped by shelf life.
-- Value of the k-th extra unit = shortage cost x P(D > x+k-1) - overstock cost x P(D <= x+k-1).
-  - Shortage cost = margin, plus a goodwill cost for must-have items.
-  - Overstock cost = unit cost if it would expire unsold, else a holding cost.
-- Take units (or packs) in order of value per ringgit, while value > 0 and budget remains.
-- With no budget limit, this reduces to the classic newsvendor rule.
-- Output: quantity, RM spent, expected units short, expected waste, and what was cut and why.
-
-**S (budget simulation):**
-- Replay the test weeks with historical sales as demand.
-- Compare LARIS with three rules at the same budgets (50/75/100% of the ideal order):
-  1. split by last month's sales value
-  2. top up the fastest sellers first
-  3. scale the ideal order down pro rata
-- Report lost margin (RM), waste (RM) and must-have units short, plus a ±30% margin sensitivity check. Labelled SIMULATED.
-
-## 7. Tests (before the demo)
-
-- **Allocator:** never exceeds the budget; matches a brute-force search on 3-product toy cases; must-have items are cut last; pack sizes respected.
-- **Dead stock:** a product with cover beyond its shelf life is flagged; a fast seller isn't.
-- **Pipeline:** the model beats both baselines on the test period (or the slide says so); band coverage is near 90%.
-- **App:** runs headless with no exceptions; the three demo scenarios load.
-
-## 8. Demo scenarios
-
-1. **Normal week, full budget:** mostly OK, a few routine orders.
-2. **Tight budget (the Encik Hafiz story):** RM 600 against a RM 1,055 ideal order. Eggs are CRITICAL with a bridge buy, milk and yoghurt are flagged as dead stock, and the allocation protects must-haves. Then drag the budget to RM 900.
-3. **Edge case:** a product with sparse history (wide band) or a false alarm, showing that the cost of being wrong is small.
+"Tight-budget Wednesday", chosen by a stated rule (Settings, "Load the pitch scenario"): the median-volume
+store and the Wednesday with the largest predicted rise in must-have demand, stock from the "Tight budget"
+preset, cash at 60% of the ideal order. See `PITCH_PLAN.md` for the 3-minute flow.
 
 ## 9. Responsible AI
 
-- **Disclosure:** a banner names the data (Ecuador, not Malaysia).
-- **Uncertainty:** always shown.
-- **Advice only:** no automatic ordering.
-- **Inputs:** costs and margins are the shop's own.
-- **Privacy:** shop data is processed locally.
-- **Honest labels:** measured and simulated results are never mixed.
-
-## 10. Remaining build (about 5-6 dev-hours, split 4 ways)
-
-| Who | Task | Est. |
-|---|---|---|
-| P1 (ML) | Download Kaggle data; run the pipeline; check the model beats the baselines; fill in the S numbers | 1.5 h |
-| P2 (decision) | `dead_stock`, `allocate_budget`, bridge buy, per-product windows, tests | 2.5 h |
-| P2/P1 | `simulate_budget` + sensitivity check | 1.5 h |
-| P3 (app) | LARIS labels (Malay + English), budget slider, must-have ticks, dead-stock card, allocation table | 2 h |
-| P4 (pitch) | `product_settings.csv` defaults (labelled), demo script, slides, 2-3 shop-owner calls | parallel |
-
-Order: P1 starts the data download now. P2 and P3 work in parallel against mock outputs. Integrate, freeze a working version, then rehearse.
+- **Disclosure:** every page names the data (Ecuador, not Malaysia); MOCK data shows a banner.
+- **Uncertainty:** always shown; probabilities are checked for calibration.
+- **Advice only:** no automatic ordering; "download" is the only output.
+- **Inputs:** costs and margins are the shop's own; defaults are labelled placeholders.
+- **Honest labels:** measured, simulated, estimates and placeholders are never mixed; where a simple rule
+  wins, the app says so.
