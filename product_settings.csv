@@ -1,0 +1,14 @@
+product,display_name,icon,unit_cost_rm,margin_rm,shelf_life_days,lead_time_days,review_days,pack_size,must_have
+GROCERY I,Groceries (dry goods),🛒,5.00,1.25,180,3,7,1,True
+BEVERAGES,Beverages,🥤,5.00,1.25,365,3,7,1,False
+DAIRY,Dairy,🥛,5.00,1.25,10,3,7,1,False
+BREAD/BAKERY,Bread & bakery,🍞,5.00,1.50,3,1,2,1,True
+EGGS,Eggs,🥚,5.00,1.00,21,3,7,1,True
+POULTRY,Poultry,🍗,5.00,1.25,4,1,2,1,False
+PRODUCE,Produce,🥬,5.00,1.50,5,1,2,1,False
+MEATS,Meats,🥩,5.00,1.25,4,1,2,1,False
+FROZEN FOODS,Frozen foods,🧊,5.00,1.25,90,3,7,1,False
+CLEANING,Cleaning,🧽,5.00,1.50,730,3,7,1,False
+PERSONAL CARE,Personal care,🧴,5.00,1.50,730,3,7,1,False
+DELI,Deli,🥪,5.00,1.25,5,1,2,1,False
+DEFAULT,Other,📦,5.00,1.25,365,3,7,1,False
