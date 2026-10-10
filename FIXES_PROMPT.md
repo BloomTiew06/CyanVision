@@ -1,6 +1,5 @@
 <!--
-Fix pack v3: for the team's Claude Code session in C:\Users\User\Downloads\Dormathon\ShelfSignal
-Start in plan mode (claude --permission-mode plan, or Shift+Tab until "plan mode on") and paste below.
+Fix pack v3: for the team's coding session in C:\Users\User\Downloads\Dormathon\ShelfSignal
 -->
 
 You're in **plan mode**. Plan first, and implement only after I approve. These are the remaining plot holes in LARIS (milestones M1–M8 are done; see `git log`, `README.md` and `LARIS_BUILD.md`). Keep every existing rule: no invented numbers, the leakage rule, nothing selected on the test set, and MOCK, SIMULATED and PLACEHOLDER labels. Extend; don't rewrite.
