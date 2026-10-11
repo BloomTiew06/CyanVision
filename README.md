@@ -56,15 +56,15 @@ Pipeline options:
 - `--settings product_settings.csv`: lead times, shelf lives, costs, must-haves (placeholders).
 - `--max-iter 150`: faster training.
 
-## 4. How LARIS maps to the code
+## 4. What LARIS does
 
-| | Track capability | What it does | Code |
-|---|---|---|---|
-| **L** Lihat ke depan | Detect and predict | 7-day forecast per store x product family, with a range from measured error; model what-if effects of promotions, holidays, payday | `pipeline.py` (model, `uncertainty_table`), `views/look_ahead.py`, `views/product.py` |
-| **A** Amaran stok habis | Detect, categorize, prioritize, explain | P(running out before delivery), risk categories, tiers (Act today / This order / Watch), RM at risk, bridge top-up, explanation card | `inventory.assess`, `categorize`, `priority`; `laris_core.assess_products`, `explain`, `plan_table`; `planning.alert_table`; `views/alerts.py`, `views/home.py` |
-| **R** Rendahkan pembaziran | Detect, explain | Stock that will expire unsold or ties up cash; skip or discount | `inventory.dead_stock`, `planning.waste_table`, `views/waste.py` |
-| **I** Ikut bajet | Decide | Best order list for the cash: must-haves first up to expected demand, then value per RM; "with RM X more"; estimate vs ordering last week's sales | `inventory.allocate_budget`, `score_allocation`; `planning.strategy_compare`, `laris_core.budget_scenario`; `views/budget.py` |
-| **S** Semak hasil | Prove it | Accuracy vs 3 simple rules with CIs; unseen stores; range coverage; alert backtest (false alarms); budget replay vs usual ordering rules | `pipeline.py`, `budget_sim.py` (metrics.json; SIMULATED replay line on I · Invest Within Budget; range coverage on charts). In the app, S is Send & Sync: `views/send.py` |
+| | Stands for | What it detects | Options given to the owner | Recommended option and why |
+|---|---|---|---|---|
+| **L** | Look ahead | Demand spikes coming from paydays, festive seasons, school reopening, or nearby schools, mosques and factories | A. Stock up fully now · B. Stock up partly · C. Skip | Usually A when the supplier needs several days and today is the last order day that arrives in time |
+| **A** | Alert before stockout | Products that will empty before the next delivery, with the likely day | A. Top up from a wholesaler today · B. Order more for the next delivery only · C. Point customers to a substitute · D. Do nothing | A for must-haves, because an empty staple can send the whole basket to the chain; B for low-value items where a short gap costs little |
+| **R** | Reduce waste | Perishables that won't sell before expiry; overstock tying up cash | A. Cut the next order · B. Skip the reorder · C. Move to the front or bundle · D. Keep the usual order | A or B, whichever leaves the least expected waste while still covering likely sales |
+| **I** | Invest within budget | When the budget can't cover everything needed | A. Protect staples first · B. Maximise margin · C. Stretch the budget (shows what an extra RM50 saves) · D. Split the order across two deliveries | A by default, because staples drive foot traffic; C only when the extra cash saves more than it costs |
+| **S** | Send & sync via WhatsApp & Telegram | Stock falling below its reorder level, stock piling up above its maximum, and the supplier's last order day for the next delivery. Reorder levels and maximums are worked out from the forecast and lead time, not fixed numbers. Each alert goes to the owner's WhatsApp or Telegram with a ready-made supplier order, and every reply syncs back to the LARIS web view | A. Send the pre-filled order to the supplier in one tap · B. Edit the quantities, then send · C. Remind me later · D. Mute alerts for this item. Every message also has an Open in LARIS button with the full details | A when today is the supplier's last order day, because the order is already sized by L, A, R and I. Only urgent alerts arrive instantly; the rest come in one evening summary, so the owner doesn't learn to ignore them. Every tap is saved, so the shop's record stays complete whichever screen the owner uses |
 
 Three layers: **(1) the AI model** (offline, `pipeline.py`) → **(2) risk assessment and prioritisation**
 (live, `inventory.py` + `laris_core.py`) → **(3) the budget optimiser** (live, `inventory.allocate_budget`).
