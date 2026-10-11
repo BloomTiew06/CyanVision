@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>LARIS</title>
+  <meta name="description" content="LARIS: a budget-aware restocking assistant for small Malaysian grocers." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>" />
+  <link rel="stylesheet" href="__STLITE__/stlite.css" />
+  __FONTS__
+  <style>
+    html, body { margin: 0; background: #0F2E24; color: #F3F1EA; }
+    #boot {
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 18px; padding: 0 16px; font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      text-align: center;
+    }
+    #boot img { width: 200px; height: auto; }
+    #boot p { margin: 0; max-width: 34rem; line-height: 1.5; opacity: .85; }
+    #boot .bar { width: 220px; height: 4px; border-radius: 2px; background: #173D31; overflow: hidden; }
+    #boot .bar::after {
+      content: ""; display: block; width: 40%; height: 100%; background: #C8E66E; border-radius: 2px;
+      animation: slide 1.4s ease-in-out infinite;
+    }
+    #boot small { opacity: .55; }
+    @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div id="boot">
+      <img src="/logo.svg" alt="LARIS" />
+      <div class="bar"></div>
+      <p>Starting LARIS in your browser. The first visit downloads the forecasting engine, which takes about half a minute; later visits are faster.</p>
+      <small>Build __BUILD__</small>
+    </div>
+  </div>
+  <script type="module">
+    import { mount } from "__STLITE__/stlite.js";
+
+    const files = __FILES__;
+    const pyodideUrl = __PYODIDE_URL__;
+
+    // The assistant's key lives in the Vercel function at /api/ai; the browser only learns whether it is on.
+    let ai = { enabled: false, model: "" };
+    try {
+      const r = await fetch("/api/ai/status", { cache: "no-store" });
+      if (r.ok) ai = await r.json();
+    } catch (e) { /* no relay (e.g. a plain static preview): the assistant stays in quick-answer mode */ }
+
+    const env = {
+      SHELFSIGNAL_OUT: "outputs",
+      LARIS_STATE: "/mnt/laris/laris_state.json",   // kept in the browser (IndexedDB), per visitor
+    };
+    if (ai.enabled) {
+      env.AI_BASE_URL = location.origin + "/api/ai";
+      env.AI_API_KEY = "server-side";               // placeholder; the relay adds the real key
+      env.AI_MODEL = ai.model;
+    }
+
+    mount(
+      {
+        entrypoint: "app.py",
+        requirements: ["numpy", "pandas", "scipy", "altair", "tzdata"],
+        files: Object.fromEntries(files.map((f) => [f, { url: "/app/" + f }])),
+        streamlitConfig: __STREAMLIT_CONFIG__,
+        env,
+        idbfsMountpoints: ["/mnt"],
+        ...(pyodideUrl ? { pyodideUrl } : {}),
+      },
+      document.getElementById("root"),
+    );
+  </script>
+</body>
+</html>

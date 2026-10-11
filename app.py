@@ -35,7 +35,9 @@ def load_outputs(out_dir, stamp=None):
     """stamp = metrics.json modification time, so a pipeline rerun refreshes the cache."""
     out = Path(out_dir)
     metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
-    fc = pd.read_parquet(out / "forecasts.parquet")
+    # The web build (web/) runs in the browser, where Parquet isn't available, so it ships a gzipped CSV instead.
+    fc = (pd.read_parquet(out / "forecasts.parquet") if (out / "forecasts.parquet").exists()
+          else pd.read_csv(out / "forecasts.csv.gz"))
     fc["date"] = pd.to_datetime(fc["date"])
     fc["store"] = fc["store"].astype(str)
     sig = pd.read_csv(out / "sigma.csv", dtype={"store": str}).set_index("sid")

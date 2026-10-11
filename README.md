@@ -157,3 +157,20 @@ LARIS's own calculations. To use an AI model, set before starting the app (envir
 The model only chooses tools from `assistant_tools.TOOL_SPECS`; the tools do every calculation. It never sees the
 owner's name or supplier contacts, keeps the last 10 messages for follow-ups, and can only *propose* an order-quantity
 change, which the owner confirms on Home and LARIS then checks against the rebuilt plan. Test it in Settings › Assistant.
+
+## 8. Web version on Vercel
+
+The deployed site runs the same Streamlit app inside the visitor's browser with [stlite](https://github.com/whitphx/stlite)
+(Streamlit on WebAssembly), so Vercel only hosts static files plus one small function for the assistant.
+
+| File | What it does |
+|---|---|
+| `vercel.json`, `package.json` | Vercel settings: build with `node web/build.mjs`, serve `dist/` |
+| `web/build.mjs` | Copies the app's Python files, assets and `web/outputs/` into `dist/` and writes `dist/index.html` |
+| `web/index.html` | Loader page: starts stlite and mounts the app |
+| `web/outputs/` | Forecast files the web version reads (sample data). Refresh with `python web/export_outputs.py <outputs folder>` |
+| `api/ai/` | Assistant relay: adds the API key on the server so it never reaches the browser |
+
+To turn on the assistant, set `AI_API_KEY`, `AI_MODEL` and (for Groq) `AI_BASE_URL=https://api.groq.com/openai/v1`
+in the Vercel project's Environment Variables, then redeploy. The first visit takes about half a minute while the
+browser downloads Python; shop edits are saved in that browser only.

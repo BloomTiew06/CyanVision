@@ -1,0 +1,12 @@
+{
+  "name": "laris-web",
+  "private": true,
+  "type": "module",
+  "description": "Vercel build for LARIS: the Streamlit app running in the browser via stlite, plus the assistant relay in api/.",
+  "scripts": {
+    "build": "node web/build.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

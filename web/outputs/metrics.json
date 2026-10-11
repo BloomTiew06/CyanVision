@@ -1,0 +1,726 @@
+{
+  "data_source": "MOCK DATA - generated for development only, not real results",
+  "splits": {
+    "train_end": "2017-05-02",
+    "val": [
+      "2017-05-03",
+      "2017-06-13"
+    ],
+    "test": [
+      "2017-06-14",
+      "2017-08-15"
+    ]
+  },
+  "n_series": 36,
+  "test_daily": {
+    "Model (gradient boosting)": {
+      "MAE": 47.63045660303749,
+      "WMAPE": 0.10478620061138677,
+      "bias": -0.021297643130660585
+    },
+    "Seasonal naive (same day last week)": {
+      "MAE": 77.41490299823633,
+      "WMAPE": 0.17031147997365453,
+      "bias": 0.0008060784718847395
+    },
+    "28-day moving average": {
+      "MAE": 71.17129629629629,
+      "WMAPE": 0.1565756506100879,
+      "bias": -0.003912189688542196
+    },
+    "Same weekday, 4-week mean": {
+      "MAE": 60.72365520282187,
+      "WMAPE": 0.13359101654158384,
+      "bias": -0.002492683698105667
+    }
+  },
+  "test_weekly_totals": {
+    "Model (gradient boosting)": {
+      "MAE": 145.56681894125467,
+      "WMAPE": 0.04574922068116687,
+      "bias": -0.021297643130660595
+    },
+    "Seasonal naive (same day last week)": {
+      "MAE": 213.62037037037038,
+      "WMAPE": 0.0671373156131871,
+      "bias": 0.0008060784718847395
+    },
+    "28-day moving average": {
+      "MAE": 160.8011463844797,
+      "WMAPE": 0.050537115430797454,
+      "bias": -0.0039121896885421946
+    },
+    "Same weekday, 4-week mean": {
+      "MAE": 164.09336419753086,
+      "WMAPE": 0.051571804519665504,
+      "bias": -0.002492683698105667
+    }
+  },
+  "model_vs_baselines_7day_ci": {
+    "label": "MEASURED: WAPE(model) - WAPE(baseline) on 7-day totals, 95% CI from resampling series; negative = model more accurate",
+    "Seasonal naive (same day last week)": {
+      "diff": -0.02138809493202022,
+      "ci95": [
+        -0.027564366806134475,
+        -0.015627952263789185
+      ]
+    },
+    "28-day moving average": {
+      "diff": -0.004787894749630581,
+      "ci95": [
+        -0.00840935108154186,
+        -0.0011427393985808765
+      ]
+    },
+    "Same weekday, 4-week mean": {
+      "diff": -0.0058225838384986265,
+      "ci95": [
+        -0.00957816781860821,
+        -0.0022779416858828123
+      ]
+    }
+  },
+  "test_by_volume_tier": {
+    "low volume": {
+      "Model (gradient boosting)": 0.1133247462737756,
+      "Seasonal naive (same day last week)": 0.17809313103014912,
+      "28-day moving average": 0.15919546893730982,
+      "Same weekday, 4-week mean": 0.14347991150326625
+    },
+    "mid volume": {
+      "Model (gradient boosting)": 0.10677738296178217,
+      "Seasonal naive (same day last week)": 0.1720138709120718,
+      "28-day moving average": 0.15914664306053772,
+      "Same weekday, 4-week mean": 0.13672852489429632
+    },
+    "high volume": {
+      "Model (gradient boosting)": 0.10075916749001709,
+      "Seasonal naive (same day last week)": 0.1667235040755379,
+      "28-day moving average": 0.15390720811925437,
+      "Same weekday, 4-week mean": 0.12831932110507693
+    }
+  },
+  "unseen_stores": {
+    "label": "MEASURED: a second model trained without these stores, scored on their test period",
+    "stores": [
+      "3"
+    ],
+    "n_series": 12,
+    "daily_wape": {
+      "Model, these stores never seen in training": 0.10565734426123265,
+      "Model (gradient boosting)": 0.10519448794808015,
+      "Seasonal naive (same day last week)": 0.1704371628693342,
+      "28-day moving average": 0.16144008972686213,
+      "Same weekday, 4-week mean": 0.13223945707240128
+    },
+    "weekly_wape": {
+      "Model, these stores never seen in training": 0.04845332321814442,
+      "Model (gradient boosting)": 0.04787638177101825,
+      "Seasonal naive (same day last week)": 0.06860842002940062,
+      "28-day moving average": 0.05371269172492907,
+      "Same weekday, 4-week mean": 0.055310301848422776
+    },
+    "unseen_model_vs_baselines_7day_ci": {
+      "Seasonal naive (same day last week)": {
+        "diff": -0.02015509681125621,
+        "ci95": [
+          -0.03487516178496482,
+          -0.0076888074493012
+        ]
+      },
+      "28-day moving average": {
+        "diff": -0.0052593685067846485,
+        "ci95": [
+          -0.011489935819329621,
+          0.0011765645318317721
+        ]
+      },
+      "Same weekday, 4-week mean": {
+        "diff": -0.006856978630278354,
+        "ci95": [
+          -0.013954865502049746,
+          -0.0006318792645362894
+        ]
+      }
+    }
+  },
+  "alert_backtest": {
+    "label": "MEASURED on real future sales with SIMULATED stock levels (the data has no stock records): stock = c x training mean daily sales x lead time, c in 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2",
+    "uncertainty_model": "conformal",
+    "validation_brier": {
+      "normal": 0.039823284272780056,
+      "conformal": 0.03930302426975827
+    },
+    "test_brier": 0.03927467969090378,
+    "tau_act": 0.13,
+    "tau_best_f1": 0.5,
+    "test": {
+      "LARIS, threshold 0.13 (same recall as min-stock rule on validation)": {
+        "precision": 0.8747633755106108,
+        "recall": 0.9919783075358717,
+        "false_alarm_rate": 0.18674788292972813,
+        "f1": 0.9296908089792462,
+        "alerts": 10037,
+        "false_alarms": 1257,
+        "missed": 71,
+        "cases": 15582
+      },
+      "LARIS, threshold 0.50 (best F1 on validation)": {
+        "precision": 0.9643107067879636,
+        "recall": 0.9341317365269461,
+        "false_alarm_rate": 0.04546129846976675,
+        "f1": 0.9489813486370158,
+        "alerts": 8574,
+        "false_alarms": 306,
+        "missed": 583,
+        "cases": 15582
+      },
+      "Min-stock rule (stock < 1.2 x 28-day average x lead time)": {
+        "precision": 0.7919596178114297,
+        "recall": 0.9926561970398825,
+        "false_alarm_rate": 0.3428911008765414,
+        "f1": 0.8810228127350213,
+        "alerts": 11094,
+        "false_alarms": 2308,
+        "missed": 65,
+        "cases": 15582
+      },
+      "Last-week rule (stock < same days last week)": {
+        "precision": 0.9229728205706552,
+        "recall": 0.9246412834707942,
+        "false_alarm_rate": 0.10147080671519834,
+        "f1": 0.9238062986793092,
+        "alerts": 8867,
+        "false_alarms": 683,
+        "missed": 667,
+        "cases": 15582
+      }
+    },
+    "test_pr_auc": {
+      "LARIS": 0.9922899393285933,
+      "Min-stock rule": 0.9833078048252227,
+      "Last-week rule": 0.9836023027774407
+    },
+    "test_rm_loss_captured_top20pct": {
+      "LARIS (expected RM loss)": 0.7314991499599478,
+      "Min-stock rule (shortfall vs 28-day average)": 0.7147893780993961,
+      "Last-week rule (shortfall vs last week)": 0.7149364430976427
+    },
+    "test_cases": 15582,
+    "test_stockout_rate": 0.5680272108843537,
+    "reliability": [
+      {
+        "predicted": 0.012727904902901679,
+        "observed": 0.010014836795252226,
+        "cases": 5392
+      },
+      {
+        "predicted": 0.14873618006639855,
+        "observed": 0.17234468937875752,
+        "cases": 499
+      },
+      {
+        "predicted": 0.24854136259020562,
+        "observed": 0.27505827505827507,
+        "cases": 429
+      },
+      {
+        "predicted": 0.3539026483865086,
+        "observed": 0.4069767441860465,
+        "cases": 344
+      },
+      {
+        "predicted": 0.44973582466991874,
+        "observed": 0.5377906976744186,
+        "cases": 344
+      },
+      {
+        "predicted": 0.5486557052823133,
+        "observed": 0.6516129032258065,
+        "cases": 310
+      },
+      {
+        "predicted": 0.6509109453168743,
+        "observed": 0.7232142857142857,
+        "cases": 224
+      },
+      {
+        "predicted": 0.745571100811093,
+        "observed": 0.7213930348258707,
+        "cases": 201
+      },
+      {
+        "predicted": 0.8544952083831214,
+        "observed": 0.8557046979865772,
+        "cases": 298
+      },
+      {
+        "predicted": 0.9899032126604342,
+        "observed": 0.995093488927198,
+        "cases": 7541
+      }
+    ],
+    "notes": [
+      "Thresholds and the uncertainty model were chosen on the validation period only.",
+      "A false alarm = alert where actual sales over the lead time did not exceed the stock.",
+      "Sales stand in for demand; past stockouts in the data may hide some true demand."
+    ]
+  },
+  "budget_simulation": {
+    "label": "SIMULATED: replay of real held-out sales for a sample of stores; not measured savings",
+    "stores": [
+      "2",
+      "3",
+      "1"
+    ],
+    "period": [
+      "2017-06-14",
+      "2017-08-15"
+    ],
+    "assumptions": [
+      "Historical sales are used as demand; past stockouts may hide some true demand (censored).",
+      "Same starting stock for every policy: 28-day average sales x lead time, assumed fresh.",
+      "Each product is ordered on its own review cycle and arrives after its lead time; unmet demand is lost.",
+      "Stock is sold oldest first and expires shelf-life days after arrival; expired units are waste at cost.",
+      "Cash per order day = a share (50/75/100%) of the order LARIS would place with no cash limit, computed in a separate reference replay; every policy gets the same cash on the same days.",
+      "Costs, margins, shelf lives, lead times, pack sizes and must-have flags are PLACEHOLDER settings.",
+      "Decisions use only forecasts for the next 7 days (built from sales at least 7 days old) and the policy's own past sales."
+    ],
+    "totals_by_budget": {
+      "50%": {
+        "AI forecast + pro-rata cut": {
+          "lost_margin_rm": 678173.4285714285,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 678173.4285714285,
+          "must_have_short_units": 104864.28571428571,
+          "stockout_days": 1492.0,
+          "spent_rm": 2485675.0,
+          "ending_stock_rm": 25.0,
+          "demand_units": 1030917.0,
+          "sold_units": 518813.17857142864,
+          "fill_rate": 0.5032540724145869
+        },
+        "LARIS (AI forecast + optimiser)": {
+          "lost_margin_rm": 661106.1785714286,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 661106.1785714286,
+          "must_have_short_units": 5930.285714285714,
+          "stockout_days": 1229.0,
+          "spent_rm": 2487150.0,
+          "ending_stock_rm": 56340.0,
+          "demand_units": 1030917.0,
+          "sold_units": 507835.17857142864,
+          "fill_rate": 0.492605300495994
+        },
+        "Optimiser + 28-day-average forecast": {
+          "lost_margin_rm": 664909.8125,
+          "waste_rm": 1540.0,
+          "lost_margin_plus_waste_rm": 666449.8125,
+          "must_have_short_units": 6840.392857142857,
+          "stockout_days": 1259.0,
+          "spent_rm": 2487150.0,
+          "ending_stock_rm": 64045.53571428572,
+          "demand_units": 1030917.0,
+          "sold_units": 505986.0714285715,
+          "fill_rate": 0.49081164771613184
+        },
+        "Optimiser + last-week forecast": {
+          "lost_margin_rm": 663433.1785714286,
+          "waste_rm": 1240.0,
+          "lost_margin_plus_waste_rm": 664673.1785714286,
+          "must_have_short_units": 6543.285714285714,
+          "stockout_days": 1264.0,
+          "spent_rm": 2487150.0,
+          "ending_stock_rm": 56890.0,
+          "demand_units": 1030917.0,
+          "sold_units": 507477.17857142864,
+          "fill_rate": 0.492258036846253
+        },
+        "Usual: best sellers first": {
+          "lost_margin_rm": 739701.1785714286,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 739701.1785714286,
+          "must_have_short_units": 123293.28571428571,
+          "stockout_days": 1603.0,
+          "spent_rm": 2422550.0,
+          "ending_stock_rm": 45975.0,
+          "demand_units": 1030917.0,
+          "sold_units": 498062.1785714286,
+          "fill_rate": 0.4831253908621437
+        },
+        "Usual: order last week's sales": {
+          "lost_margin_rm": 753954.6785714285,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 753954.6785714285,
+          "must_have_short_units": 116293.28571428571,
+          "stockout_days": 1637.0,
+          "spent_rm": 2188710.0,
+          "ending_stock_rm": 0.0,
+          "demand_units": 1030917.0,
+          "sold_units": 461684.1785714286,
+          "fill_rate": 0.4478383599954493
+        },
+        "Usual: split cash by sales value": {
+          "lost_margin_rm": 682947.6785714285,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 682947.6785714285,
+          "must_have_short_units": 114083.28571428571,
+          "stockout_days": 1572.0,
+          "spent_rm": 2456875.0,
+          "ending_stock_rm": 0.0,
+          "demand_units": 1030917.0,
+          "sold_units": 513056.17857142864,
+          "fill_rate": 0.4976697237230821
+        }
+      },
+      "75%": {
+        "AI forecast + pro-rata cut": {
+          "lost_margin_rm": 365227.4285714286,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 365227.4285714286,
+          "must_have_short_units": 52405.28571428571,
+          "stockout_days": 852.0,
+          "spent_rm": 3729305.0,
+          "ending_stock_rm": 40435.0,
+          "demand_units": 1030917.0,
+          "sold_units": 755090.1785714286,
+          "fill_rate": 0.7324451712130352
+        },
+        "LARIS (AI forecast + optimiser)": {
+          "lost_margin_rm": 360277.6785714286,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 360277.6785714286,
+          "must_have_short_units": 5644.285714285714,
+          "stockout_days": 866.0,
+          "spent_rm": 3730720.0,
+          "ending_stock_rm": 80765.0,
+          "demand_units": 1030917.0,
+          "sold_units": 747303.1785714286,
+          "fill_rate": 0.724891701826072
+        },
+        "Optimiser + 28-day-average forecast": {
+          "lost_margin_rm": 362432.8125,
+          "waste_rm": 1540.0,
+          "lost_margin_plus_waste_rm": 363972.8125,
+          "must_have_short_units": 6734.392857142857,
+          "stockout_days": 850.0,
+          "spent_rm": 3730720.0,
+          "ending_stock_rm": 81455.53571428571,
+          "demand_units": 1030917.0,
+          "sold_units": 746857.0714285715,
+          "fill_rate": 0.7244589733495242
+        },
+        "Optimiser + last-week forecast": {
+          "lost_margin_rm": 362730.4285714286,
+          "waste_rm": 1240.0,
+          "lost_margin_plus_waste_rm": 363970.4285714286,
+          "must_have_short_units": 6512.285714285714,
+          "stockout_days": 839.0,
+          "spent_rm": 3730720.0,
+          "ending_stock_rm": 80800.0,
+          "demand_units": 1030917.0,
+          "sold_units": 747048.1785714286,
+          "fill_rate": 0.7246443492263962
+        },
+        "Usual: best sellers first": {
+          "lost_margin_rm": 419159.9285714285,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 419159.9285714285,
+          "must_have_short_units": 94514.28571428571,
+          "stockout_days": 1159.0,
+          "spent_rm": 3643490.0,
+          "ending_stock_rm": 69675.0,
+          "demand_units": 1030917.0,
+          "sold_units": 733426.1785714286,
+          "fill_rate": 0.7114308703527332
+        },
+        "Usual: order last week's sales": {
+          "lost_margin_rm": 452201.1785714286,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 452201.1785714286,
+          "must_have_short_units": 64714.28571428571,
+          "stockout_days": 992.0,
+          "spent_rm": 3376755.0,
+          "ending_stock_rm": 36430.0,
+          "demand_units": 1030917.0,
+          "sold_units": 689751.1785714286,
+          "fill_rate": 0.6690656750945311
+        },
+        "Usual: split cash by sales value": {
+          "lost_margin_rm": 379160.9285714286,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 379160.9285714286,
+          "must_have_short_units": 62246.28571428571,
+          "stockout_days": 935.0,
+          "spent_rm": 3646890.0,
+          "ending_stock_rm": 20665.0,
+          "demand_units": 1030917.0,
+          "sold_units": 742562.1785714286,
+          "fill_rate": 0.7202928834924913
+        }
+      },
+      "100%": {
+        "AI forecast + pro-rata cut": {
+          "lost_margin_rm": 62362.017857142855,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 62362.017857142855,
+          "must_have_short_units": 4540.571428571428,
+          "stockout_days": 316.0,
+          "spent_rm": 4974570.0,
+          "ending_stock_rm": 120896.42857142858,
+          "demand_units": 1030917.0,
+          "sold_units": 983683.892857143,
+          "fill_rate": 0.9541834045390104
+        },
+        "LARIS (AI forecast + optimiser)": {
+          "lost_margin_rm": 62362.017857142855,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 62362.017857142855,
+          "must_have_short_units": 4540.571428571428,
+          "stockout_days": 316.0,
+          "spent_rm": 4974570.0,
+          "ending_stock_rm": 120896.42857142858,
+          "demand_units": 1030917.0,
+          "sold_units": 983683.892857143,
+          "fill_rate": 0.9541834045390104
+        },
+        "Optimiser + 28-day-average forecast": {
+          "lost_margin_rm": 107741.53571428571,
+          "waste_rm": 1540.0,
+          "lost_margin_plus_waste_rm": 109281.53571428571,
+          "must_have_short_units": 6320.5714285714275,
+          "stockout_days": 378.0,
+          "spent_rm": 4790575.0,
+          "ending_stock_rm": 112556.42857142858,
+          "demand_units": 1030917.0,
+          "sold_units": 948792.892857143,
+          "fill_rate": 0.9203387788319942
+        },
+        "Optimiser + last-week forecast": {
+          "lost_margin_rm": 91050.67857142858,
+          "waste_rm": 1240.0,
+          "lost_margin_plus_waste_rm": 92290.67857142858,
+          "must_have_short_units": 5260.214285714285,
+          "stockout_days": 345.0,
+          "spent_rm": 4858255.0,
+          "ending_stock_rm": 130474.64285714287,
+          "demand_units": 1030917.0,
+          "sold_units": 961718.25,
+          "fill_rate": 0.9328765070320889
+        },
+        "Usual: best sellers first": {
+          "lost_margin_rm": 152721.17857142858,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 152721.17857142858,
+          "must_have_short_units": 53425.28571428571,
+          "stockout_days": 515.0,
+          "spent_rm": 4625155.0,
+          "ending_stock_rm": 102685.0,
+          "demand_units": 1030917.0,
+          "sold_units": 920699.1785714286,
+          "fill_rate": 0.8930875895648521
+        },
+        "Usual: order last week's sales": {
+          "lost_margin_rm": 208965.01785714284,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 208965.01785714284,
+          "must_have_short_units": 22458.285714285714,
+          "stockout_days": 545.0,
+          "spent_rm": 4357595.0,
+          "ending_stock_rm": 88055.35714285714,
+          "demand_units": 1030917.0,
+          "sold_units": 873047.1071428573,
+          "fill_rate": 0.8468645944754595
+        },
+        "Usual: split cash by sales value": {
+          "lost_margin_rm": 110136.92857142857,
+          "waste_rm": 0.0,
+          "lost_margin_plus_waste_rm": 110136.92857142857,
+          "must_have_short_units": 15433.285714285714,
+          "stockout_days": 456.0,
+          "spent_rm": 4761935.0,
+          "ending_stock_rm": 97205.0,
+          "demand_units": 1030917.0,
+          "sold_units": 947628.1785714286,
+          "fill_rate": 0.9192089941008138
+        }
+      }
+    },
+    "laris_win_rate_by_store": {
+      "50%": {
+        "Optimiser + last-week forecast": 1.0,
+        "Optimiser + 28-day-average forecast": 1.0,
+        "AI forecast + pro-rata cut": 1.0,
+        "Usual: order last week's sales": 1.0,
+        "Usual: split cash by sales value": 1.0,
+        "Usual: best sellers first": 1.0
+      },
+      "75%": {
+        "Optimiser + last-week forecast": 1.0,
+        "Optimiser + 28-day-average forecast": 1.0,
+        "AI forecast + pro-rata cut": 1.0,
+        "Usual: order last week's sales": 1.0,
+        "Usual: split cash by sales value": 1.0,
+        "Usual: best sellers first": 1.0
+      },
+      "100%": {
+        "Optimiser + last-week forecast": 1.0,
+        "Optimiser + 28-day-average forecast": 1.0,
+        "AI forecast + pro-rata cut": 0.0,
+        "Usual: order last week's sales": 1.0,
+        "Usual: split cash by sales value": 1.0,
+        "Usual: best sellers first": 1.0
+      }
+    },
+    "sensitivity_75pct": {
+      "base": {
+        "laris_lowest_vs_usual": true,
+        "win_rate_vs_usual": {
+          "Usual: order last week's sales": 1.0,
+          "Usual: split cash by sales value": 1.0,
+          "Usual: best sellers first": 1.0
+        }
+      },
+      "deliveries 1 day late": {
+        "laris_lowest_vs_usual": true,
+        "win_rate_vs_usual": {
+          "Usual: order last week's sales": 1.0,
+          "Usual: split cash by sales value": 1.0,
+          "Usual: best sellers first": 1.0
+        }
+      },
+      "double must-have goodwill": {
+        "laris_lowest_vs_usual": true,
+        "win_rate_vs_usual": {
+          "Usual: order last week's sales": 1.0,
+          "Usual: split cash by sales value": 1.0,
+          "Usual: best sellers first": 1.0
+        }
+      },
+      "margins +30%": {
+        "laris_lowest_vs_usual": true,
+        "win_rate_vs_usual": {
+          "Usual: order last week's sales": 1.0,
+          "Usual: split cash by sales value": 1.0,
+          "Usual: best sellers first": 1.0
+        }
+      },
+      "margins -30%": {
+        "laris_lowest_vs_usual": true,
+        "win_rate_vs_usual": {
+          "Usual: order last week's sales": 1.0,
+          "Usual: split cash by sales value": 1.0,
+          "Usual: best sellers first": 1.0
+        }
+      },
+      "no must-have goodwill": {
+        "laris_lowest_vs_usual": true,
+        "win_rate_vs_usual": {
+          "Usual: order last week's sales": 1.0,
+          "Usual: split cash by sales value": 1.0,
+          "Usual: best sellers first": 1.0
+        }
+      },
+      "shelf lives +30%": {
+        "laris_lowest_vs_usual": true,
+        "win_rate_vs_usual": {
+          "Usual: order last week's sales": 1.0,
+          "Usual: split cash by sales value": 1.0,
+          "Usual: best sellers first": 1.0
+        }
+      },
+      "shelf lives -30%": {
+        "laris_lowest_vs_usual": false,
+        "win_rate_vs_usual": {
+          "Usual: order last week's sales": 1.0,
+          "Usual: split cash by sales value": 0.3333333333333333,
+          "Usual: best sellers first": 1.0
+        }
+      }
+    },
+    "conclusion_holds_in_all_scenarios": false,
+    "runtime_seconds": 11.6
+  },
+  "band_coverage_90": 0.9029982363315696,
+  "lead_time_interval_coverage": {
+    "label": "MEASURED on the test period: share of actual L-day sales inside the forecast interval (key L{days}_{level}); conformal = validation error quantiles, normal = sigma*sqrt(L)",
+    "conformal": {
+      "L1_50": 0.5070546737213404,
+      "L1_80": 0.8108465608465608,
+      "L1_90": 0.8968253968253969,
+      "L1_95": 0.9506172839506173,
+      "L3_50": 0.5045537340619308,
+      "L3_80": 0.8146630236794171,
+      "L3_90": 0.906648451730419,
+      "L3_95": 0.9544626593806922,
+      "L7_50": 0.5112085769980507,
+      "L7_80": 0.8084795321637427,
+      "L7_90": 0.8908382066276803,
+      "L7_95": 0.9351851851851852
+    },
+    "normal": {
+      "L1_50": 0.5194003527336861,
+      "L1_80": 0.8148148148148148,
+      "L1_90": 0.9029982363315696,
+      "L1_95": 0.9519400352733686,
+      "L3_50": 0.49681238615664847,
+      "L3_80": 0.7877959927140255,
+      "L3_90": 0.889344262295082,
+      "L3_95": 0.936247723132969,
+      "L7_50": 0.44834307992202727,
+      "L7_80": 0.7451267056530214,
+      "L7_90": 0.8674463937621832,
+      "L7_95": 0.9234892787524367
+    },
+    "width_conformal": {
+      "L1_50": 0.19223976981213517,
+      "L1_80": 0.3674184306177099,
+      "L1_90": 0.4609164801792042,
+      "L1_95": 0.5542100401361763,
+      "L3_50": 0.11559511391479524,
+      "L3_80": 0.22689176737088046,
+      "L3_90": 0.289174527127623,
+      "L3_95": 0.3503516161544509,
+      "L7_50": 0.0843408021270717,
+      "L7_80": 0.15970729048181337,
+      "L7_90": 0.20069392923850093,
+      "L7_95": 0.23009464690657935
+    },
+    "width_normal": {
+      "L1_50": 0.20126190078740455,
+      "L1_80": 0.38240388970121186,
+      "L1_90": 0.49081007885008016,
+      "L1_95": 0.5848362808904224,
+      "L3_50": 0.11487491043056199,
+      "L3_80": 0.21826591324965952,
+      "L3_90": 0.2801412668057666,
+      "L3_95": 0.33380890829803167,
+      "L7_50": 0.07484192507983004,
+      "L7_80": 0.14220199228608688,
+      "L7_90": 0.18251428117299198,
+      "L7_95": 0.21747917985035084
+    }
+  },
+  "data_quality": {
+    "suspect_zero_days": 0,
+    "series_with_suspect_zeros": 0,
+    "rule": "5+ consecutive zero-sales days in a series whose median is >= 5 per day (possible stockout, closure or missing data); excluded from training targets and evaluation"
+  },
+  "simulation": {
+    "label": "SIMULATED on historical test-period sales; not measured savings",
+    "lead_time_days": 3,
+    "review_days": 7,
+    "headline_matched_fill_rate": {
+      "matched_fill_rate": 0.9994216322280816,
+      "baseline_days_of_cover": 4.33745431740331,
+      "model_days_of_cover": 4.083126266252319,
+      "stock_change_pct": -0.05863532674696825
+    },
+    "assumptions": [
+      "Historical sales are used as demand; past stockouts mean true demand may be higher (censored).",
+      "Fixed lead time; orders arrive at the start of day t + lead time.",
+      "Weekly ordering; no minimum order quantities, pack sizes or shelf-life limits.",
+      "Both policies use the same order-up-to rule; only the demand forecast and its error spread differ."
+    ]
+  }
+}
