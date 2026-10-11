@@ -1,0 +1,145 @@
+family,item_code,item,unit,display_name,state,price_rm,n_obs,basis,period_start,period_end
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Johor,5.5,357,small shops in Johor,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Kedah,4.99,198,small shops in Kedah,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Kelantan,5.35,423,small shops in Kelantan,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Kuala Lumpur,5.5,173,small shops in Kuala Lumpur,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Labuan,4.99,10,small shops in Labuan,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Melaka,5.2,117,small shops in Melaka,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Negeri Sembilan,5.5,108,small shops in Negeri Sembilan,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Pahang,5.4,331,small shops in Pahang,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Perak,4.99,328,small shops in Perak,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Perlis,5.0,55,small shops in Perlis,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Pulau Pinang,5.25,254,small shops in Pulau Pinang,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Putrajaya,5.5,55,small shops in Putrajaya,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Sabah,5.2,284,small shops in Sabah,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Sarawak,5.2,340,small shops in Sarawak,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Selangor,5.19,198,small shops in Selangor,2026-08-26,2026-09-24
+GROCERY I,1976,MAGGI MI SEGERA PERISA KARI,5 X 79g,Maggi curry instant noodles 5 x 79g,Terengganu,5.5,273,small shops in Terengganu,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Johor,20.9,79,small shops in Johor,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Kedah,19.85,52,small shops in Kedah,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Kelantan,20.99,107,small shops in Kelantan,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Kuala Lumpur,20.5,34,small shops in Kuala Lumpur,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Labuan,20.9,793,"small shops, Malaysia",2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Melaka,19.9,23,small shops in Melaka,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Negeri Sembilan,20.5,21,small shops in Negeri Sembilan,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Pahang,18.8,65,small shops in Pahang,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Perak,19.49,85,small shops in Perak,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Perlis,19.9,12,small shops in Perlis,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Pulau Pinang,19.8,55,small shops in Pulau Pinang,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Putrajaya,21.7,12,small shops in Putrajaya,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Sabah,22.5,66,small shops in Sabah,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Sarawak,21.9,73,small shops in Sarawak,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Selangor,19.95,42,small shops in Selangor,2026-08-26,2026-09-24
+BEVERAGES,2114,MILO (PAKET),900 g,Milo 900g,Terengganu,20.9,65,small shops in Terengganu,2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Johor,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Kedah,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Kelantan,7.99,10,small shops in Kelantan,2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Kuala Lumpur,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Labuan,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Melaka,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Negeri Sembilan,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Pahang,7.99,22,small shops in Pahang,2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Perak,7.99,23,small shops in Perak,2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Perlis,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Pulau Pinang,8.49,14,small shops in Pulau Pinang,2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Putrajaya,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Sabah,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Sarawak,7.99,125,"small shops, Malaysia",2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Selangor,7.95,10,small shops in Selangor,2026-08-26,2026-09-24
+DAIRY,224,SUSU SEGAR DUTCH LADY,1 liter,Dutch Lady fresh milk 1L,Terengganu,9.45,11,small shops in Terengganu,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Johor,15.29,236,small shops in Johor,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Kedah,14.9,96,small shops in Kedah,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Kelantan,15.5,356,small shops in Kelantan,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Kuala Lumpur,15.3,136,small shops in Kuala Lumpur,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Labuan,15.4,2102,"small shops, Malaysia",2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Melaka,14.9,119,small shops in Melaka,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Negeri Sembilan,15.6,57,small shops in Negeri Sembilan,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Pahang,15.3,176,small shops in Pahang,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Perak,15.45,159,small shops in Perak,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Perlis,15.6,18,small shops in Perlis,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Pulau Pinang,15.0,150,small shops in Pulau Pinang,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Putrajaya,14.6,66,small shops in Putrajaya,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Sabah,15.9,34,small shops in Sabah,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Sarawak,16.5,173,small shops in Sarawak,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Selangor,15.5,103,small shops in Selangor,2026-08-26,2026-09-24
+EGGS,1110,TELUR AYAM GRED B,30 biji,"Eggs, grade B (tray of 30)",Terengganu,15.5,222,small shops in Terengganu,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Johor,9.5,282,small shops in Johor,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Kedah,9.2,83,small shops in Kedah,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Kelantan,9.8,88,small shops in Kelantan,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Kuala Lumpur,10.19,129,small shops in Kuala Lumpur,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Labuan,9.69,1585,"small shops, Malaysia",2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Melaka,9.3,112,small shops in Melaka,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Negeri Sembilan,10.4,56,small shops in Negeri Sembilan,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Pahang,9.8,143,small shops in Pahang,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Perak,9.0,116,small shops in Perak,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Perlis,9.1,44,small shops in Perlis,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Pulau Pinang,8.99,99,small shops in Pulau Pinang,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Putrajaya,9.3,79,small shops in Putrajaya,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Sabah,9.69,1585,"small shops, Malaysia",2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Sarawak,11.2,86,small shops in Sarawak,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Selangor,9.9,83,small shops in Selangor,2026-08-26,2026-09-24
+POULTRY,1,AYAM BERSIH - STANDARD,1kg,Whole chicken (cleaned) 1kg,Terengganu,9.69,183,small shops in Terengganu,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Johor,7.0,276,small shops in Johor,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Kedah,4.0,117,small shops in Kedah,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Kelantan,5.9,117,small shops in Kelantan,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Kuala Lumpur,6.0,104,small shops in Kuala Lumpur,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Labuan,6.0,1984,"small shops, Malaysia",2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Melaka,4.9,124,small shops in Melaka,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Negeri Sembilan,6.95,42,small shops in Negeri Sembilan,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Pahang,6.35,200,small shops in Pahang,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Perak,3.49,137,small shops in Perak,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Perlis,3.2,47,small shops in Perlis,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Pulau Pinang,4.2,161,small shops in Pulau Pinang,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Putrajaya,6.5,85,small shops in Putrajaya,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Sabah,7.0,111,small shops in Sabah,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Sarawak,8.0,151,small shops in Sarawak,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Selangor,6.5,117,small shops in Selangor,2026-08-26,2026-09-24
+PRODUCE,1558,SAWI HIJAU,1kg,Sawi hijau 1kg,Terengganu,6.0,191,small shops in Terengganu,2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Johor,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Kedah,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Kelantan,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Kuala Lumpur,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Labuan,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Melaka,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Negeri Sembilan,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Pahang,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Perak,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Perlis,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Pulau Pinang,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Putrajaya,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Sabah,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Sarawak,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Selangor,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+MEATS,1913,DAGING LEMBU IMPORT (BLOCK),1kg,Imported beef (block) 1kg,Terengganu,32.99,118,"all premise types, Malaysia",2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Johor,7.1,82,small shops in Johor,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Kedah,6.0,51,small shops in Kedah,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Kelantan,6.9,107,small shops in Kelantan,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Kuala Lumpur,6.9,41,small shops in Kuala Lumpur,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Labuan,6.8,847,"small shops, Malaysia",2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Melaka,6.9,23,small shops in Melaka,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Negeri Sembilan,6.85,26,small shops in Negeri Sembilan,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Pahang,6.5,98,small shops in Pahang,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Perak,6.2,86,small shops in Perak,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Perlis,6.2,13,small shops in Perlis,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Pulau Pinang,6.25,64,small shops in Pulau Pinang,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Putrajaya,7.5,14,small shops in Putrajaya,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Sabah,7.1,48,small shops in Sabah,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Sarawak,6.9,71,small shops in Sarawak,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Selangor,6.5,45,small shops in Selangor,2026-08-26,2026-09-24
+CLEANING,2112,SABUN PENCUCI SUNLIGHT (PELBAGAI JENIS),800ml,Sunlight dishwashing liquid 800ml,Terengganu,7.0,76,small shops in Terengganu,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Johor,18.99,39,small shops in Johor,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Kedah,17.9,30,small shops in Kedah,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Kelantan,18.49,30,small shops in Kelantan,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Kuala Lumpur,18.5,13,small shops in Kuala Lumpur,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Labuan,17.5,352,"small shops, Malaysia",2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Melaka,17.5,352,"small shops, Malaysia",2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Negeri Sembilan,17.5,352,"small shops, Malaysia",2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Pahang,16.5,42,small shops in Pahang,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Perak,16.5,46,small shops in Perak,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Perlis,17.5,352,"small shops, Malaysia",2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Pulau Pinang,17.9,35,small shops in Pulau Pinang,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Putrajaya,17.5,352,"small shops, Malaysia",2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Sabah,24.8,16,small shops in Sabah,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Sarawak,22.7,37,small shops in Sarawak,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Selangor,16.5,20,small shops in Selangor,2026-08-26,2026-09-24
+PERSONAL CARE,2108,SYAMPU SUNSILK (PELBAGAI JENIS),625ml,Sunsilk shampoo 625ml,Terengganu,22.5,17,small shops in Terengganu,2026-08-26,2026-09-24

@@ -1,7 +1,8 @@
-"""LARIS demo app.  Run:  streamlit run app.py
+"""LARIS app.  Run:  streamlit run app.py
 
 Reads precomputed files from ./outputs (made by pipeline.py), so it starts instantly and never retrains or
-downloads anything. The planning week is a date inside the held-out test period (a replay, labelled as one).
+downloads anything. calendar_my moves the forecast weeks onto the current week and applies the Malaysian public
+holidays of the shop's state; laris_core.load_market_prices supplies PriceCatcher prices for the default products.
 
 This file owns the shared state and builds the ONE planning context (laris_core.build_context) every page reads:
 products (ss.inputs), planning week, global budget, budget strategy and the owner's order adjustments. Pages live
@@ -15,6 +16,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+import calendar_my as cal
 import laris_core as core
 import laris_ui as ui
 import planning
@@ -48,9 +50,21 @@ def load_product_settings(path):
     return load_settings(path)
 
 
+@st.cache_data
+def malaysian_calendar(out_dir, stamp, offset, state, start):
+    """Forecasts moved onto the current weeks with the state's public holidays applied (cached per week and state)."""
+    _, fc_raw, _, _ = load_outputs(out_dir, stamp)
+    return cal.apply_calendar(fc_raw, offset, cal.load_holidays(state), start)
+
+
+@st.cache_data
+def market_prices(state, stamp):
+    return core.load_market_prices(state)
+
+
 if not (OUT / "metrics.json").exists():
     st.error(f"LARIS can't find its forecast files in {OUT}. Run:  python pipeline.py --data <folder with "
-             "train.csv> --out outputs   (or make_mock_data.py first for a quick demo).")
+             "train.csv> --out outputs")
     st.stop()
 try:
     metrics, fc, sig, unc = load_outputs(str(OUT), (OUT / "metrics.json").stat().st_mtime)
@@ -68,7 +82,7 @@ PAGES = [
     ("views/orders.py", "Orders", ":material/local_shipping:", "MANAGE", "Orders",
      "Check this week's order, share it with your supplier and record what arrives."),
     ("views/settings.py", "Settings", ":material/settings:", "MANAGE", "Settings",
-     "Your shop, supplier, alerts, local events, the assistant and the sample data."),
+     "Your shop, supplier, alerts, local events, the assistant and your product list."),
     ("views/product.py", "Product detail", ":material/insights:", "", "", ""),
 ]
 want = os.environ.get("LARIS_PAGE", "")
@@ -93,26 +107,31 @@ for k, v in PROFILE.items():
 for k, v in {"service": 0.95, "scale": 1.0, "preset": "Mixed week", "strategy": "essentials", "order_adj": {},
              "budget_rm": None, "inputs_dirty": False, "tool": "L"}.items():
     ss.setdefault(k, v)
+ss["state"] = prefs.get("state", cal.DEFAULT_STATE)
 stores = sorted(fc["store"].unique(), key=lambda s: (len(s), s))
 test = fc[fc["split"] == "test"]
 days = sorted(pd.Timestamp(d) for d in test["date"].unique()
               if pd.Timestamp(d) + pd.Timedelta(days=6) <= test["date"].max())
-if ss.get("as_of") not in days:
-    ss["as_of"] = days[len(days) // 2]
+# The planning week is the current week: the forecast weeks move onto today's dates by whole weeks (weekday
+# patterns stay) and the public holidays of the shop's state are applied (calendar_my).
+offset = cal.week_offset(days[len(days) // 2], cal.today())
+ss["as_of"] = days[len(days) // 2] + pd.Timedelta(days=offset)
+fc = malaysian_calendar(str(OUT), (OUT / "metrics.json").stat().st_mtime, offset, ss["state"], ss["as_of"])
 if ss.get("store") not in stores:
     ss["store"] = stores[0]
-ss["_days"], ss["_stores"] = days, stores
+ss["_stores"] = stores
 store_id, as_of = ss["store"], ss["as_of"]
+prices = market_prices(ss["state"], core.PRICES_CSV.stat().st_mtime if core.PRICES_CSV.exists() else None)
 
-# Products: load the sample shop for this week, unless the owner has edited their list (then keep it).
-key = (store_id, str(as_of))
+# Products: the default product list for this week, unless the owner has edited their list (then keep it).
+key = (store_id, str(as_of), ss["state"])
 if ss.get("inputs_key") != key:
     if ss.get("inputs_dirty") and "inputs" in ss:
-        ss["flash"] = ss.get("flash", []) + ["You changed the sample week or store; your edited product list was "
-                                             "kept. Use Settings › Sample data › Reset to load this week's sample stock."]
+        ss["flash"] = ss.get("flash", []) + ["A new planning week started; your product list was kept. "
+                                             "Settings › Product list restores the default list."]
     else:
         week0 = core.week_view(fc, store_id, as_of, ss["scale"])
-        ss["inputs"], ss["widest"] = core.default_inputs(week0, settings, sig, store_id, ss["preset"])
+        ss["inputs"], ss["widest"] = core.default_inputs(week0, settings, sig, store_id, ss["preset"], prices)
     if ss.get("inputs_key") is not None:   # a different week/store: old order changes no longer apply
         ss["order_adj"] = {}
     ss["inputs_key"] = key
@@ -123,11 +142,23 @@ build = lambda budget: core.build_context(
 if ss["budget_rm"] is None:   # first visit: a round budget that covers the full recommended order
     ss["budget_rm"] = float(ceil(build(None)["ideal_rm"] / 50) * 50)
 ctx = build(ss["budget_rm"])
-# plain description of the training data for the page footer and Settings (no development-only wording)
-source = metrics.get("data_source", "sample data")
-source = "sample sales data" if "MOCK" in source.upper() else source
+# plain description of the training data and the price source, for the page footer, Products and Settings
+source = metrics.get("data_source", "")
+if "FAVORITA" in source.upper():
+    source = "daily grocery sales from Corporación Favorita stores, 2013–2017 (public Kaggle dataset)"
+elif "STORE ITEM" in source.upper():
+    source = "five years of daily store-item sales (public Kaggle dataset)"
+else:
+    source = "generated daily sales data"
+price_info = None
+if len(prices):
+    p0 = prices.iloc[0]
+    price_info = {"n": len(prices), "start": pd.Timestamp(p0["period_start"]), "end": pd.Timestamp(p0["period_end"]),
+                  "own_state": int(prices["basis"].str.contains(" in ").sum()), "state": ss["state"]}
 ss["ctx"] = {**ctx, "metrics": metrics, "fc": fc, "sig": sig, "settings": settings, "data_source": source,
-             "inputs": ss["inputs"], "ref": planning.order_ref(store_id, as_of), "shop": ss["shop_name"]}
+             "inputs": ss["inputs"], "ref": planning.order_ref(store_id, as_of), "shop": ss["shop_name"],
+             "state": ss["state"], "price_info": price_info,
+             "upcoming_holidays": cal.upcoming(cal.load_holidays(ss["state"]), as_of, 14)}
 ui.topbar(ss["shop_name"], ss["shop_place"])
 for msg in ss.pop("flash", []):
     st.toast(msg)
@@ -141,8 +172,11 @@ else:   # every other page sits on one glass card so its content stands off the 
         pg.run()
 
 st.divider()
-st.caption("**About these numbers.** Product names, prices, stock and weekly sales are an illustrative sample shop. "
-           f"Each product's daily sales pattern and forecast come from a machine-learning model trained on "
-           f"{source}, scaled to the shop's weekly sales; this is not Malaysian sales "
-           "data and the model has not learned Malaysian paydays, festivals or local events. RM impacts are estimates, "
-           "replay comparisons are simulations, and LARIS never sends messages or places orders by itself.")
+prices_txt = (f"Market prices: KPDN PriceCatcher, median at small shops ({price_info['start']:%d %b} – "
+              f"{price_info['end']:%d %b %Y}; data.gov.my, CC BY 4.0); costs are estimated until you enter your "
+              "supplier's price. " if price_info else "")
+st.caption(f"**About these numbers.** Forecasts come from a machine-learning model trained on {source}, scaled to "
+           f"your recent sales, with the public holidays of {ss['state']}. Seasonal patterns such as Ramadan and "
+           f"festive build-up are not learned from Malaysian sales. {prices_txt}Stock, sales and lead times are your "
+           "entries. RM impacts are estimates, the savings comparison is a back-test on past sales, and LARIS never "
+           "sends messages or places orders by itself.")

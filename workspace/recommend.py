@@ -153,8 +153,8 @@ def _budget(ctx):
     laris, usual = t.get("LARIS (AI forecast + optimiser)"), t.get("Usual: split cash by sales value")
     if laris and usual and usual["lost_margin_plus_waste_rm"] > 0:
         cut_pct = 1 - laris["lost_margin_plus_waste_rm"] / usual["lost_margin_plus_waste_rm"]
-        st.markdown(ui.label("SIMULATED", "simulated") + f'<span class="lr-muted">In a replay of past weeks for '
+        st.markdown(ui.label("BACK-TEST", "simulated") + f'<span class="lr-muted">On past weeks of sales for '
                     f"{len(bs['stores'])} stores at 75% of the cash needed, ordering this way lost {abs(cut_pct):.0%} "
                     f"{'less' if cut_pct >= 0 else 'more'} profit and stock to waste than splitting the cash by last "
-                    "month's sales. A simulation with placeholder costs, not measured savings.</span>",
+                    "month's sales. A back-test with estimated costs, not measured savings in your shop.</span>",
                     unsafe_allow_html=True)

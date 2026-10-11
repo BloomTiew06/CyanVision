@@ -56,6 +56,25 @@ Pipeline options:
 - `--settings product_settings.csv`: lead times, shelf lives, costs, must-haves (placeholders).
 - `--max-iter 150`: faster training.
 
+### 3b. Malaysian data (holidays, prices, current week)
+
+| Data | File | Made by | Source |
+|---|---|---|---|
+| Public holidays 2025-2027, federal + state, one row per state | `data_my/malaysia_public_holidays.csv` | `python make_my_holidays.py` | Official schedules, Prime Minister's Department (kabinet.gov.my), plus later announced extra holidays |
+| Market prices, median at small shops (kedai runcit, pasar mini) per state, latest 30 days | `data_my/pricecatcher_prices.csv` | `python make_my_prices.py` (`--refresh` for new months) | KPDN PriceCatcher, data.gov.my, CC BY 4.0 |
+| Which PriceCatcher item stands for each product family | `data_my/pricecatcher_map.csv` | by hand | |
+
+How the app uses them (`calendar_my.py`, `laris_core.load_market_prices`):
+- The forecast weeks move onto the current week by whole weeks (weekday patterns stay), so the planning week is
+  this week. `LARIS_TODAY=YYYY-MM-DD` fixes the date (tests use it).
+- `pipeline.py` exports a calendar-neutral forecast (`pred_base`) and the model's holiday and payday effects
+  (`eff_holiday`, `eff_payday`). The app applies them on the public holidays of the shop's state (Settings › Shop and
+  owner › State, default Selangor) and on mid-month and month-end paydays. The model itself still trains on
+  Favorita's own holidays, which match those sales. Ramadan and festive build-up are not learned.
+- Default products take their name and selling price from PriceCatcher where an item matches; cost is estimated
+  at 85% of that price until the owner enters their own. Bread, frozen foods and deli keep default prices
+  (PriceCatcher had no recent prices for them).
+
 ## 4. How LARIS maps to the code
 
 | | Track capability | What it does | Code |

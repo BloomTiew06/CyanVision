@@ -79,9 +79,8 @@ def http_transport(cfg, payload, retries=1):
 
 def _ai_answer(question, history, ctx, cfg, transport):
     week = ctx["week"]
-    today = (f"\nLARIS is replaying past data: treat {week['as_of']:%A %d %B %Y} as today and the planning week as "
-             f"{week['as_of']:%d %b} to {week['end']:%d %b %Y}. Use dates exactly as the tools give them; never "
-             "compare them with the real calendar.")
+    today = (f"\nThe planning week is {week['as_of']:%A %d %B %Y} to {week['end']:%d %b %Y}. Use dates exactly as "
+             "the tools give them.")
     messages = [{"role": "system", "content": SYSTEM + today}]
     messages += [{"role": m["role"], "content": m["content"]} for m in history[-HISTORY_TURNS:]
                  if m["role"] in ("user", "assistant")]

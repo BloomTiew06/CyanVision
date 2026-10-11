@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 import assistant
+import calendar_my as cal
 import laris_ui as ui
 import store
 
@@ -43,6 +44,9 @@ with st.expander("Shop and owner", expanded=True, icon=":material/storefront:"):
         a, b = st.columns(2)
         shop = a.text_input("Shop name", value=ss["shop_name"])
         place = b.text_input("Location", value=ss["shop_place"])
+        state = st.selectbox("State", cal.STATES, index=cal.STATES.index(ss["state"]) if ss["state"] in cal.STATES
+                             else cal.STATES.index(cal.DEFAULT_STATE),
+                             help="Sets the public holidays in your forecast and the PriceCatcher prices of new products.")
         c, d = st.columns([1, 2])
         title = c.selectbox("How should LARIS address you?", TITLES,
                             index=TITLES.index(ss["title"]) if ss["title"] in TITLES else len(TITLES) - 1)
@@ -52,7 +56,7 @@ with st.expander("Shop and owner", expanded=True, icon=":material/storefront:"):
                 st.error("Shop name and your name can't be empty.")
             else:
                 store.put("prefs", {**store.get("prefs", {}), "shop_name": shop.strip(), "shop_place": place.strip(),
-                                    "title": title, "owner": owner.strip()})
+                                    "title": title, "owner": owner.strip(), "state": state})
                 st.success("Saved. Home will greet you as "
                            f"{(title + ' ') if title != '(none)' else ''}{owner.strip()}.")
 
@@ -164,25 +168,24 @@ Keys are read on the server only and never shown in the browser. The assistant o
 from LARIS's tools, never your name or supplier contacts. It can't change anything without your confirmation.
 """)
 
-# ---------------- sample data ----------------
-with st.expander("Sample data (demo only)", icon=":material/dataset:"):
-    st.markdown(ui.label("SAMPLE", "placeholder") + '<span class="lr-muted">These controls choose which past week '
-                "and store pattern the demo replays. They are not real shop settings.</span>", unsafe_allow_html=True)
-    days, stores = ss["_days"], ss["_stores"]
-    a, b = st.columns(2)
-    a.selectbox("Week to replay", days, format_func=lambda d: f"{d:%d %b} – {d + pd.Timedelta(days=6):%d %b %Y}",
-                **ui.bind("set_week", "as_of"))
-    b.selectbox("Sales pattern from store", stores, **ui.bind("set_store", "store"))
-    st.caption(f"Data source: {ctx['data_source']}.")
+# ---------------- product list and data sources ----------------
+with st.expander("Product list and data sources", icon=":material/dataset:"):
+    pi = ctx.get("price_info")
+    st.markdown(f"- **Forecasts:** machine-learning model trained on {ctx['data_source']}, with the public holidays "
+                f"of {ctx['state']}.\n"
+                + (f"- **Market prices:** KPDN PriceCatcher (data.gov.my, CC BY 4.0), median at small shops, "
+                   f"{pi['start']:%d %b} – {pi['end']:%d %b %Y}. {pi['own_state']} of {pi['n']} items priced from "
+                   f"{pi['state']} shops, the rest from shops across Malaysia.\n" if pi else "")
+                + "- **Public holidays:** official federal and state schedules, Prime Minister's Department.")
 
     def _reset():
         for k in ("inputs_key", "inputs", "budget_rm"):
             ss.pop(k, None)
         ss.update(order_adj={}, inputs_dirty=False, reset_ok=False, inputs_ver=ss.get("inputs_ver", 0) + 1,
-                  flash=["The sample shop was reloaded for this week."])
+                  flash=["The default product list was restored."])
 
     st.checkbox("I understand this replaces my products and order changes", key="reset_ok")
-    st.button("Reset to sample shop", on_click=_reset, disabled=not ss.get("reset_ok"))
+    st.button("Restore default product list", on_click=_reset, disabled=not ss.get("reset_ok"))
 
 if ss.pop("set_msg", None):
     st.toast("Saved.")

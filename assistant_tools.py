@@ -61,8 +61,8 @@ def find_product(ctx, query):
 # ---------------- read tools ----------------
 def get_business_summary(ctx):
     return clean({"currency": "RM", **planning.business_summary(ctx),
-                  "data_note": "Sample shop: prices and stock are illustrative; sales patterns are replayed sample "
-                               "data. Forecasts and RM impacts are estimates."})
+                  "data_note": "Stock, sales and costs are the shop's entries; default selling prices are PriceCatcher "
+                               "market medians. Forecasts and RM impacts are estimates."})
 
 
 def get_budget_status(ctx):
@@ -180,7 +180,7 @@ def get_sales_summary(ctx, days=7):
                                     for r in h.nlargest(5, "revenue").itertuples()],
         "best_sellers_by_units": [{"name": plain(r.name), "units": r.units} for r in h.nlargest(5, "units").itertuples()],
         "products_without_history_in_period": t["no_history"],
-        "note": "Recorded sales (replayed sample data scaled to this shop) priced at your selling prices."})
+        "note": "Daily sales history scaled to the shop's weekly sales, priced at its selling prices."})
 
 
 def get_profit_summary(ctx, days=28):

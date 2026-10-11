@@ -22,8 +22,8 @@ def render(ctx):
                f"{int(inv['value_rm'].isna().sum())} product(s) without a cost price"
                if inv["value_rm"].isna().any() else "all products priced"))
 
-    ui.section("Weekly sales and gross profit", "Recorded sales (replayed sample data, scaled to this shop), priced "
-                                                 "at your selling prices.")
+    ui.section("Weekly sales and gross profit", "Daily sales history scaled to your weekly sales, priced at your "
+                                                 "selling prices.")
     wk = planning.weekly_sales(ctx, 8)
     if wk.empty:
         st.caption("Not enough sales history yet.")

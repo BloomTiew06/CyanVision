@@ -29,12 +29,20 @@ for tz in (st.context.timezone, os.environ.get("LARIS_TZ"), "Asia/Kuala_Lumpur")
 now = now or datetime.now()
 greet = "Good morning" if now.hour < 12 else "Good afternoon" if now.hour < 18 else "Good evening"
 who = ss["owner"] if ss.get("title") in (None, "", "(none)") else f"{ss['title']} {ss['owner']}"
+# public holidays in the shop's state over the next 14 days (calendar_my); festivals are flagged
+coming = ctx.get("upcoming_holidays")
+coming_html = ""
+if coming is not None and len(coming):
+    chips = "".join(f'<span class="lr-chip" style="margin:0 6px 6px 0">{"🎉 " if r.major_festival else ""}'
+                    f'{escape(r.name)} · {r.date:%a %d %b}</span>' for r in coming.itertuples())
+    coming_html = (f'<p class="lr-sub" style="margin-top:6px">Coming up in {escape(ctx["state"])}: </p>'
+                   f'<div>{chips}</div>')
 st.markdown(ui.ribbon("rb_hero", top=-40)
             + f'<div class="lr-hero"><div class="lr-hero-top"><div class="lr-eyebrow" style="margin:0">Week of '
-              f'{as_of:%d %b %Y} · replay</div></div>'
+              f'{as_of:%d %b %Y}</div></div>'
               f'<h1 class="lr-h1">{escape(greet)}, {escape(who)}.</h1>'
               '<p class="lr-sub">Here\'s your shop at a glance. This week\'s order is ready for you to review.</p>'
-              "</div>", unsafe_allow_html=True)
+              f"{coming_html}</div>", unsafe_allow_html=True)
 
 # ---------------- shared numbers: every figure from planning.business_summary ----------------
 s = planning.business_summary(ctx)

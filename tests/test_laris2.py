@@ -288,19 +288,19 @@ def test_labels_and_no_claims_of_sending(monkeypatch):
         if tool == "S":
             assert "not net profit" in text
         if tool == "R":
-            assert "SIMULATED" in text or "budget replay hasn't been run" in text
+            assert "BACK-TEST" in text or "budget replay hasn't been run" in text
 
 
 def test_reset_is_explicit_and_edits_survive_a_week_change(monkeypatch):
     at = _app(monkeypatch, "settings.py")
-    assert next(b for b in at.button if b.label == "Reset to sample shop").disabled
+    assert next(b for b in at.button if b.label == "Restore default product list").disabled
     inp = at.session_state["inputs"].copy()
     inp.loc[0, "On hand"] = 12345
     at.session_state["inputs"], at.session_state["inputs_dirty"] = inp, True
-    week = at.selectbox(key="set_week")
-    target = week.options[0] if week.value != week.options[0] else week.options[1]
-    at.selectbox(key="set_week").set_value(target).run()
-    assert str(at.session_state["as_of"].date()) in target or at.session_state["inputs_key"][1] != str(week.value)
+    week = at.session_state["as_of"]
+    monkeypatch.setenv("LARIS_TODAY", str((week + pd.Timedelta(days=7)).date()))   # the next week starts
+    at.run()
+    assert at.session_state["as_of"] == week + pd.Timedelta(days=7)
     assert not at.exception and at.session_state["inputs"].loc[0, "On hand"] == 12345
 
 

@@ -395,8 +395,7 @@ def theme_script(m):
 def topbar(name, place):
     """Shop pill + light/dark switch, pinned to the right of the top nav (in the page flow on narrow screens)."""
     with st.container(key="topbar", horizontal=True):
-        st.markdown(f'<div class="lr-shoppill">{escape(name)} · {escape(place)}'
-                    f'<span class="lr-badge">Sample shop</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="lr-shoppill">{escape(name)} · {escape(place)}</div>', unsafe_allow_html=True)
         dark = mode() == "dark"
         st.button("Switch to light mode" if dark else "Switch to dark mode", key="theme_btn",
                   icon=":material/light_mode:" if dark else ":material/dark_mode:", on_click=toggle_theme,

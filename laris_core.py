@@ -1,10 +1,11 @@
-"""LARIS shared context: everything the pages show for one shop, replay week and set of inputs.
+"""LARIS shared context: everything the pages show for one shop, planning week and set of inputs.
 
 Layer 1 (AI model) outputs are read from outputs/ (forecasts.parquet, sigma.csv). Layer 2 (risk
 assessment, categories, priority) and layer 3 (budget allocation) run live here via inventory.py.
 No Streamlit imports, so this can be tested on its own.
 """
 from math import ceil, sqrt
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -12,9 +13,10 @@ import pandas as pd
 from inventory import (TAU_ACT, TIER_RANK, _normal_loss, allocate_budget, assess, categorize, dead_stock,
                        horizon_demand, make_item, priority, product_settings, score_allocation)
 
-# Sample kedai runcit (ILLUSTRATIVE): item names, RM prices and weekly sales are made up for the demo. Each item
-# replays the daily sales pattern of one Favorita product family, scaled to these weekly sales.
-SAMPLE_SHOP = {  # family: (item, cost RM, selling price RM, units sold last 7 days)
+# Default product list for a new kedai runcit: one item per product family the model forecasts, with a starting
+# cost, selling price and weekly sales the owner replaces with their own. Where PriceCatcher has the item
+# (load_market_prices), its name and market price replace these.
+DEFAULT_PRODUCTS = {  # family: (item, cost RM, selling price RM, units sold last 7 days)
     "GROCERY I": ("Maggi Curry 5-pack", 4.20, 5.20, 60),
     "BEVERAGES": ("Milo 1kg", 15.50, 18.90, 20),
     "DAIRY": ("Fresh milk 1L", 6.20, 7.50, 35),
@@ -28,6 +30,19 @@ SAMPLE_SHOP = {  # family: (item, cost RM, selling price RM, units sold last 7 d
     "PERSONAL CARE": ("Shampoo 400ml", 12.00, 15.90, 8),
     "DELI": ("Fishballs 500g", 6.00, 7.90, 20),
 }
+SAMPLE_SHOP = DEFAULT_PRODUCTS   # old name, kept for callers that still use it
+
+PRICES_CSV = Path(__file__).parent / "data_my" / "pricecatcher_prices.csv"
+COST_SHARE = 0.85   # estimated cost = 85% of the market selling price until the owner enters their supplier's price
+
+
+def load_market_prices(state, path=PRICES_CSV):
+    """PriceCatcher market prices for `state`: family, display_name, price_rm, basis, period_start, period_end.
+    Empty when the file is missing (the default prices are used)."""
+    if not Path(path).exists():
+        return pd.DataFrame(columns=["family", "display_name", "price_rm", "basis", "period_start", "period_end"])
+    p = pd.read_csv(path)
+    return p[(p["state"] == state) & p["price_rm"].notna()].reset_index(drop=True)
 
 # Shop categories the owner can filter and sort by (editable per product in Products).
 CATEGORIES = ["Vegetables", "Fruits", "Drinks", "Dairy & eggs", "Bakery", "Meat & poultry", "Seafood", "Frozen",
@@ -74,7 +89,12 @@ def week_view(fc, store, as_of, scale=1.0):
     act_wide = window.pivot_table(index="date", columns="product", values="y").reindex(days)
     past = sub[sub["date"] < as_of]
     last7 = past[past["date"] >= as_of - pd.Timedelta(days=7)].groupby("product")["y"].sum()
+    hol_names = []
+    if "holiday_name" in window and len(window):
+        named = window[window["holiday_name"] != ""].drop_duplicates("date").sort_values("date")
+        hol_names = [f"{n} ({d:%a %d %b})" for d, n in zip(named["date"], named["holiday_name"])]
     return {
+        "holiday_names": hol_names,
         "as_of": as_of, "end": end, "sub": sub, "window": window, "past": past,
         "products": sorted(window["product"].unique()),
         "fc_wide": fc_wide * scale, "act_wide": act_wide * scale, "last7": last7 * scale,
@@ -91,9 +111,11 @@ def sigma_for(sig, store, product, daily_fc, scale=1.0):
     return max(1.0 * scale, float(np.mean(daily_fc)) * 0.3), True
 
 
-def default_inputs(week, settings, sig, store, preset="Mixed week"):
-    """Editable shop inputs: stock levels set as days of forecast cover (deterministic per preset),
-    plus PLACEHOLDER settings from product_settings.csv."""
+def default_inputs(week, settings, sig, store, preset="Mixed week", prices=None):
+    """Editable shop inputs: stock levels set as days of forecast cover (deterministic per preset), default
+    settings from product_settings.csv, and PriceCatcher names and market prices from `prices`
+    (load_market_prices) where available; cost is then estimated as COST_SHARE of the market price."""
+    market = {} if prices is None else {r["family"]: r for _, r in prices.iterrows()}
     p = PRESETS.get(preset, PRESETS["Mixed week"])
     widest = None
     if p.get("widest_band"):
@@ -106,8 +128,11 @@ def default_inputs(week, settings, sig, store, preset="Mixed week"):
     rows = []
     for i, prod in enumerate(week["products"]):
         s = product_settings(settings, prod)
-        name, cost, price, sales7 = SAMPLE_SHOP.get(prod, (s["display_name"], s["unit_cost_rm"],
-                                                           s["unit_cost_rm"] + s["margin_rm"], None))
+        name, cost, price, sales7 = DEFAULT_PRODUCTS.get(prod, (s["display_name"], s["unit_cost_rm"],
+                                                                s["unit_cost_rm"] + s["margin_rm"], None))
+        if prod in market:
+            name, price = market[prod]["display_name"], float(market[prod]["price_rm"])
+            cost = round(price * COST_SHARE, 2)
         if sales7 is None:
             sales7 = round(float(week["last7"].get(prod, 0.0)))
         cover = p["cover"].get(prod, p["default"] if p["default"] is not None else COVER_PATTERN[i % len(COVER_PATTERN)])
@@ -231,6 +256,7 @@ def assess_products(week, sig, store, inputs, service=0.95, scale=1.0, unc=None,
                "dead_action": d["action"], "low_confidence": bool(low_why), "low_why": low_why,
                "anomaly": anomaly, "anomaly_why": anomaly_why, "model_err28": m_err, "naive_err28": n_err,
                "promo_days": int(week["promo_days"].get(prod, 0)), "holiday": week["holiday"],
+               "holiday_names": week.get("holiday_names", []),
                "effects": effects, "tau_act": tau,
                "uncertainty": "past errors of the model" if q is not None else "measured daily error"}
         row["category"], row["label"] = categorize(row)
@@ -275,8 +301,9 @@ def action_text(row):
 def explain(row):
     """Evidence for one product as (tag, text) pairs. Tags say where each statement comes from:
     'AI forecast' (the trained model), 'Calculation' (from the forecast and measured error),
-    'Your setting' (shop inputs, placeholders by default), 'Track record', 'Caution'."""
+    'Your setting' (shop inputs, defaults until changed), 'Track record', 'Caution'."""
     out = []
+    hol = row.get("holiday_names") or []
     fc7, last7 = row["demand_7d"], row["demand_last7"]
     if last7 <= 0:
         change = "no sales in the last 7 days"
@@ -286,8 +313,8 @@ def explain(row):
         change = f"{fc7 / last7 - 1:+.0%} vs last 7 days' {last7:,.0f}"
     out.append(("AI forecast", f"Expected to sell {fc7:,.0f} in the next 7 days ({change})."))
     fx = row.get("effects") or {}
-    names = {"promo": f"the planned promotion ({row['promo_days']} day(s))", "holiday": "the public holiday",
-             "payday": "payday"}
+    names = {"promo": f"the planned promotion ({row['promo_days']} day(s))",
+             "holiday": " and ".join(hol) if hol else "the public holiday", "payday": "payday"}
     shown = False
     for k, v in fx.items():
         if abs(v) >= max(1.0, 0.02 * fc7):
@@ -296,7 +323,7 @@ def explain(row):
             shown = True
     if not shown and not fx:
         drivers = ([f"a promotion on {row['promo_days']} day(s)"] if row["promo_days"] else []) + \
-                  (["a public holiday"] if row["holiday"] else [])
+                  ([" and ".join(hol) if hol else "a public holiday"] if row["holiday"] else [])
         if drivers:
             out.append(("AI forecast", "The model takes into account " + " and ".join(drivers) + " this week."))
     if np.isfinite(row["band_pct"]):
@@ -321,7 +348,7 @@ def explain(row):
     for w in row["low_why"]:
         out.append(("Caution", f"Lower confidence: {w}."))
     out.append(("Your setting", f"Lead time {row['lead_time']} d, shelf life {row['shelf_life']} d, margin RM "
-                                f"{row['margin']:.2f}{', must-have' if row['must_have'] else ''} (placeholders unless you changed them)."))
+                                f"{row['margin']:.2f}{', must-have' if row['must_have'] else ''} (defaults unless you changed them)."))
     return out
 
 

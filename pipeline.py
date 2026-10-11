@@ -631,9 +631,19 @@ def main():
         X = keep[FEATURES].copy()
         X[name] = 0
         keep[f"pred_no_{name}"] = np.clip(model.predict(X), 0, None)
+    # Calendar-neutral forecast plus the model's holiday and payday effects, so the app can apply a different
+    # (e.g. Malaysian) calendar: pred = pred_base + eff_holiday * holiday + eff_payday * payday.
+    X = keep[FEATURES].copy()
+    X["holiday"], X["payday"] = 0, 0
+    keep["pred_base"] = np.clip(model.predict(X), 0, None)
+    for name in ("holiday", "payday"):
+        X1 = X.copy()
+        X1[name] = 1
+        keep[f"eff_{name}"] = np.clip(model.predict(X1), 0, None) - keep["pred_base"]
     keep[["date", "sid", "store", "product", "y", "promo", "holiday", "payday", "split", "suspect_zero",
           "pred_model", "pred_naive7", "pred_ma28", "pred_dow4", "pred_no_promo", "pred_no_holiday",
-          "pred_no_payday"]].to_parquet(out / "forecasts.parquet", index=False)
+          "pred_no_payday", "pred_base", "eff_holiday", "eff_payday"]].to_parquet(out / "forecasts.parquet",
+                                                                                  index=False)
 
     metrics = {
         "data_source": source,

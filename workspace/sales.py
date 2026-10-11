@@ -15,9 +15,8 @@ def render(ctx):
     period = st.segmented_control("Period", list(planning.PERIODS), **ui.sticky("sales_period", "Last 28 days")) \
         or "Last 28 days"
     df, tot = planning.sales_summary(ctx, planning.PERIODS[period])
-    st.markdown(ui.label("SAMPLE DATA", "placeholder") + f'<span class="lr-muted">{tot["start"]:%d %b %Y} – '
-                f'{tot["end"]:%d %b %Y} ({tot["days"]} days). Recorded sales are replayed sample data scaled to this shop, '
-                "priced with your selling prices and costs: illustrative, not real business results.</span>",
+    st.markdown(f'<span class="lr-muted">{tot["start"]:%d %b %Y} – {tot["end"]:%d %b %Y} ({tot["days"]} days). '
+                "Daily sales history scaled to your weekly sales, priced with your selling prices and costs.</span>",
                 unsafe_allow_html=True)
 
     # ---------------- A. summary ----------------

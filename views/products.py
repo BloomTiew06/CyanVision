@@ -40,9 +40,15 @@ def _set_category(product, key):
     ss.update(inputs=inp, inputs_dirty=True)
 
 
-st.markdown(ui.label("SAMPLE SHOP", "placeholder") + '<span class="lr-muted">Preloaded with an illustrative kedai '
-            "runcit. Your edits are kept while the app is open; reset the sample shop from Settings.</span>",
-            unsafe_allow_html=True)
+pi = ctx.get("price_info")
+if pi:
+    st.markdown(ui.label("MARKET PRICES", "measured") + f'<span class="lr-muted">Selling prices of {pi["n"]} products '
+                f"are PriceCatcher medians at small shops ({pi['start']:%d %b} – {pi['end']:%d %b %Y}); costs are "
+                "estimated at 85% of that price. Enter your own prices, costs and stock counts to tailor the plan."
+                "</span>", unsafe_allow_html=True)
+else:
+    st.markdown('<span class="lr-muted">Enter your own prices, costs and stock counts to tailor the plan.</span>',
+                unsafe_allow_html=True)
 
 full = _ranked(planning.to_view(ss["inputs"]))
 a, b, c = st.columns([1.3, 1.6, 1.4], vertical_alignment="bottom")

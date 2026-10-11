@@ -1,0 +1,927 @@
+date,weekday,type,locale,locale_name,description,holiday_key,level,major_festival,subject_to_change,transferred,source
+2025-01-01,Wed,Holiday,Regional,Kuala Lumpur,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Labuan,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Melaka,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Negeri Sembilan,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Pahang,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Perak,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Pulau Pinang,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Putrajaya,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Sabah,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Sarawak,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-01,Wed,Holiday,Regional,Selangor,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-14,Tue,Holiday,Regional,Negeri Sembilan,Birthday of Yang di-Pertuan Besar Negeri Sembilan,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-27,Mon,Holiday,Regional,Kedah,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-27,Mon,Holiday,Regional,Negeri Sembilan,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-27,Mon,Holiday,Regional,Perlis,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-27,Mon,Holiday,Regional,Terengganu,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Johor,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Kedah,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Kelantan,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Kuala Lumpur,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Labuan,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Melaka,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Negeri Sembilan,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Pahang,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Perak,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Perlis,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Pulau Pinang,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Putrajaya,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Sabah,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Sarawak,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Selangor,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-29,Wed,Holiday,National,Terengganu,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Johor,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Kedah,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Kelantan,Chinese New Year (2nd day),cny_2,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Kuala Lumpur,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Labuan,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Melaka,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Negeri Sembilan,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Pahang,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Perak,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Perlis,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Pulau Pinang,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Putrajaya,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Sabah,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Sarawak,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Selangor,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-01-30,Thu,Holiday,National,Terengganu,Chinese New Year (2nd day),cny_2,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-01,Sat,Holiday,Regional,Kuala Lumpur,Federal Territory Day,ft_day,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-01,Sat,Holiday,Regional,Labuan,Federal Territory Day,ft_day,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-01,Sat,Holiday,Regional,Putrajaya,Federal Territory Day,ft_day,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-11,Tue,Holiday,Regional,Johor,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-11,Tue,Holiday,Regional,Kuala Lumpur,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-11,Tue,Holiday,Regional,Negeri Sembilan,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-11,Tue,Holiday,Regional,Perak,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-11,Tue,Holiday,Regional,Pulau Pinang,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-11,Tue,Holiday,Regional,Putrajaya,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-11,Tue,Holiday,Regional,Selangor,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-02-20,Thu,Holiday,Regional,Melaka,Declaration of Independence Day (Melaka),state_day,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-02,Sun,Holiday,Regional,Johor,Awal Ramadan,awal_ramadan,state,False,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-02,Sun,Holiday,Regional,Kedah,Awal Ramadan,awal_ramadan,state,False,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-04,Tue,Holiday,Regional,Terengganu,Anniversary of Installation of Sultan of Terengganu,ruler_installation,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Kelantan,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Kuala Lumpur,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Labuan,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Pahang,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Perak,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Perlis,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Pulau Pinang,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Putrajaya,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Selangor,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-18,Tue,Holiday,Regional,Terengganu,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-23,Sun,Holiday,Regional,Johor,Birthday of Sultan of Johor,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Johor,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Kedah,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Kelantan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Kuala Lumpur,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Labuan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Melaka,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Negeri Sembilan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Pahang,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Perak,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Perlis,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Pulau Pinang,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Putrajaya,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Sabah,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Sarawak,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Selangor,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-03-31,Mon,Holiday,National,Terengganu,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Johor,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Kedah,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Kelantan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Kuala Lumpur,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Labuan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Melaka,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Negeri Sembilan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Pahang,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Perak,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Perlis,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Pulau Pinang,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Putrajaya,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Sabah,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Sarawak,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Selangor,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-01,Tue,Holiday,National,Terengganu,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-02,Wed,Holiday,Regional,Melaka,Hari Raya Aidilfitri (3rd day),hari_raya_puasa_3,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-18,Fri,Holiday,Regional,Sabah,Good Friday,good_friday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-18,Fri,Holiday,Regional,Sarawak,Good Friday,good_friday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-04-26,Sat,Holiday,Regional,Terengganu,Birthday of Sultan of Terengganu,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Johor,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Kedah,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Kelantan,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Kuala Lumpur,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Labuan,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Melaka,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Negeri Sembilan,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Pahang,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Perak,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Perlis,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Pulau Pinang,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Putrajaya,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Sabah,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Sarawak,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Selangor,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-01,Thu,Holiday,National,Terengganu,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Johor,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Kedah,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Kelantan,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Kuala Lumpur,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Labuan,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Melaka,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Negeri Sembilan,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Pahang,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Perak,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Perlis,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Pulau Pinang,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Putrajaya,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Sabah,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Sarawak,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Selangor,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-12,Mon,Holiday,National,Terengganu,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-17,Sat,Holiday,Regional,Perlis,Birthday of Raja of Perlis,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-22,Thu,Holiday,Regional,Pahang,Hol of Almarhum Sultan Ahmad Shah (Pahang),hol,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-30,Fri,Holiday,Regional,Labuan,Harvest Festival (Pesta Kaamatan),kaamatan,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-30,Fri,Holiday,Regional,Sabah,Harvest Festival (Pesta Kaamatan),kaamatan,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-31,Sat,Holiday,Regional,Labuan,"Harvest Festival (Pesta Kaamatan, 2nd day)",kaamatan,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-05-31,Sat,Holiday,Regional,Sabah,"Harvest Festival (Pesta Kaamatan, 2nd day)",kaamatan,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-01,Sun,Holiday,Regional,Sarawak,Gawai Dayak,gawai,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Johor,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Kedah,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Kelantan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Kuala Lumpur,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Labuan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Melaka,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Negeri Sembilan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Pahang,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Perak,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Perlis,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Pulau Pinang,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Putrajaya,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Sabah,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Sarawak,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Selangor,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,National,Terengganu,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-02,Mon,Holiday,Regional,Sarawak,Gawai Dayak (2nd day),gawai,state,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-06,Fri,Holiday,Regional,Kelantan,Arafah Day,arafah,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-06,Fri,Holiday,Regional,Terengganu,Arafah Day,arafah,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Johor,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Kedah,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Kelantan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Kuala Lumpur,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Labuan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Melaka,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Negeri Sembilan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Pahang,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Perak,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Perlis,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Pulau Pinang,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Putrajaya,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Sabah,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Sarawak,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Selangor,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-07,Sat,Holiday,National,Terengganu,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-08,Sun,Holiday,Regional,Kedah,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,state,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-08,Sun,Holiday,Regional,Kelantan,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-08,Sun,Holiday,Regional,Perlis,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,state,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-08,Sun,Holiday,Regional,Terengganu,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-22,Sun,Holiday,Regional,Kedah,Birthday of Sultan of Kedah,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Johor,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Kedah,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Kelantan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Kuala Lumpur,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Labuan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Melaka,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Negeri Sembilan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Pahang,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Perak,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Perlis,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Pulau Pinang,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Putrajaya,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Sabah,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Sarawak,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Selangor,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-06-27,Fri,Holiday,National,Terengganu,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-07-07,Mon,Holiday,Regional,Pulau Pinang,George Town World Heritage City Day,state_day,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-07-12,Sat,Holiday,Regional,Pulau Pinang,Birthday of Yang di-Pertua Negeri Pulau Pinang,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-07-22,Tue,Holiday,Regional,Sarawak,Sarawak Independence Day,state_day,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-07-30,Wed,Holiday,Regional,Pahang,Birthday of Sultan of Pahang,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-07-31,Thu,Holiday,Regional,Johor,Hol of Almarhum Sultan Iskandar (Johor),hol,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-24,Sun,Holiday,Regional,Melaka,Birthday of Yang di-Pertua Negeri Melaka,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Johor,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Kedah,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Kelantan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Kuala Lumpur,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Labuan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Melaka,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Negeri Sembilan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Pahang,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Perak,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Perlis,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Pulau Pinang,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Putrajaya,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Sabah,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Sarawak,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Selangor,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-08-31,Sun,Holiday,National,Terengganu,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Johor,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Kedah,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Kelantan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Kuala Lumpur,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Labuan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Melaka,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Negeri Sembilan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Pahang,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Perak,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Perlis,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Pulau Pinang,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Putrajaya,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Sabah,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Sarawak,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Selangor,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-05,Fri,Holiday,National,Terengganu,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-15,Mon,Additional,National,Johor,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Kedah,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Kelantan,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Kuala Lumpur,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Labuan,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Melaka,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Negeri Sembilan,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Pahang,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Perak,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Perlis,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Pulau Pinang,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Putrajaya,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Sabah,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Sarawak,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Selangor,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-15,Mon,Additional,National,Terengganu,Additional holiday for Malaysia Day,malaysia_day_additional,additional,False,False,False,"https://www.fmm.org.my/Articles/Details/Branch_Circulars-@-Declaration_of_Public_Holiday_on_September_15,_2025_"
+2025-09-16,Tue,Holiday,National,Johor,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Kedah,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Kelantan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Kuala Lumpur,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Labuan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Melaka,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Negeri Sembilan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Pahang,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Perak,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Perlis,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Pulau Pinang,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Putrajaya,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Sabah,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Sarawak,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Selangor,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-16,Tue,Holiday,National,Terengganu,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-29,Mon,Holiday,Regional,Kelantan,Birthday of Sultan of Kelantan,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-09-30,Tue,Holiday,Regional,Kelantan,Birthday of Sultan of Kelantan (2nd day),ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-04,Sat,Holiday,Regional,Sabah,Birthday of Yang di-Pertua Negeri Sabah,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-11,Sat,Holiday,Regional,Sarawak,Birthday of Yang di-Pertua Negeri Sarawak,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Johor,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Kedah,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Kelantan,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Kuala Lumpur,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Labuan,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Melaka,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Negeri Sembilan,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Pahang,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Perak,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Perlis,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Pulau Pinang,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Putrajaya,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Sabah,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Selangor,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-10-20,Mon,Holiday,Regional,Terengganu,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-11-07,Fri,Holiday,Regional,Perak,Birthday of Sultan of Perak,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-11,Thu,Holiday,Regional,Selangor,Birthday of Sultan of Selangor,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-24,Wed,Holiday,Regional,Sabah,Christmas Eve,christmas_eve,state,False,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Johor,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Kedah,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Kelantan,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Kuala Lumpur,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Labuan,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Melaka,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Negeri Sembilan,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Pahang,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Perak,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Perlis,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Pulau Pinang,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Putrajaya,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Sabah,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Sarawak,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Selangor,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2025-12-25,Thu,Holiday,National,Terengganu,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2024/11/hka_2025.pdf
+2026-01-01,Thu,Holiday,Regional,Kuala Lumpur,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Labuan,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Melaka,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Negeri Sembilan,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Pahang,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Perak,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Pulau Pinang,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Putrajaya,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Sabah,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Sarawak,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-01,Thu,Holiday,Regional,Selangor,New Year's Day,new_year,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-14,Wed,Holiday,Regional,Negeri Sembilan,Birthday of Yang di-Pertuan Besar Negeri Sembilan,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-17,Sat,Holiday,Regional,Kedah,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-17,Sat,Holiday,Regional,Negeri Sembilan,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-17,Sat,Holiday,Regional,Perlis,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-01-17,Sat,Holiday,Regional,Terengganu,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Kuala Lumpur,Federal Territory Day,ft_day,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Labuan,Federal Territory Day,ft_day,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Putrajaya,Federal Territory Day,ft_day,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Johor,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Kuala Lumpur,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Negeri Sembilan,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Perak,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Pulau Pinang,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Putrajaya,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-01,Sun,Holiday,Regional,Selangor,Thaipusam,thaipusam,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Johor,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Kedah,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Kelantan,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Kuala Lumpur,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Labuan,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Melaka,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Negeri Sembilan,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Pahang,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Perak,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Perlis,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Pulau Pinang,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Putrajaya,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Sabah,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Sarawak,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Selangor,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-17,Tue,Holiday,National,Terengganu,Chinese New Year,cny,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Johor,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Kedah,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Kelantan,Chinese New Year (2nd day),cny_2,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Kuala Lumpur,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Labuan,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Melaka,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Negeri Sembilan,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Pahang,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Perak,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Perlis,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Pulau Pinang,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Putrajaya,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Sabah,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Sarawak,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Selangor,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-18,Wed,Holiday,National,Terengganu,Chinese New Year (2nd day),cny_2,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-19,Thu,Holiday,Regional,Johor,Awal Ramadan,awal_ramadan,state,False,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-19,Thu,Holiday,Regional,Kedah,Awal Ramadan,awal_ramadan,state,False,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-02-20,Fri,Holiday,Regional,Melaka,Declaration of Independence Day (Melaka),state_day,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-04,Wed,Holiday,Regional,Terengganu,Anniversary of Installation of Sultan of Terengganu,ruler_installation,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Kelantan,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Kuala Lumpur,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Labuan,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Pahang,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Perak,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Perlis,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Pulau Pinang,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Putrajaya,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Selangor,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-07,Sat,Holiday,Regional,Terengganu,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-20,Fri,Additional,National,Johor,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Kedah,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Kelantan,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Kuala Lumpur,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Labuan,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Melaka,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Negeri Sembilan,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Pahang,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Perak,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Perlis,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Pulau Pinang,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Putrajaya,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Sabah,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Sarawak,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Selangor,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-20,Fri,Additional,National,Terengganu,Additional holiday for Hari Raya Aidilfitri,hari_raya_puasa_additional,additional,True,False,False,https://berita.rtm.gov.my/?p=581444
+2026-03-21,Sat,Holiday,National,Johor,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Kedah,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Kelantan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Kuala Lumpur,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Labuan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Melaka,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Negeri Sembilan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Pahang,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Perak,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Perlis,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Pulau Pinang,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Putrajaya,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Sabah,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Sarawak,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Selangor,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-21,Sat,Holiday,National,Terengganu,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Johor,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Kedah,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Kelantan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Kuala Lumpur,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Labuan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Melaka,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Negeri Sembilan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Pahang,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Perak,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Perlis,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Pulau Pinang,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Putrajaya,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Sabah,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Sarawak,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Selangor,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-22,Sun,Holiday,National,Terengganu,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-23,Mon,Holiday,Regional,Johor,Birthday of Sultan of Johor,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-23,Mon,Holiday,Regional,Melaka,Hari Raya Aidilfitri (3rd day),hari_raya_puasa_3,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-03-30,Mon,Holiday,Regional,Sabah,Birthday of Yang di-Pertua Negeri Sabah,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-04-03,Fri,Holiday,Regional,Sabah,Good Friday,good_friday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-04-03,Fri,Holiday,Regional,Sarawak,Good Friday,good_friday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-04-26,Sun,Holiday,Regional,Terengganu,Birthday of Sultan of Terengganu,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Johor,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Kedah,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Kelantan,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Kuala Lumpur,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Labuan,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Melaka,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Negeri Sembilan,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Pahang,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Perak,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Perlis,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Pulau Pinang,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Putrajaya,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Sabah,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Sarawak,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Selangor,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-01,Fri,Holiday,National,Terengganu,Labour Day,labour_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-17,Sun,Holiday,Regional,Perlis,Birthday of Raja of Perlis,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-22,Fri,Holiday,Regional,Pahang,Hol of Almarhum Sultan Ahmad Shah (Pahang),hol,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-26,Tue,Holiday,Regional,Kelantan,Arafah Day,arafah,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-26,Tue,Holiday,Regional,Terengganu,Arafah Day,arafah,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Johor,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Kedah,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Kelantan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Kuala Lumpur,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Labuan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Melaka,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Negeri Sembilan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Pahang,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Perak,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Perlis,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Pulau Pinang,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Putrajaya,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Sabah,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Sarawak,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Selangor,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-27,Wed,Holiday,National,Terengganu,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-28,Thu,Holiday,Regional,Kedah,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,state,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-28,Thu,Holiday,Regional,Kelantan,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-28,Thu,Holiday,Regional,Perlis,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,state,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-28,Thu,Holiday,Regional,Terengganu,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-30,Sat,Holiday,Regional,Labuan,Harvest Festival (Pesta Kaamatan),kaamatan,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-30,Sat,Holiday,Regional,Sabah,Harvest Festival (Pesta Kaamatan),kaamatan,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,Regional,Labuan,"Harvest Festival (Pesta Kaamatan, 2nd day)",kaamatan,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,Regional,Sabah,"Harvest Festival (Pesta Kaamatan, 2nd day)",kaamatan,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Johor,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Kedah,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Kelantan,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Kuala Lumpur,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Labuan,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Melaka,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Negeri Sembilan,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Pahang,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Perak,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Perlis,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Pulau Pinang,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Putrajaya,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Sabah,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Sarawak,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Selangor,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-05-31,Sun,Holiday,National,Terengganu,Wesak Day,wesak,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Johor,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Kedah,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Kelantan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Kuala Lumpur,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Labuan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Melaka,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Negeri Sembilan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Pahang,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Perak,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Perlis,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Pulau Pinang,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Putrajaya,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Sabah,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Sarawak,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Selangor,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,National,Terengganu,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-01,Mon,Holiday,Regional,Sarawak,Gawai Dayak,gawai,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-02,Tue,Holiday,Regional,Sarawak,Gawai Dayak (2nd day),gawai,state,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Johor,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Kedah,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Kelantan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Kuala Lumpur,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Labuan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Melaka,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Negeri Sembilan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Pahang,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Perak,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Perlis,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Pulau Pinang,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Putrajaya,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Sabah,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Sarawak,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Selangor,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-17,Wed,Holiday,National,Terengganu,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-06-21,Sun,Holiday,Regional,Kedah,Birthday of Sultan of Kedah,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-07-07,Tue,Holiday,Regional,Pulau Pinang,George Town World Heritage City Day,state_day,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-07-11,Sat,Holiday,Regional,Pulau Pinang,Birthday of Yang di-Pertua Negeri Pulau Pinang,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-07-21,Tue,Holiday,Regional,Johor,Hol of Almarhum Sultan Iskandar (Johor),hol,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-07-22,Wed,Holiday,Regional,Sarawak,Sarawak Independence Day,state_day,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-07-31,Fri,Holiday,Regional,Pahang,Birthday of Sultan of Pahang,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-24,Mon,Holiday,Regional,Melaka,Birthday of Yang di-Pertua Negeri Melaka,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Johor,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Kedah,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Kelantan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Kuala Lumpur,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Labuan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Melaka,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Negeri Sembilan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Pahang,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Perak,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Perlis,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Pulau Pinang,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Putrajaya,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Sabah,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Sarawak,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Selangor,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-25,Tue,Holiday,National,Terengganu,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Johor,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Kedah,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Kelantan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Kuala Lumpur,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Labuan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Melaka,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Negeri Sembilan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Pahang,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Perak,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Perlis,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Pulau Pinang,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Putrajaya,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Sabah,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Sarawak,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Selangor,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-08-31,Mon,Holiday,National,Terengganu,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-01,Tue,Additional,Regional,Selangor,Selangor state holiday (SUKMA 2026),state_special,additional,False,False,False,https://www.fmm.org.my/article/circulars/fmm-selangor-kuala-lumpur-advisory-selangor-state-public-holiday-september-1-2026-sklb282026
+2026-09-16,Wed,Holiday,National,Johor,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Kedah,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Kelantan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Kuala Lumpur,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Labuan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Melaka,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Negeri Sembilan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Pahang,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Perak,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Perlis,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Pulau Pinang,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Putrajaya,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Sabah,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Sarawak,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Selangor,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-16,Wed,Holiday,National,Terengganu,Malaysia Day,malaysia_day,federal,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-29,Tue,Holiday,Regional,Kelantan,Birthday of Sultan of Kelantan,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-09-30,Wed,Holiday,Regional,Kelantan,Birthday of Sultan of Kelantan (2nd day),ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-10-10,Sat,Holiday,Regional,Sarawak,Birthday of Yang di-Pertua Negeri Sarawak,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-10-25,Sun,Additional,Regional,Selangor,Silver Jubilee of the Sultan of Selangor's reign,state_special,additional,False,False,False,https://www.fmm.org.my/article/circulars/fmm-selangor-kuala-lumpur-advisory-declaration-of-state-holiday-sultan-of-selangor-25th-silver-jubilee-october-25-2026-sklb302026
+2026-11-06,Fri,Holiday,Regional,Perak,Birthday of Sultan of Perak,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Johor,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Kedah,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Kelantan,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Kuala Lumpur,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Labuan,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Melaka,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Negeri Sembilan,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Pahang,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Perak,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Perlis,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Pulau Pinang,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Putrajaya,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Sabah,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Selangor,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-11-08,Sun,Holiday,Regional,Terengganu,Deepavali,deepavali,federal,True,True,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-11,Fri,Holiday,Regional,Selangor,Birthday of Sultan of Selangor,ruler_birthday,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-24,Thu,Holiday,Regional,Sabah,Christmas Eve,christmas_eve,state,False,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Johor,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Kedah,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Kelantan,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Kuala Lumpur,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Labuan,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Melaka,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Negeri Sembilan,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Pahang,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Perak,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Perlis,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Pulau Pinang,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Putrajaya,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Sabah,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Sarawak,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Selangor,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2026-12-25,Fri,Holiday,National,Terengganu,Christmas Day,christmas,federal,True,False,False,https://www.kabinet.gov.my/storage/2025/08/HKA-2026.pdf
+2027-01-01,Fri,Holiday,Regional,Kuala Lumpur,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Labuan,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Melaka,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Negeri Sembilan,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Pahang,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Perak,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Pulau Pinang,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Putrajaya,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Sabah,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Sarawak,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-01,Fri,Holiday,Regional,Selangor,New Year's Day,new_year,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-06,Wed,Holiday,Regional,Kedah,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-06,Wed,Holiday,Regional,Negeri Sembilan,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-06,Wed,Holiday,Regional,Perlis,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-06,Wed,Holiday,Regional,Terengganu,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-14,Thu,Holiday,Regional,Negeri Sembilan,Birthday of Yang di-Pertuan Besar Negeri Sembilan,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-22,Fri,Holiday,Regional,Johor,Thaipusam,thaipusam,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-22,Fri,Holiday,Regional,Kuala Lumpur,Thaipusam,thaipusam,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-22,Fri,Holiday,Regional,Negeri Sembilan,Thaipusam,thaipusam,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-22,Fri,Holiday,Regional,Perak,Thaipusam,thaipusam,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-22,Fri,Holiday,Regional,Pulau Pinang,Thaipusam,thaipusam,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-22,Fri,Holiday,Regional,Putrajaya,Thaipusam,thaipusam,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-01-22,Fri,Holiday,Regional,Selangor,Thaipusam,thaipusam,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-01,Mon,Holiday,Regional,Kuala Lumpur,Federal Territory Day,ft_day,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-01,Mon,Holiday,Regional,Labuan,Federal Territory Day,ft_day,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-01,Mon,Holiday,Regional,Putrajaya,Federal Territory Day,ft_day,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Johor,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Kedah,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Kelantan,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Kuala Lumpur,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Labuan,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Melaka,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Negeri Sembilan,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Pahang,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Perak,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Perlis,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Pulau Pinang,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Putrajaya,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Sabah,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Sarawak,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Selangor,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-06,Sat,Holiday,National,Terengganu,Chinese New Year,cny,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Johor,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Kedah,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Kelantan,Chinese New Year (2nd day),cny_2,state,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Kuala Lumpur,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Labuan,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Melaka,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Negeri Sembilan,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Pahang,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Perak,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Perlis,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Pulau Pinang,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Putrajaya,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Sabah,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Sarawak,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Selangor,Chinese New Year (2nd day),cny_2,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-07,Sun,Holiday,National,Terengganu,Chinese New Year (2nd day),cny_2,state,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-08,Mon,Holiday,Regional,Johor,Awal Ramadan,awal_ramadan,state,False,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-08,Mon,Holiday,Regional,Kedah,Awal Ramadan,awal_ramadan,state,False,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-20,Sat,Holiday,Regional,Melaka,Declaration of Independence Day (Melaka),state_day,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Kelantan,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Kuala Lumpur,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Labuan,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Pahang,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Perak,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Perlis,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Pulau Pinang,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Putrajaya,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Selangor,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-02-24,Wed,Holiday,Regional,Terengganu,Nuzul Al-Quran,nuzul_quran,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-04,Thu,Holiday,Regional,Terengganu,Anniversary of Installation of Sultan of Terengganu,ruler_installation,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Johor,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Kedah,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Kelantan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Kuala Lumpur,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Labuan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Melaka,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Negeri Sembilan,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Pahang,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Perak,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Perlis,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Pulau Pinang,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Putrajaya,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Sabah,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Sarawak,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Selangor,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-10,Wed,Holiday,National,Terengganu,Hari Raya Aidilfitri,hari_raya_puasa,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Johor,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Kedah,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Kelantan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Kuala Lumpur,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Labuan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Melaka,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Negeri Sembilan,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Pahang,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Perak,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Perlis,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Pulau Pinang,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Putrajaya,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Sabah,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Sarawak,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Selangor,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-11,Thu,Holiday,National,Terengganu,Hari Raya Aidilfitri (2nd day),hari_raya_puasa_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-12,Fri,Holiday,Regional,Melaka,Hari Raya Aidilfitri (3rd day),hari_raya_puasa_3,state,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-23,Tue,Holiday,Regional,Johor,Birthday of Sultan of Johor,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-26,Fri,Holiday,Regional,Sabah,Good Friday,good_friday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-26,Fri,Holiday,Regional,Sarawak,Good Friday,good_friday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-03-30,Tue,Holiday,Regional,Sabah,Birthday of Yang di-Pertua Negeri Sabah,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-04-26,Mon,Holiday,Regional,Terengganu,Birthday of Sultan of Terengganu,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Johor,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Kedah,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Kelantan,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Kuala Lumpur,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Labuan,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Melaka,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Negeri Sembilan,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Pahang,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Perak,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Perlis,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Pulau Pinang,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Putrajaya,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Sabah,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Sarawak,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Selangor,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-01,Sat,Holiday,National,Terengganu,Labour Day,labour_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-16,Sun,Holiday,Regional,Kelantan,Arafah Day,arafah,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-16,Sun,Holiday,Regional,Terengganu,Arafah Day,arafah,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,Regional,Perlis,Birthday of Raja of Perlis,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Johor,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Kedah,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Kelantan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Kuala Lumpur,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Labuan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Melaka,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Negeri Sembilan,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Pahang,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Perak,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Perlis,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Pulau Pinang,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Putrajaya,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Sabah,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Sarawak,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Selangor,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-17,Mon,Holiday,National,Terengganu,Hari Raya Aidiladha (Haji),hari_raya_haji,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-18,Tue,Holiday,Regional,Kedah,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,state,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-18,Tue,Holiday,Regional,Kelantan,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-18,Tue,Holiday,Regional,Perlis,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,state,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-18,Tue,Holiday,Regional,Terengganu,Hari Raya Aidiladha (2nd day),hari_raya_haji_2,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Johor,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Kedah,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Kelantan,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Kuala Lumpur,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Labuan,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Melaka,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Negeri Sembilan,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Pahang,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Perak,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Perlis,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Pulau Pinang,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Putrajaya,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Sabah,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Sarawak,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Selangor,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-20,Thu,Holiday,National,Terengganu,Wesak Day,wesak,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-22,Sat,Holiday,Regional,Pahang,Hol of Almarhum Sultan Ahmad Shah (Pahang),hol,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-30,Sun,Holiday,Regional,Labuan,Harvest Festival (Pesta Kaamatan),kaamatan,state,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-30,Sun,Holiday,Regional,Sabah,Harvest Festival (Pesta Kaamatan),kaamatan,state,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-31,Mon,Holiday,Regional,Labuan,"Harvest Festival (Pesta Kaamatan, 2nd day)",kaamatan,state,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-05-31,Mon,Holiday,Regional,Sabah,"Harvest Festival (Pesta Kaamatan, 2nd day)",kaamatan,state,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-01,Tue,Holiday,Regional,Sarawak,Gawai Dayak,gawai,state,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-02,Wed,Holiday,Regional,Sarawak,Gawai Dayak (2nd day),gawai,state,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Johor,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Kedah,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Kelantan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Kuala Lumpur,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Labuan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Melaka,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Negeri Sembilan,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Pahang,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Perak,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Perlis,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Pulau Pinang,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Putrajaya,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Sabah,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Sarawak,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Selangor,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-06,Sun,Holiday,National,Terengganu,Awal Muharram (Maal Hijrah),awal_muharram,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Johor,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Kedah,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Kelantan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Kuala Lumpur,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Labuan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Melaka,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Negeri Sembilan,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Pahang,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Perak,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Perlis,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Pulau Pinang,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Putrajaya,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Sabah,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Sarawak,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Selangor,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-07,Mon,Holiday,National,Terengganu,Birthday of the Yang di-Pertuan Agong,agong_birthday,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-06-20,Sun,Holiday,Regional,Kedah,Birthday of Sultan of Kedah,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-07-07,Wed,Holiday,Regional,Pulau Pinang,George Town World Heritage City Day,state_day,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-07-10,Sat,Holiday,Regional,Pulau Pinang,Birthday of Yang di-Pertua Negeri Pulau Pinang,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-07-11,Sun,Holiday,Regional,Johor,Hol of Almarhum Sultan Iskandar (Johor),hol,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-07-22,Thu,Holiday,Regional,Sarawak,Sarawak Independence Day,state_day,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-07-30,Fri,Holiday,Regional,Pahang,Birthday of Sultan of Pahang,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Johor,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Kedah,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Kelantan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Kuala Lumpur,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Labuan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Melaka,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Negeri Sembilan,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Pahang,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Perak,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Perlis,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Pulau Pinang,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Putrajaya,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Sabah,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Sarawak,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Selangor,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-15,Sun,Holiday,National,Terengganu,Prophet Muhammad's Birthday (Maulidur Rasul),maulidur_rasul,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-24,Tue,Holiday,Regional,Melaka,Birthday of Yang di-Pertua Negeri Melaka,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Johor,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Kedah,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Kelantan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Kuala Lumpur,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Labuan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Melaka,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Negeri Sembilan,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Pahang,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Perak,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Perlis,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Pulau Pinang,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Putrajaya,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Sabah,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Sarawak,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Selangor,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-08-31,Tue,Holiday,National,Terengganu,National Day (Hari Merdeka),national_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Johor,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Kedah,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Kelantan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Kuala Lumpur,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Labuan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Melaka,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Negeri Sembilan,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Pahang,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Perak,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Perlis,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Pulau Pinang,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Putrajaya,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Sabah,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Sarawak,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Selangor,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-16,Thu,Holiday,National,Terengganu,Malaysia Day,malaysia_day,federal,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-29,Wed,Holiday,Regional,Kelantan,Birthday of Sultan of Kelantan,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-09-30,Thu,Holiday,Regional,Kelantan,Birthday of Sultan of Kelantan (2nd day),ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-09,Sat,Holiday,Regional,Sarawak,Birthday of Yang di-Pertua Negeri Sarawak,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Johor,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Kedah,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Kelantan,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Kuala Lumpur,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Labuan,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Melaka,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Negeri Sembilan,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Pahang,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Perak,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Perlis,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Pulau Pinang,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Putrajaya,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Sabah,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Selangor,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-10-28,Thu,Holiday,Regional,Terengganu,Deepavali,deepavali,federal,True,True,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-11-05,Fri,Holiday,Regional,Perak,Birthday of Sultan of Perak,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-11,Sat,Holiday,Regional,Selangor,Birthday of Sultan of Selangor,ruler_birthday,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-24,Fri,Holiday,Regional,Sabah,Christmas Eve,christmas_eve,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Johor,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Kedah,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Kelantan,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Kuala Lumpur,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Labuan,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Melaka,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Negeri Sembilan,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Pahang,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Perak,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Perlis,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Pulau Pinang,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Putrajaya,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Sabah,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Sarawak,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Selangor,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-25,Sat,Holiday,National,Terengganu,Christmas Day,christmas,federal,True,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-26,Sun,Holiday,Regional,Kedah,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-26,Sun,Holiday,Regional,Negeri Sembilan,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-26,Sun,Holiday,Regional,Perlis,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
+2027-12-26,Sun,Holiday,Regional,Terengganu,Israk and Mikraj,israk_mikraj,state,False,False,False,https://www.fmm.org.my/uploads/files/fmm/20260828_144306_GI15%20-%202027%20Public%20Holiday%20National%20&%20State%20-%2027%20Aug.pdf
